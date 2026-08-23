@@ -220,35 +220,70 @@ class _LoginScreenState extends State<_LoginScreen> {
     super.dispose();
   }
 
+  void _fail(String message) {
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      _error = message;
+    });
+  }
+
+  String _readable(Object error) {
+    final String raw = error.toString();
+    if (raw.contains('Invalid login credentials')) {
+      return 'Email ou mot de passe incorrect.';
+    }
+    if (raw.contains('Email not confirmed')) {
+      return "Email non confirmé. Dans Supabase : Authentication > Users > "
+          "ouvrir le compte > Confirm email.";
+    }
+    if (raw.contains('Failed host lookup') || raw.contains('ClientException')) {
+      return 'Serveur injoignable. Vérifie la connexion et les clés Supabase.';
+    }
+    return raw;
+  }
+
   Future<void> _submit() async {
     setState(() {
       _busy = true;
       _error = null;
     });
+
     try {
       await widget.repository.signIn(
         email: _email.text,
         password: _password.text,
       );
-      final bool admin = await widget.repository.isAdmin();
-      if (!admin) {
-        await widget.repository.signOut();
-        if (!mounted) return;
-        setState(() {
-          _busy = false;
-          _error = "Ce compte n'a pas les droits d'administration.";
-        });
-        return;
-      }
-      if (!mounted) return;
-      widget.onSuccess();
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _busy = false;
-        _error = 'Email ou mot de passe incorrect.';
-      });
+    } catch (error) {
+      _fail('Connexion refusée. ${_readable(error)}');
+      return;
     }
+
+    bool admin = false;
+    try {
+      admin = await widget.repository.isAdmin();
+    } catch (error) {
+      await widget.repository.signOut();
+      _fail(
+        'Compte reconnu, mais impossible de vérifier les droits. '
+        'Le fichier supabase/admin.sql a-t-il bien été exécuté ? '
+        '${_readable(error)}',
+      );
+      return;
+    }
+
+    if (!admin) {
+      await widget.repository.signOut();
+      _fail(
+        'Compte reconnu, mais absent de la table admins. '
+        "Exécute la requête insert into public.admins avec l'email "
+        '${_email.text.trim()}',
+      );
+      return;
+    }
+
+    if (!mounted) return;
+    widget.onSuccess();
   }
 
   @override
