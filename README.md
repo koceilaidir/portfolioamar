@@ -1,5 +1,8 @@
 # Portfolio — Amar Hammour
 
+> **Nouveau sur le projet ?** Lis `GUIDE.txt` à la racine : il explique pas à pas
+> comment récupérer le code, le lancer, administrer le contenu et publier le site.
+
 Site portfolio one-page développé en Flutter (cible web), fidèle à la maquette
 HTML fournie : palette crème / terracotta, polices Fraunces + Manrope + Caveat,
 et une version desktop pensée pour les grands écrans.

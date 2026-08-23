@@ -1,0 +1,137 @@
+******************RECUPERER LE PROJET DEPUIS GITHUB
+
+
+Adresse du depot : https://github.com/koceilaidir/portfolioamar
+Git https://git-scm.com/downloads
+Verifier que tout est e place, dans un terminal :
+  flutter doctor
+
+************ telecharger le projet 
+
+Ouvrir un terminal (PowerShell sur Windows) dans le dossier ou tu veux
+ranger le projet, puis :
+
+    git clone https://github.com/koceilaidir/portfolioamar.git
+    cd portfolioamar
+    flutter pub get
+
+
+
+************ recuperer les mises a jour plus tard 
+
+Chaque fois que quelqu'un modifie le code, pour recuperer les changements :
+
+    git pull
+
+Si tu as toi-meme modifie des fichiers et que tu veux les envoyer :
+
+    git add -A
+    git commit -m "decris ici ce que tu as change"
+    git push
+
+
+
+  *********** COMPRENDRE L'ORGANISATION DU CODE
+
+
+    lib/
+      main.dart              point d'entree, choisit la source du contenu
+      app.dart               theme general et chargement du contenu
+      admin_mode.dart        interrupteur du bouton ADMIN 
+
+      core/
+        animation/           apparition des sections au defilement
+        config/              cles Supabase
+        layout/              tailles d'ecran 
+        theme/               couleurs, polices, icones
+        utils/               ouverture des liens (email, site)
+        widgets/             effet de survol
+
+      data/
+        models/              structure du contenu (projets, avis, etc.)
+        repositories/        d'ou vient le contenu :
+                               static_...   contenu ecrit en dur (secours)
+                               supabase_... contenu de la base de donnees
+                               admin_...    ecriture depuis le panneau admin
+
+      presentation/
+        home/                la page du site
+          sections/          header, hero, projets, competences, avis, footer
+        admin/               le panneau d'administration
+        widgets/             briques reutilisables (cartes, boutons, etc.)
+
+    assets/fonts/            les polices (Fraunces, Manrope, Caveat)
+    web/                     page HTML de base, favicon, icones
+    supabase/                schema.sql et admin.sql (base de donnees)
+    .github/workflows/       publication automatique du site
+
+Pour changer une couleur ou une police : lib/core/theme/
+Pour changer la mise en page d'une section : lib/presentation/home/sections/
+
+
+  ***************LANCER LE SITE SUR SON ORDINATEUR
+
+Sans la base de donnees (le plus simple) 
+
+    flutter run -d chrome
+
+Le site s'ouvre avec le contenu ecrit en dur dans le code. Suffisant pour
+travailler sur le design.
+
+
+
+*****************ADMINISTRATION : AFFICHER / ADMINISTRER / CACHER
+
+
+Le bouton ADMIN (en bas a gauche du site) ouvre le panneau. On peut le
+masquer pour que les visiteurs ne le voient pas.
+
+L'interrupteur se trouve dans le fichier :
+
+    lib/admin_mode.dart
+
+Il contient une seule ligne :
+
+    const bool kAdminVisible = true;
+
+    true   = le bouton ADMIN est visible
+    false  = le bouton ADMIN est cache
+
+--- Le cycle complet 
+
+  1) Afficher le bouton
+       ouvrir lib/admin_mode.dart
+       mettre  true
+       sauvegarder
+
+  2) Publier cette version
+       git add -A
+       git commit -m "admin visible"
+       git push
+       attendre le point vert dans l'onglet Actions de GitHub (3 a 5 min)
+
+  3) Administrer
+       ouvrir https://koceilaidir.github.io/portfolioamar/
+       cliquer sur ADMIN en bas a gauche
+       se connecter avec l'email et le mot de passe du chapitre 4
+       faire les modifications
+       (elles sont enregistrees immediatement dans la base)
+
+  4) Recacher le bouton
+       ouvrir lib/admin_mode.dart
+       mettre  false
+       sauvegarder
+
+  5) Republier
+       git add -A
+       git commit -m "admin cache"
+       git push
+
+
+
+ 
+
+
+
+
+

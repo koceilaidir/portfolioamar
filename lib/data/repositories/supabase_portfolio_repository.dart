@@ -19,15 +19,19 @@ class SupabasePortfolioRepository implements PortfolioRepository {
   Future<PortfolioContent> loadContent() async {
     final List<dynamic> results = await Future.wait<dynamic>(<Future<dynamic>>[
       _client.from('site_settings').select().eq('id', 1).maybeSingle(),
-      _client.from('projects').select().eq('published', true).order('position'),
-      _client.from('skills').select().order('position'),
-      _client.from('features').select().order('position'),
+      _client
+          .from('projects')
+          .select()
+          .eq('published', true)
+          .order('position', ascending: true),
+      _client.from('skills').select().order('position', ascending: true),
+      _client.from('features').select().order('position', ascending: true),
       _client
           .from('testimonials')
           .select()
           .eq('status', 'approved')
-          .order('position')
-          .order('created_at'),
+          .order('position', ascending: true)
+          .order('created_at', ascending: true),
     ]);
 
     final Map<String, dynamic> settings =

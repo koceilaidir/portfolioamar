@@ -1,11 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../../admin_mode.dart';
 import '../../core/animation/reveal.dart';
 import '../../core/layout/breakpoints.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/portfolio_content.dart';
+import '../../data/repositories/admin_repository.dart';
 import '../../data/repositories/portfolio_repository.dart';
+import '../widgets/admin_entry_button.dart';
 import 'sections/footer_section.dart';
 import 'sections/hero_section.dart';
 import 'sections/projects_section.dart';
@@ -18,10 +21,14 @@ class HomePage extends StatefulWidget {
     super.key,
     required this.content,
     required this.repository,
+    this.adminRepository,
+    this.onContentChanged,
   });
 
   final PortfolioContent content;
   final PortfolioRepository repository;
+  final AdminRepository? adminRepository;
+  final VoidCallback? onContentChanged;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -174,6 +181,15 @@ class _HomePageState extends State<HomePage> {
                 onTap: _scrollToTop,
               ),
             ),
+            if (kAdminVisible && widget.adminRepository != null)
+              Positioned(
+                left: Breakpoints.gutter(size),
+                bottom: Breakpoints.gutter(size),
+                child: AdminEntryButton(
+                  repository: widget.adminRepository!,
+                  onClosed: widget.onContentChanged,
+                ),
+              ),
           ],
         ),
       ),

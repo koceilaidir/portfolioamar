@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
+import 'data/repositories/admin_repository.dart';
 import 'data/repositories/portfolio_repository.dart';
 import 'data/repositories/static_portfolio_repository.dart';
 import 'data/repositories/supabase_portfolio_repository.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(AppTheme.overlayStyle);
 
   PortfolioRepository repository = const StaticPortfolioRepository();
+  AdminRepository? adminRepository;
 
   if (AppConfig.hasSupabase) {
     try {
@@ -22,11 +24,18 @@ Future<void> main() async {
         url: AppConfig.supabaseUrl,
         anonKey: AppConfig.supabaseAnonKey,
       );
-      repository = SupabasePortfolioRepository(Supabase.instance.client);
+      final SupabaseClient client = Supabase.instance.client;
+      repository = SupabasePortfolioRepository(client);
+      adminRepository = AdminRepository(client);
     } catch (error) {
       debugPrint('Supabase indisponible, contenu statique utilisé : $error');
     }
   }
 
-  runApp(PortfolioApp(repository: repository));
+  runApp(
+    PortfolioApp(
+      repository: repository,
+      adminRepository: adminRepository,
+    ),
+  );
 }

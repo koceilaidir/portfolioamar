@@ -5,6 +5,7 @@ import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/app_typography.dart';
 import 'data/models/portfolio_content.dart';
+import 'data/repositories/admin_repository.dart';
 import 'data/repositories/portfolio_repository.dart';
 import 'presentation/home/home_page.dart';
 
@@ -30,9 +31,14 @@ class AppScrollBehavior extends MaterialScrollBehavior {
 }
 
 class PortfolioApp extends StatefulWidget {
-  const PortfolioApp({super.key, required this.repository});
+  const PortfolioApp({
+    super.key,
+    required this.repository,
+    this.adminRepository,
+  });
 
   final PortfolioRepository repository;
+  final AdminRepository? adminRepository;
 
   @override
   State<PortfolioApp> createState() => _PortfolioAppState();
@@ -73,6 +79,8 @@ class _PortfolioAppState extends State<PortfolioApp> {
           return HomePage(
             content: snapshot.data!,
             repository: widget.repository,
+            adminRepository: widget.adminRepository,
+            onContentChanged: _reload,
           );
         },
       ),
