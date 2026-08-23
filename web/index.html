@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfolio d'Amar Hammour, Web Designer & Digital Creative. Design d'interfaces, identité de marque et développement web.">
+  <meta name="theme-color" content="#F2EBDD">
+
+  <!-- Partage social -->
+  <meta property="og:title" content="Amar Hammour — Web Designer & Digital Creative">
+  <meta property="og:description" content="Je conçois des visuels clairs, modernes et centrés sur l'utilisateur qui aident les marques à se démarquer.">
+  <meta property="og:type" content="website">
+
+  <!-- iOS -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Amar Hammour">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Amar Hammour — Portfolio</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #F2EBDD;
+    }
+    #loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F2EBDD;
+      transition: opacity .35s ease;
+      z-index: 10;
+    }
+    #loading .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #C15A34;
+      animation: pulse 1.1s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(.6); opacity: .35; }
+      50%      { transform: scale(1);  opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading"><div class="dot"></div></div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      const loader = document.getElementById('loading');
+      if (!loader) return;
+      loader.style.opacity = '0';
+      setTimeout(function () { loader.remove(); }, 400);
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
