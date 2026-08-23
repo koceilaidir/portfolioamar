@@ -46,6 +46,7 @@ Tout se fait depuis **Table Editor** dans Supabase :
 | Table           | Contenu                                                        |
 |-----------------|----------------------------------------------------------------|
 | `site_settings` | Tous les textes du site (hero, titres de sections, contact)     |
+| ↳ `hero_sentence` | La grande phrase du hero. Deux marqueurs : `*texte*` met en terracotta, `•` insère un rond terracotta animé |
 | `projects`      | Les projets (`position` = ordre, `published` = visible ou non)  |
 | `skills`        | Les barres de compétences (`level` de 0 à 100)                  |
 | `features`      | Les 4 arguments (`icon_key` : user, code, responsive, performance, design, star) |

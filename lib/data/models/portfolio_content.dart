@@ -10,34 +10,29 @@ Color colorFromHex(String value) {
 class ProfileInfo {
   const ProfileInfo({
     required this.role,
-    required this.heroTitle,
-    required this.greeting,
+    required this.heroSentence,
     required this.firstName,
     required this.lastName,
     required this.subrole,
-    required this.lede,
     required this.signature,
   });
 
   final String role;
-  final String heroTitle;
-  final String greeting;
+
+  final String heroSentence;
   final String firstName;
   final String lastName;
   final String subrole;
-  final String lede;
   final String signature;
 
   String get fullName => '$firstName $lastName';
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) => ProfileInfo(
         role: json['role'] as String,
-        heroTitle: json['heroTitle'] as String,
-        greeting: json['greeting'] as String,
+        heroSentence: json['heroSentence'] as String,
         firstName: json['firstName'] as String,
         lastName: json['lastName'] as String,
         subrole: json['subrole'] as String,
-        lede: json['lede'] as String,
         signature: json['signature'] as String,
       );
 }

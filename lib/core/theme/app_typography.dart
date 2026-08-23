@@ -41,31 +41,23 @@ abstract final class AppText {
     letterSpacing: 1,
   );
 
-  static TextStyle heroTitle(double fontSize) => TextStyle(
+  static TextStyle heroSentence(double fontSize) => TextStyle(
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w900,
         fontSize: fontSize,
-        height: 1,
-        letterSpacing: -1,
-        color: AppColors.terracotta,
+        height: 1.04,
+        letterSpacing: -fontSize * 0.018,
+        color: AppColors.ink,
       );
 
-  static const TextStyle hello = TextStyle(
+  static const TextStyle kicker = TextStyle(
     fontFamily: AppFonts.sans,
-    fontWeight: FontWeight.w600,
-    fontSize: 13,
+    fontWeight: FontWeight.w700,
+    fontSize: 10.5,
     height: 1.2,
     letterSpacing: 2,
     color: AppColors.inkSoft,
   );
-
-  static TextStyle name(double fontSize) => TextStyle(
-        fontFamily: AppFonts.display,
-        fontWeight: FontWeight.w900,
-        fontSize: fontSize,
-        height: 0.98,
-        color: AppColors.ink,
-      );
 
   static const TextStyle subrole = TextStyle(
     fontFamily: AppFonts.sans,

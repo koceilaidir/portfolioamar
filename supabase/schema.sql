@@ -3,6 +3,7 @@ create table if not exists public.site_settings (
 
   role                     text not null default 'Web Designer',
   hero_title               text not null default 'Portfolio',
+  hero_sentence            text not null default 'Bonjour, moi c''est • *Amar Hammour*. Je conçois des • expériences digitales qui aident les marques à se démarquer.',
   greeting                 text not null default 'Hello, I''m',
   first_name               text not null default 'Amar',
   last_name                text not null default 'Hammour',
@@ -81,6 +82,10 @@ create table if not exists public.testimonials (
   created_at  timestamptz not null default now()
 );
 
+alter table public.site_settings
+  add column if not exists hero_sentence text not null
+  default 'Bonjour, moi c''est • *Amar Hammour*. Je conçois des • expériences digitales qui aident les marques à se démarquer.';
+
 create index if not exists testimonials_status_idx on public.testimonials (status);
 create index if not exists projects_position_idx  on public.projects (position);
 
@@ -124,7 +129,7 @@ create policy "project_images_public_read"
   using (bucket_id = 'project-images');
 
 insert into public.site_settings (
-  id, role, hero_title, greeting, first_name, last_name, subrole, lede, signature,
+  id, role, hero_title, hero_sentence, greeting, first_name, last_name, subrole, lede, signature,
   projects_title, projects_accent, projects_description, projects_link_label,
   skills_title, skills_accent, quote,
   testimonials_title, testimonials_accent, testimonials_description,
@@ -134,6 +139,7 @@ insert into public.site_settings (
   1,
   'Web Designer',
   'Portfolio',
+  'Bonjour, moi c''est • *Amar Hammour*. Je conçois des • expériences digitales qui aident les marques à se démarquer.',
   'Hello, I''m',
   'Amar',
   'Hammour',

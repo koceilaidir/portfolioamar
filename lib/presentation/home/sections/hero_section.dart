@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/portfolio_content.dart';
 import '../../widgets/grid_fade.dart';
+import '../../widgets/hero_sentence.dart';
 import '../../widgets/pill_button.dart';
 
 class HeroSection extends StatelessWidget {
@@ -25,166 +26,82 @@ class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScreenSize size = Breakpoints.of(context);
-    final bool isDesktop = size == ScreenSize.desktop;
+    final double fontSize =
+        responsive<double>(size, mobile: 32, tablet: 54, desktop: 74);
+    final double sentenceWidth =
+        responsive<double>(size, mobile: 560, tablet: 780, desktop: 1020);
+    final double minHeight =
+        (MediaQuery.sizeOf(context).height - topPadding).clamp(440.0, 880.0);
 
     return Padding(
       padding: EdgeInsets.only(
-        top: topPadding + responsive<double>(size, mobile: 8, tablet: 24, desktop: 36),
-        bottom: responsive<double>(size, mobile: 26, tablet: 48, desktop: 72),
+        top: topPadding,
+        bottom: responsive<double>(size, mobile: 30, tablet: 50, desktop: 70),
       ),
-      child: ContentContainer(
-        child: isDesktop ? _buildDesktop(context) : _buildCompact(context, size),
-      ),
-    );
-  }
-
-  Widget _buildCompact(BuildContext context, ScreenSize size) {
-    final double titleSize = responsive<double>(size, mobile: 66, tablet: 92);
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: <Widget>[
-        Positioned(
-          top: -10,
-          left: -Breakpoints.gutter(size),
-          right: -Breakpoints.gutter(size),
-          height: responsive<double>(size, mobile: 150, tablet: 210),
-          child: const GridFade(),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              child: _FloatingTitle(
-                text: profile.heroTitle,
-                fontSize: titleSize,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 4),
-            _HeroCopy(
-              profile: profile,
-              size: size,
-              onProjects: onProjects,
-              onContact: onContact,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDesktop(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          flex: 6,
-          child: _HeroCopy(
-            profile: profile,
-            size: ScreenSize.desktop,
-            onProjects: onProjects,
-            onContact: onContact,
-          ),
-        ),
-        const SizedBox(width: 48),
-        Expanded(
-          flex: 5,
-          child: SizedBox(
-            height: 400,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                const Positioned.fill(child: GridFade(cell: 32)),
-                _FloatingTitle(
-                  text: profile.heroTitle,
-                  fontSize: 104,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _HeroCopy extends StatelessWidget {
-  const _HeroCopy({
-    required this.profile,
-    required this.size,
-    required this.onProjects,
-    required this.onContact,
-  });
-
-  final ProfileInfo profile;
-  final ScreenSize size;
-  final VoidCallback onProjects;
-  final VoidCallback onContact;
-
-  @override
-  Widget build(BuildContext context) {
-    final double nameSize =
-        responsive<double>(size, mobile: 46, tablet: 62, desktop: 74);
-    final double ledeWidth =
-        responsive<double>(size, mobile: 300, tablet: 440, desktop: 460);
-
-    return Reveal(
-      offsetY: 18,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          const SizedBox(height: 6),
-          Text(profile.greeting.toUpperCase(), style: AppText.hello),
-          const SizedBox(height: 2),
-          Text.rich(
-            TextSpan(
-              children: <InlineSpan>[
-                TextSpan(text: '${profile.firstName} '),
-                TextSpan(
-                  text: profile.lastName,
-                  style: const TextStyle(color: AppColors.terracotta),
-                ),
-              ],
+          Positioned.fill(
+            child: GridFade(
+              cell: responsive<double>(size, mobile: 26, tablet: 30, desktop: 34),
+              center: const Alignment(0, -0.1),
             ),
-            style: AppText.name(nameSize),
           ),
-          const SizedBox(height: 12),
-          Text(profile.subrole.toUpperCase(), style: AppText.subrole),
-          const SizedBox(height: 12),
           ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: ledeWidth),
-            child: Text(
-              profile.lede,
-              style: AppText.lede.copyWith(
-                fontSize: responsive<double>(size, mobile: 14, tablet: 15, desktop: 16),
+            constraints: BoxConstraints(minHeight: minHeight),
+            child: Center(
+              child: ContentContainer(
+                child: Reveal(
+                  offsetY: 20,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      _Kicker(label: profile.subrole),
+                      SizedBox(
+                        height: responsive<double>(size,
+                            mobile: 22, tablet: 30, desktop: 34),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: sentenceWidth),
+                        child: HeroSentence(
+                          text: profile.heroSentence,
+                          fontSize: fontSize,
+                        ),
+                      ),
+                      SizedBox(
+                        height: responsive<double>(size,
+                            mobile: 24, tablet: 30, desktop: 34),
+                      ),
+                      Text(
+                        profile.signature,
+                        textAlign: TextAlign.center,
+                        style: AppText.signature(
+                          responsive<double>(size,
+                              mobile: 30, tablet: 34, desktop: 38),
+                        ),
+                      ),
+                      SizedBox(
+                        height: responsive<double>(size,
+                            mobile: 20, tablet: 24, desktop: 28),
+                      ),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: <Widget>[
+                          PillButton(label: 'Mes projets', onTap: onProjects),
+                          PillButton(
+                            label: 'Me contacter',
+                            variant: PillVariant.ghost,
+                            onTap: onContact,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Text(
-            profile.signature,
-            style: AppText.signature(
-              responsive<double>(size, mobile: 30, tablet: 34, desktop: 38),
-            ),
-          ),
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: <Widget>[
-              PillButton(
-                label: 'Mes projets',
-                onTap: onProjects,
-              ),
-              PillButton(
-                label: 'Me contacter',
-                variant: PillVariant.ghost,
-                onTap: onContact,
-              ),
-            ],
           ),
         ],
       ),
@@ -192,64 +109,24 @@ class _HeroCopy extends StatelessWidget {
   }
 }
 
-class _FloatingTitle extends StatefulWidget {
-  const _FloatingTitle({
-    required this.text,
-    required this.fontSize,
-    this.textAlign = TextAlign.center,
-  });
+class _Kicker extends StatelessWidget {
+  const _Kicker({required this.label});
 
-  final String text;
-  final double fontSize;
-  final TextAlign textAlign;
-
-  @override
-  State<_FloatingTitle> createState() => _FloatingTitleState();
-}
-
-class _FloatingTitleState extends State<_FloatingTitle>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 5000),
-  )..repeat(reverse: true);
-
-  late final Animation<double> _float = _controller.drive(
-    Tween<double>(begin: 0, end: -8)
-        .chain(CurveTween(curve: Curves.easeInOut)),
-  );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _float,
-      builder: (BuildContext context, Widget? child) {
-        return Transform.translate(
-          offset: Offset(0, _float.value),
-          child: child,
-        );
-      },
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          widget.text,
-          textAlign: widget.textAlign,
-          style: AppText.heroTitle(widget.fontSize).copyWith(
-            shadows: const <Shadow>[
-              Shadow(
-                color: AppColors.titleGlow,
-                offset: Offset(0, 10),
-                blurRadius: 18,
-              ),
-            ],
-          ),
-        ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        border: Border.all(color: AppColors.line),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label.toUpperCase(),
+        textAlign: TextAlign.center,
+        style: AppText.kicker,
       ),
     );
   }

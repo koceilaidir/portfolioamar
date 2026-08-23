@@ -45,12 +45,11 @@ class SupabasePortfolioRepository implements PortfolioRepository {
     return PortfolioContent(
       profile: ProfileInfo(
         role: _text(settings, 'role', _fallback.profile.role),
-        heroTitle: _text(settings, 'hero_title', _fallback.profile.heroTitle),
-        greeting: _text(settings, 'greeting', _fallback.profile.greeting),
+        heroSentence: _text(
+            settings, 'hero_sentence', _fallback.profile.heroSentence),
         firstName: _text(settings, 'first_name', _fallback.profile.firstName),
         lastName: _text(settings, 'last_name', _fallback.profile.lastName),
         subrole: _text(settings, 'subrole', _fallback.profile.subrole),
-        lede: _text(settings, 'lede', _fallback.profile.lede),
         signature: _text(settings, 'signature', _fallback.profile.signature),
       ),
       projectsSection: SectionCopy(
