@@ -1,12 +1,19 @@
-******************RECUPERER LE PROJET DEPUIS GITHUB
+
+
+
+
+  1. RECUPERER LE PROJET DEPUIS GITHUB
 
 
 Adresse du depot : https://github.com/koceilaidir/portfolioamar
-Git https://git-scm.com/downloads
-Verifier que tout est e place, dans un terminal :
-  flutter doctor
 
-************ telecharger le projet 
+- Etape 1 : installer les outils
+  - Git             https://git-scm.com/downloads
+
+Verifier que tout est en place, dans un terminal :
+    flutter doctor
+
+ Etape 2 : telecharger le projet
 
 Ouvrir un terminal (PowerShell sur Windows) dans le dossier ou tu veux
 ranger le projet, puis :
@@ -15,34 +22,33 @@ ranger le projet, puis :
     cd portfolioamar
     flutter pub get
 
+Le projet est maintenant sur ton ordinateur
 
-
-************ recuperer les mises a jour plus tard 
+- Etape 3 : recuperer les mises a jour plus tard 
 
 Chaque fois que quelqu'un modifie le code, pour recuperer les changements :
 
     git pull
 
-Si tu as toi-meme modifie des fichiers et que tu veux les envoyer :
+Si tu as toimeme modifie des fichiers et que tu veux les envoyer :
 
     git add -A
     git commit -m "decris ici ce que tu as change"
     git push
 
 
-
-  *********** COMPRENDRE L'ORGANISATION DU CODE
+  2. COMPRENDRE L'ORGANISATION DU CODE
 
 
     lib/
       main.dart              point d'entree, choisit la source du contenu
       app.dart               theme general et chargement du contenu
-      admin_mode.dart        interrupteur du bouton ADMIN 
+      admin_mode.dart        interrupteur du bouton ADMIN (voir chapitre 5)
 
       core/
         animation/           apparition des sections au defilement
         config/              cles Supabase
-        layout/              tailles d'ecran 
+        layout/              tailles d'ecran (mobile / tablette / desktop)
         theme/               couleurs, polices, icones
         utils/               ouverture des liens (email, site)
         widgets/             effet de survol
@@ -69,21 +75,10 @@ Pour changer une couleur ou une police : lib/core/theme/
 Pour changer la mise en page d'une section : lib/presentation/home/sections/
 
 
-  ***************LANCER LE SITE SUR SON ORDINATEUR
-
-Sans la base de donnees (le plus simple) 
-
-    flutter run -d chrome
-
-Le site s'ouvre avec le contenu ecrit en dur dans le code. Suffisant pour
-travailler sur le design.
+  3. LE CYCLE D'ADMINISTRATION : AFFICHER / ADMINISTRER / CACHER
 
 
-
-*****************ADMINISTRATION : AFFICHER / ADMINISTRER / CACHER
-
-
-Le bouton ADMIN (en bas a gauche du site) ouvre le panneau. On peut le
+Le bouton ADMIN  ouvre le panneau. On peut le
 masquer pour que les visiteurs ne le voient pas.
 
 L'interrupteur se trouve dans le fichier :
@@ -129,9 +124,20 @@ Il contient une seule ligne :
 
 
 
- 
+  4. PUBLIER LE SITE
 
 
+Le site se republie tout seul a chaque envoi de code sur GitHub :
 
+    git add -A
+    git commit -m "description de la modification"
+    git push
 
+Ensuite, sur GitHub, onglet "Actions" : un travail nommé "Deploy web"
+demarre. Quand il est vert, le site est a jour.
+
+    Adresse du site : https://koceilaidir.github.io/portfolioamar/
+
+Si le site semble inchange dans le navigateur, forcer le rechargement avec
+Ctrl + Shift + R (le navigateur garde l'ancienne version en memoire).
 

@@ -136,8 +136,9 @@ class _AdminPageState extends State<AdminPage> {
                           hint: '#FFFFFF'),
                       AdminField(
                         'image_path',
-                        'Image',
-                        hint: 'Nom du fichier dans le bucket, ou URL complète',
+                        'Image du projet',
+                        kind: AdminFieldKind.image,
+                        hint: 'Nom du fichier envoyé, ou URL complète',
                       ),
                       AdminField('url', 'Lien du projet'),
                       AdminField('position', 'Ordre',

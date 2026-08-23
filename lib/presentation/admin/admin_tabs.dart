@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/repositories/admin_repository.dart';
 import 'admin_fields.dart';
+import 'admin_image_field.dart';
 
 class SettingsTab extends StatefulWidget {
   const SettingsTab({super.key, required this.repository});
@@ -106,7 +107,7 @@ class _SettingsTabState extends State<SettingsTab> {
       showAdminMessage(context, 'Textes enregistrés.');
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, "Échec de l'enregistrement.", error: true);
+      showAdminMessage(context, "Échec : ${adminErrorText(error)}", error: true);
     }
     if (mounted) setState(() => _saving = false);
   }
@@ -222,7 +223,8 @@ class _TableTabState extends State<TableTab> {
       showAdminMessage(context, 'Élément ajouté.');
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, "Impossible d'ajouter l'élément.", error: true);
+      showAdminMessage(context, "Ajout impossible : ${adminErrorText(error)}",
+          error: true);
     }
   }
 
@@ -251,6 +253,7 @@ class _TableTabState extends State<TableTab> {
         for (final Map<String, dynamic> row in _rows)
           RowEditor(
             key: ValueKey<Object?>(row['id']),
+            repository: widget.repository,
             row: row,
             fields: widget.fields,
             title: (row[widget.titleColumn] ?? 'Sans titre').toString(),
@@ -269,6 +272,7 @@ class _TableTabState extends State<TableTab> {
 class RowEditor extends StatefulWidget {
   const RowEditor({
     super.key,
+    required this.repository,
     required this.row,
     required this.fields,
     required this.title,
@@ -276,6 +280,7 @@ class RowEditor extends StatefulWidget {
     required this.onDelete,
   });
 
+  final AdminRepository repository;
   final Map<String, dynamic> row;
   final List<AdminField> fields;
   final String title;
@@ -333,7 +338,7 @@ class _RowEditorState extends State<RowEditor> {
       showAdminMessage(context, 'Modifications enregistrées.');
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, "Échec de l'enregistrement.", error: true);
+      showAdminMessage(context, "Échec : ${adminErrorText(error)}", error: true);
     }
     if (mounted) setState(() => _busy = false);
   }
@@ -366,7 +371,8 @@ class _RowEditorState extends State<RowEditor> {
       await widget.onDelete();
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, 'Suppression impossible.', error: true);
+      showAdminMessage(context, "Suppression impossible : ${adminErrorText(error)}",
+          error: true);
       setState(() => _busy = false);
     }
   }
@@ -390,6 +396,13 @@ class _RowEditorState extends State<RowEditor> {
                   value: _toggles[field.column] ?? false,
                   onChanged: (bool value) =>
                       setState(() => _toggles[field.column] = value),
+                )
+              else if (field.kind == AdminFieldKind.image)
+                AdminImageField(
+                  controller: _controllers[field.column]!,
+                  repository: widget.repository,
+                  label: field.label,
+                  hint: field.hint,
                 )
               else
                 AdminInput(
@@ -483,7 +496,8 @@ class _ReviewsTabState extends State<ReviewsTab> {
       );
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, 'Action impossible.', error: true);
+      showAdminMessage(context, "Action impossible : ${adminErrorText(error)}",
+          error: true);
     }
   }
 
@@ -493,7 +507,8 @@ class _ReviewsTabState extends State<ReviewsTab> {
       await _load();
     } catch (error) {
       if (!mounted) return;
-      showAdminMessage(context, 'Suppression impossible.', error: true);
+      showAdminMessage(context, "Suppression impossible : ${adminErrorText(error)}",
+          error: true);
     }
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 
-enum AdminFieldKind { text, multiline, number, toggle }
+enum AdminFieldKind { text, multiline, number, toggle, image }
 
 class AdminField {
   const AdminField(
@@ -193,14 +193,28 @@ class AdminCard extends StatelessWidget {
   }
 }
 
+String adminErrorText(Object error) {
+  String raw = error.toString().replaceAll('\n', ' ').trim();
+  if (raw.startsWith('PostgrestException(')) {
+    raw = raw.substring('PostgrestException('.length);
+    if (raw.endsWith(')')) raw = raw.substring(0, raw.length - 1);
+  }
+  if (raw.length > 240) raw = '${raw.substring(0, 240)}…';
+  return raw;
+}
+
 void showAdminMessage(BuildContext context, String message,
     {bool error = false}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: error ? AppColors.terracottaDeep : AppColors.ink,
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 3),
-      content: Text(message, style: AppText.footerRow),
-    ),
-  );
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        backgroundColor: error ? AppColors.terracottaDeep : AppColors.ink,
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: error ? 10 : 3),
+        showCloseIcon: error,
+        closeIconColor: AppColors.cream,
+        content: Text(message, style: AppText.footerRow),
+      ),
+    );
 }

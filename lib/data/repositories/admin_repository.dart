@@ -1,4 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../core/config/app_config.dart';
 
 class AdminRepository {
   const AdminRepository(this.client);
@@ -67,6 +71,25 @@ class AdminRepository {
 
   Future<void> deleteRow(String table, Object id) async {
     await client.from(table).delete().eq('id', id);
+  }
+
+  Future<String> uploadProjectImage({
+    required String fileName,
+    required Uint8List bytes,
+  }) async {
+    await client.storage.from(AppConfig.projectImagesBucket).uploadBinary(
+          fileName,
+          bytes,
+          fileOptions: const FileOptions(upsert: true, cacheControl: '3600'),
+        );
+    return fileName;
+  }
+
+  String publicImageUrl(String path) {
+    if (path.startsWith('http')) return path;
+    return client.storage
+        .from(AppConfig.projectImagesBucket)
+        .getPublicUrl(path);
   }
 
   Future<int> nextPosition(String table) async {
