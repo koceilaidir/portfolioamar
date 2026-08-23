@@ -13,6 +13,21 @@ class StaticPortfolioRepository implements PortfolioRepository {
   @override
   Future<PortfolioContent> loadContent() async => content;
 
+  @override
+  bool get acceptsReviews => false;
+
+  @override
+  Future<void> submitReview({
+    required String author,
+    required String authorRole,
+    required String quote,
+    String? email,
+  }) async {
+    throw UnsupportedError(
+      'Le dépôt d\'avis nécessite Supabase (voir supabase/schema.sql).',
+    );
+  }
+
   static const PortfolioContent content = PortfolioContent(
     profile: ProfileInfo(
       role: 'Web Designer',

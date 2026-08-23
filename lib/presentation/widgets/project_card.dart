@@ -64,14 +64,42 @@ class ProjectCard extends StatelessWidget {
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeOut,
                         scale: hovered ? 1.06 : 1,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: project.gradient,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: <Widget>[
+                            DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: project.gradient,
+                                ),
+                              ),
                             ),
-                          ),
+                            if (project.imageUrl != null)
+                              Image.network(
+                                project.imageUrl!,
+                                fit: BoxFit.cover,
+                                errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stack) =>
+                                    const SizedBox.shrink(),
+                              ),
+                            // Voile sombre : garde le titre lisible sur une photo
+                            if (project.imageUrl != null)
+                              const DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: <Color>[
+                                      Color(0x0020201C),
+                                      Color(0x9920201C),
+                                    ],
+                                    stops: <double>[0.45, 1],
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -80,8 +108,11 @@ class ProjectCard extends StatelessWidget {
                           alignment: Alignment.bottomLeft,
                           child: Text(
                             project.thumbnailLabel,
-                            style: AppText.projectThumb(labelSize)
-                                .copyWith(color: project.thumbnailTextColor),
+                            style: AppText.projectThumb(labelSize).copyWith(
+                              color: project.imageUrl != null
+                                  ? Colors.white
+                                  : project.thumbnailTextColor,
+                            ),
                           ),
                         ),
                       ),

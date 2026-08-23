@@ -57,7 +57,7 @@ class _PortfolioAppState extends State<PortfolioApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Amar Hammour — Portfolio',
+      title: 'Amar Hammour Portfolio',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.build(),
       scrollBehavior: const AppScrollBehavior(),
@@ -71,7 +71,10 @@ class _PortfolioAppState extends State<PortfolioApp> {
           if (!snapshot.hasData) {
             return const _LoadingScreen();
           }
-          return HomePage(content: snapshot.data!);
+          return HomePage(
+            content: snapshot.data!,
+            repository: widget.repository,
+          );
         },
       ),
     );

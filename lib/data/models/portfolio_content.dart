@@ -54,6 +54,7 @@ class Project {
     required this.thumbnailLabel,
     required this.gradient,
     this.thumbnailTextColor = Colors.white,
+    this.imageUrl,
     this.url,
   });
 
@@ -67,6 +68,9 @@ class Project {
   /// Dégradé de la vignette (2 couleurs, orientation 135°).
   final List<Color> gradient;
   final Color thumbnailTextColor;
+
+  /// Visuel du projet (Supabase Storage). Null → on garde le dégradé.
+  final String? imageUrl;
   final String? url;
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
@@ -80,7 +84,25 @@ class Project {
         thumbnailTextColor: json['thumbnailTextColor'] == null
             ? Colors.white
             : colorFromHex(json['thumbnailTextColor'] as String),
+        imageUrl: json['imageUrl'] as String?,
         url: json['url'] as String?,
+      );
+
+  /// Ligne de la table `projects` de Supabase.
+  factory Project.fromRow(Map<String, dynamic> row, {String? imageUrl}) =>
+      Project(
+        id: row['id'].toString(),
+        title: (row['title'] ?? '') as String,
+        subtitle: (row['subtitle'] ?? '') as String,
+        thumbnailLabel: (row['thumbnail_label'] ?? '') as String,
+        gradient: <Color>[
+          colorFromHex((row['gradient_start'] ?? '#2B2B28') as String),
+          colorFromHex((row['gradient_end'] ?? '#4A453D') as String),
+        ],
+        thumbnailTextColor:
+            colorFromHex((row['thumbnail_text_color'] ?? '#FFFFFF') as String),
+        imageUrl: imageUrl,
+        url: row['url'] as String?,
       );
 }
 
@@ -99,6 +121,12 @@ class Skill {
   factory Skill.fromJson(Map<String, dynamic> json) => Skill(
         label: json['label'] as String,
         level: (json['level'] as num).round(),
+      );
+
+  /// Ligne de la table `skills` de Supabase.
+  factory Skill.fromRow(Map<String, dynamic> row) => Skill(
+        label: (row['label'] ?? '') as String,
+        level: ((row['level'] ?? 0) as num).round(),
       );
 }
 
@@ -121,6 +149,13 @@ class Feature {
         title: json['title'] as String,
         description: json['description'] as String,
       );
+
+  /// Ligne de la table `features` de Supabase.
+  factory Feature.fromRow(Map<String, dynamic> row) => Feature(
+        iconKey: (row['icon_key'] ?? 'star') as String,
+        title: (row['title'] ?? '') as String,
+        description: (row['description'] ?? '') as String,
+      );
 }
 
 /// Un témoignage client.
@@ -140,6 +175,13 @@ class Testimonial {
         quote: json['quote'] as String,
         author: json['author'] as String,
         authorRole: json['authorRole'] as String,
+      );
+
+  /// Ligne de la table `testimonials` de Supabase.
+  factory Testimonial.fromRow(Map<String, dynamic> row) => Testimonial(
+        quote: (row['quote'] ?? '') as String,
+        author: (row['author'] ?? '') as String,
+        authorRole: (row['author_role'] ?? '') as String,
       );
 }
 

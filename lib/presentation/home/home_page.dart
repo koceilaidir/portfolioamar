@@ -5,6 +5,7 @@ import '../../core/animation/reveal.dart';
 import '../../core/layout/breakpoints.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/models/portfolio_content.dart';
+import '../../data/repositories/portfolio_repository.dart';
 import 'sections/footer_section.dart';
 import 'sections/hero_section.dart';
 import 'sections/projects_section.dart';
@@ -14,9 +15,14 @@ import 'sections/testimonials_section.dart';
 
 /// Page unique du portfolio : toutes les sections empilées + barre fixe.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.content});
+  const HomePage({
+    super.key,
+    required this.content,
+    required this.repository,
+  });
 
   final PortfolioContent content;
+  final PortfolioRepository repository;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -124,6 +130,9 @@ class _HomePageState extends State<HomePage> {
                       key: _testimonialsKey,
                       copy: content.testimonialsSection,
                       testimonials: content.testimonials,
+                      onSubmitReview: widget.repository.acceptsReviews
+                          ? widget.repository.submitReview
+                          : null,
                     ),
                     FooterSection(
                       key: _contactKey,
