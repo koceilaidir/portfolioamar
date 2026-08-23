@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 
-/// Grille très légère qui s'estompe sur les bords — équivalent de `.grid-fade`.
 class GridFade extends StatelessWidget {
   const GridFade({super.key, this.cell = 26, this.center = const Alignment(0, -0.4)});
 

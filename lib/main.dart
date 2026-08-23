@@ -14,7 +14,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(AppTheme.overlayStyle);
 
-  // Sans clés Supabase, le site fonctionne avec le contenu embarqué.
   PortfolioRepository repository = const StaticPortfolioRepository();
 
   if (AppConfig.hasSupabase) {

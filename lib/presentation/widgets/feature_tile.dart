@@ -5,7 +5,6 @@ import '../../core/theme/app_icons.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/portfolio_content.dart';
 
-/// Argument différenciant — `.feat`.
 class FeatureTile extends StatelessWidget {
   const FeatureTile({super.key, required this.feature});
 

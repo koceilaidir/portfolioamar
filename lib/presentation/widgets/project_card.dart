@@ -6,7 +6,6 @@ import '../../core/theme/app_typography.dart';
 import '../../core/widgets/hover_region.dart';
 import '../../data/models/portfolio_content.dart';
 
-/// Carte projet — `.proj`, `.proj .thumb`, `.proj .meta`.
 class ProjectCard extends StatelessWidget {
   const ProjectCard({
     super.key,
@@ -84,7 +83,7 @@ class ProjectCard extends StatelessWidget {
                                         Object error, StackTrace? stack) =>
                                     const SizedBox.shrink(),
                               ),
-                            // Voile sombre : garde le titre lisible sur une photo
+
                             if (project.imageUrl != null)
                               const DecoratedBox(
                                 decoration: BoxDecoration(

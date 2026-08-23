@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Petit utilitaire : expose un état "survolé" à son builder et affiche le
-/// curseur main quand un [onTap] est fourni.
 class HoverRegion extends StatefulWidget {
   const HoverRegion({
     super.key,

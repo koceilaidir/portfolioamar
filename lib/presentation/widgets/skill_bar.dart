@@ -6,8 +6,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/portfolio_content.dart';
 
-/// Ligne de compétence — `.skill-row`, `.bar`, `.pct`.
-/// La barre se remplit en même temps que le [Reveal] parent apparaît.
 class SkillBar extends StatelessWidget {
   const SkillBar({super.key, required this.skill});
 

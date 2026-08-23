@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Diffuse la position de défilement de la page à tous les widgets [Reveal]
-/// sans provoquer de reconstruction générale : chaque [Reveal] s'abonne
-/// lui-même au notifier et s'en désabonne dès qu'il est apparu.
 class ScrollOffsetProvider extends InheritedWidget {
   const ScrollOffsetProvider({
     super.key,
@@ -23,8 +20,6 @@ class ScrollOffsetProvider extends InheritedWidget {
       oldWidget.offset != offset;
 }
 
-/// Expose l'animation d'apparition du [Reveal] parent afin que des enfants
-/// (barres de compétences, compteurs…) puissent se caler dessus.
 class RevealAnimation extends InheritedWidget {
   const RevealAnimation({
     super.key,
@@ -43,8 +38,6 @@ class RevealAnimation extends InheritedWidget {
       oldWidget.animation != animation;
 }
 
-/// Fait apparaître son enfant (fondu + léger glissement vers le haut)
-/// la première fois qu'il entre dans la zone visible.
 class Reveal extends StatefulWidget {
   const Reveal({
     super.key,
@@ -88,7 +81,7 @@ class _RevealState extends State<Reveal> with SingleTickerProviderStateMixin {
       }
     }
     if (notifier == null) {
-      // Pas de scroll observé (tests, aperçus) : on affiche directement.
+
       _start();
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) => _maybeReveal());

@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import 'pill_button.dart';
 
-/// Signature de `PortfolioRepository.submitReview`.
 typedef ReviewSubmitter = Future<void> Function({
   required String author,
   required String authorRole,
@@ -12,8 +11,6 @@ typedef ReviewSubmitter = Future<void> Function({
   String? email,
 });
 
-/// Formulaire d'avis client, ouvert en modale.
-/// L'avis part en statut "en attente" et n'est publié qu'après validation.
 class ReviewFormDialog extends StatefulWidget {
   const ReviewFormDialog({super.key, required this.onSubmit});
 

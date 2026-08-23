@@ -1,13 +1,11 @@
 import 'package:flutter/widgets.dart';
 
-/// Les trois tailles d'écran gérées par le site.
 enum ScreenSize { mobile, tablet, desktop }
 
 abstract final class Breakpoints {
   static const double tablet = 760;
   static const double desktop = 1100;
 
-  /// Largeur maximale du contenu sur les grands écrans.
   static const double maxContentWidth = 1160;
 
   static ScreenSize of(BuildContext context) {
@@ -20,7 +18,6 @@ abstract final class Breakpoints {
     return ScreenSize.mobile;
   }
 
-  /// Marge horizontale du contenu selon la taille d'écran.
   static double gutter(ScreenSize size) {
     switch (size) {
       case ScreenSize.mobile:
@@ -33,7 +30,6 @@ abstract final class Breakpoints {
   }
 }
 
-/// Petit helper pour choisir une valeur par breakpoint sans répéter de switch.
 T responsive<T>(
   ScreenSize size, {
   required T mobile,
@@ -50,7 +46,6 @@ T responsive<T>(
   }
 }
 
-/// Conteneur centré, largeur maximale + marges latérales cohérentes.
 class ContentContainer extends StatelessWidget {
   const ContentContainer({
     super.key,

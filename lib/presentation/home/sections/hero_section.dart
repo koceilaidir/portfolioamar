@@ -8,7 +8,6 @@ import '../../../data/models/portfolio_content.dart';
 import '../../widgets/grid_fade.dart';
 import '../../widgets/pill_button.dart';
 
-/// Section d'accueil — `.hero`.
 class HeroSection extends StatelessWidget {
   const HeroSection({
     super.key,
@@ -39,7 +38,6 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  // --- Mobile / tablette ----------------------------------------------------
   Widget _buildCompact(BuildContext context, ScreenSize size) {
     final double titleSize = responsive<double>(size, mobile: 66, tablet: 92);
 
@@ -77,7 +75,6 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  // --- Desktop --------------------------------------------------------------
   Widget _buildDesktop(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -195,7 +192,6 @@ class _HeroCopy extends StatelessWidget {
   }
 }
 
-/// Titre "Portfolio" en lévitation — `@keyframes floatY`.
 class _FloatingTitle extends StatefulWidget {
   const _FloatingTitle({
     required this.text,

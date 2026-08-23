@@ -2,24 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
 
-/// Familles de polices embarquées (assets/fonts).
 abstract final class AppFonts {
-  /// Fraunces optique "display" — pour les grands titres.
+
   static const String display = 'FrauncesDisplay';
 
-  /// Fraunces optique "texte" — pour les titres secondaires et citations.
   static const String serif = 'Fraunces';
 
-  /// Manrope — texte courant, boutons, labels.
   static const String sans = 'Manrope';
 
-  /// Caveat — signature manuscrite.
   static const String script = 'Caveat';
 }
 
-/// Styles de texte repris des règles CSS de la maquette.
 abstract final class AppText {
-  // --- Barre du haut -------------------------------------------------------
+
   static const TextStyle role = TextStyle(
     fontFamily: AppFonts.sans,
     fontWeight: FontWeight.w700,
@@ -46,7 +41,6 @@ abstract final class AppText {
     letterSpacing: 1,
   );
 
-  // --- Hero ----------------------------------------------------------------
   static TextStyle heroTitle(double fontSize) => TextStyle(
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w900,
@@ -98,7 +92,6 @@ abstract final class AppText {
         color: AppColors.ink,
       );
 
-  // --- Titres de section ---------------------------------------------------
   static TextStyle sectionKicker(double fontSize) => TextStyle(
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w700,
@@ -124,7 +117,6 @@ abstract final class AppText {
     color: AppColors.terracottaDeep,
   );
 
-  // --- Projets -------------------------------------------------------------
   static TextStyle projectThumb(double fontSize) => TextStyle(
         fontFamily: AppFonts.serif,
         fontWeight: FontWeight.w700,
@@ -157,7 +149,6 @@ abstract final class AppText {
     color: AppColors.inkSoft,
   );
 
-  // --- Compétences ---------------------------------------------------------
   static const TextStyle skillLabel = TextStyle(
     fontFamily: AppFonts.sans,
     fontWeight: FontWeight.w700,
@@ -201,7 +192,6 @@ abstract final class AppText {
     color: AppColors.inkSoft,
   );
 
-  // --- Témoignages ---------------------------------------------------------
   static const TextStyle testimonial = TextStyle(
     fontFamily: AppFonts.sans,
     fontWeight: FontWeight.w400,
@@ -226,7 +216,6 @@ abstract final class AppText {
     color: AppColors.inkSoft,
   );
 
-  // --- Pied de page --------------------------------------------------------
   static TextStyle footerTitle(double fontSize) => TextStyle(
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w700,

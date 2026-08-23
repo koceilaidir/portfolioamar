@@ -13,7 +13,6 @@ import 'sections/site_header.dart';
 import 'sections/skills_section.dart';
 import 'sections/testimonials_section.dart';
 
-/// Page unique du portfolio : toutes les sections empilées + barre fixe.
 class HomePage extends StatefulWidget {
   const HomePage({
     super.key,
@@ -182,7 +181,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// Bouton discret de retour en haut de page.
 class _BackToTopButton extends StatelessWidget {
   const _BackToTopButton({required this.scrollOffset, required this.onTap});
 

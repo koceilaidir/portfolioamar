@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// Convertit une couleur "#RRGGBB" (ou "#AARRGGBB") en [Color].
 Color colorFromHex(String value) {
   String hex = value.replaceAll('#', '').trim();
   if (hex.length == 6) hex = 'FF$hex';
   return Color(int.parse(hex, radix: 16));
 }
 
-/// Identité et pitch affichés dans le hero.
 @immutable
 class ProfileInfo {
   const ProfileInfo({
@@ -44,7 +42,6 @@ class ProfileInfo {
       );
 }
 
-/// Un projet de la section "Selected Projects".
 @immutable
 class Project {
   const Project({
@@ -62,14 +59,11 @@ class Project {
   final String title;
   final String subtitle;
 
-  /// Texte affiché en grand dans la vignette (retours à la ligne avec "\n").
   final String thumbnailLabel;
 
-  /// Dégradé de la vignette (2 couleurs, orientation 135°).
   final List<Color> gradient;
   final Color thumbnailTextColor;
 
-  /// Visuel du projet (Supabase Storage). Null → on garde le dégradé.
   final String? imageUrl;
   final String? url;
 
@@ -88,7 +82,6 @@ class Project {
         url: json['url'] as String?,
       );
 
-  /// Ligne de la table `projects` de Supabase.
   factory Project.fromRow(Map<String, dynamic> row, {String? imageUrl}) =>
       Project(
         id: row['id'].toString(),
@@ -106,14 +99,12 @@ class Project {
       );
 }
 
-/// Une ligne de compétence avec sa barre de progression.
 @immutable
 class Skill {
   const Skill({required this.label, required this.level});
 
   final String label;
 
-  /// Niveau entre 0 et 100.
   final int level;
 
   double get fraction => (level / 100).clamp(0.0, 1.0);
@@ -123,14 +114,12 @@ class Skill {
         level: (json['level'] as num).round(),
       );
 
-  /// Ligne de la table `skills` de Supabase.
   factory Skill.fromRow(Map<String, dynamic> row) => Skill(
         label: (row['label'] ?? '') as String,
         level: ((row['level'] ?? 0) as num).round(),
       );
 }
 
-/// Un argument différenciant (icône + titre + description).
 @immutable
 class Feature {
   const Feature({
@@ -139,7 +128,6 @@ class Feature {
     required this.description,
   });
 
-  /// Clé résolue en icône par `AppIcons.resolve`.
   final String iconKey;
   final String title;
   final String description;
@@ -150,7 +138,6 @@ class Feature {
         description: json['description'] as String,
       );
 
-  /// Ligne de la table `features` de Supabase.
   factory Feature.fromRow(Map<String, dynamic> row) => Feature(
         iconKey: (row['icon_key'] ?? 'star') as String,
         title: (row['title'] ?? '') as String,
@@ -158,7 +145,6 @@ class Feature {
       );
 }
 
-/// Un témoignage client.
 @immutable
 class Testimonial {
   const Testimonial({
@@ -177,7 +163,6 @@ class Testimonial {
         authorRole: json['authorRole'] as String,
       );
 
-  /// Ligne de la table `testimonials` de Supabase.
   factory Testimonial.fromRow(Map<String, dynamic> row) => Testimonial(
         quote: (row['quote'] ?? '') as String,
         author: (row['author'] ?? '') as String,
@@ -185,7 +170,6 @@ class Testimonial {
       );
 }
 
-/// Coordonnées affichées dans le pied de page.
 @immutable
 class ContactInfo {
   const ContactInfo({
@@ -214,7 +198,6 @@ class ContactInfo {
       );
 }
 
-/// Titre + description d'une section.
 @immutable
 class SectionCopy {
   const SectionCopy({
@@ -237,8 +220,6 @@ class SectionCopy {
       );
 }
 
-/// L'ensemble du contenu du site. C'est le seul objet que l'UI consomme :
-/// le back n'aura qu'à fournir un [PortfolioContent].
 @immutable
 class PortfolioContent {
   const PortfolioContent({

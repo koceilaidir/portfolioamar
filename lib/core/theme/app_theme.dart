@@ -37,7 +37,6 @@ abstract final class AppTheme {
     );
   }
 
-  /// Barre de statut claire sur fond crème (utile si le site est ouvert en PWA).
   static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,

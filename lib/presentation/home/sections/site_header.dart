@@ -7,7 +7,6 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/hover_region.dart';
 import '../../widgets/pill_button.dart';
 
-/// Élément de navigation du haut de page.
 class NavItem {
   const NavItem({required this.label, required this.onTap});
 
@@ -15,7 +14,6 @@ class NavItem {
   final VoidCallback onTap;
 }
 
-/// Barre supérieure fixe — reprend `.topbar` et se densifie au défilement.
 class SiteHeader extends StatelessWidget {
   const SiteHeader({
     super.key,

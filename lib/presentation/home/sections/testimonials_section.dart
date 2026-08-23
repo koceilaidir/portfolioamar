@@ -8,7 +8,6 @@ import '../../widgets/review_form.dart';
 import '../../widgets/section_heading.dart';
 import '../../widgets/testimonial_card.dart';
 
-/// Section "What Clients Say" — `.testi`.
 class TestimonialsSection extends StatelessWidget {
   const TestimonialsSection({
     super.key,
@@ -20,7 +19,6 @@ class TestimonialsSection extends StatelessWidget {
   final SectionCopy copy;
   final List<Testimonial> testimonials;
 
-  /// Non null quand le back accepte les avis de visiteurs.
   final ReviewSubmitter? onSubmitReview;
 
   @override

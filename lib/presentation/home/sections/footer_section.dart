@@ -10,7 +10,6 @@ import '../../../core/widgets/hover_region.dart';
 import '../../../data/models/portfolio_content.dart';
 import '../../widgets/pill_button.dart';
 
-/// Pied de page / section contact — `.foot`.
 class FooterSection extends StatelessWidget {
   const FooterSection({
     super.key,

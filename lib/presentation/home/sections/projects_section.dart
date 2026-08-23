@@ -6,7 +6,6 @@ import '../../../data/models/portfolio_content.dart';
 import '../../widgets/project_card.dart';
 import '../../widgets/section_heading.dart';
 
-/// Section "Selected Projects" — `.sec` + `.projects`.
 class ProjectsSection extends StatelessWidget {
   const ProjectsSection({
     super.key,

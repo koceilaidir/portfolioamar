@@ -6,7 +6,6 @@ import '../../core/theme/app_typography.dart';
 import '../../core/widgets/hover_region.dart';
 import '../../data/models/portfolio_content.dart';
 
-/// Titre de section : `.sec-kicker` + `.sec-desc` + `.link-all`.
 class SectionHeading extends StatelessWidget {
   const SectionHeading({
     super.key,

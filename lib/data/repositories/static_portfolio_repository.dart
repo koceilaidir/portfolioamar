@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import '../models/portfolio_content.dart';
 import 'portfolio_repository.dart';
 
-/// Contenu embarqué dans l'application (reprise fidèle de la maquette).
-///
-/// C'est le seul fichier à modifier pour changer les textes tant que le back
-/// n'est pas branché.
 class StaticPortfolioRepository implements PortfolioRepository {
   const StaticPortfolioRepository();
 

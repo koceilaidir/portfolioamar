@@ -9,7 +9,6 @@ import '../../widgets/feature_tile.dart';
 import '../../widgets/section_heading.dart';
 import '../../widgets/skill_bar.dart';
 
-/// Section "Skills & Expertise" — `.skills-wrap`, `.quote`, `.feat`.
 class SkillsSection extends StatelessWidget {
   const SkillsSection({
     super.key,

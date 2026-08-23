@@ -6,7 +6,6 @@ import '../../core/widgets/hover_region.dart';
 
 enum PillVariant { solid, ghost, ghostOnDark }
 
-/// Bouton en forme de pilule — reprend `.btn`, `.btn-solid` et `.btn-ghost`.
 class PillButton extends StatelessWidget {
   const PillButton({
     super.key,
@@ -95,7 +94,6 @@ class PillButton extends StatelessWidget {
   }
 }
 
-/// Variante compacte utilisée dans la barre du haut (`.topbar .contact`).
 class PillLink extends StatelessWidget {
   const PillLink({
     super.key,

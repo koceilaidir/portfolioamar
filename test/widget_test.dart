@@ -5,8 +5,6 @@ import 'package:portfolio/data/repositories/static_portfolio_repository.dart';
 import 'package:portfolio/presentation/widgets/project_card.dart';
 import 'package:portfolio/presentation/widgets/testimonial_card.dart';
 
-/// Le titre "Portfolio" est animé en boucle : on ne peut pas utiliser
-/// `pumpAndSettle`, on avance donc le temps manuellement.
 Future<void> _settle(WidgetTester tester) async {
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 400));

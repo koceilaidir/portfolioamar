@@ -1,18 +1,6 @@
--- =============================================================================
---  Portfolio Amar Hammour — schéma Supabase
---  À exécuter tel quel dans : Supabase Dashboard → SQL Editor → New query → Run
---  Le script est idempotent : tu peux le relancer sans casser les données.
--- =============================================================================
-
--- -----------------------------------------------------------------------------
--- 1. TABLES
--- -----------------------------------------------------------------------------
-
--- Contenu éditorial du site (une seule ligne, id = 1)
 create table if not exists public.site_settings (
   id                       smallint primary key default 1 check (id = 1),
 
-  -- Hero
   role                     text not null default 'Web Designer',
   hero_title               text not null default 'Portfolio',
   greeting                 text not null default 'Hello, I''m',
@@ -22,23 +10,19 @@ create table if not exists public.site_settings (
   lede                     text not null default '',
   signature                text not null default 'Amar Hammour',
 
-  -- Section projets
   projects_title           text not null default 'Selected',
   projects_accent          text not null default 'Projects',
   projects_description     text,
   projects_link_label      text,
 
-  -- Section compétences
   skills_title             text not null default 'Skills &',
   skills_accent            text not null default 'Expertise',
   quote                    text not null default '',
 
-  -- Section témoignages
   testimonials_title       text not null default 'What Clients',
   testimonials_accent      text not null default 'Say',
   testimonials_description text,
 
-  -- Pied de page / contact
   contact_email            text not null default '',
   contact_website          text not null default '',
   contact_availability     text not null default '',
@@ -49,18 +33,17 @@ create table if not exists public.site_settings (
   updated_at               timestamptz not null default now()
 );
 
--- Projets
 create table if not exists public.projects (
   id                   uuid primary key default gen_random_uuid(),
   title                text not null,
   subtitle             text not null default '',
-  -- Texte affiché en grand sur la vignette (utilise \n pour un retour à la ligne)
+
   thumbnail_label      text not null default '',
-  -- Dégradé de repli quand il n'y a pas d'image
+
   gradient_start       text not null default '#2B2B28',
   gradient_end         text not null default '#4A453D',
   thumbnail_text_color text not null default '#FFFFFF',
-  -- Chemin du fichier dans le bucket "project-images" (ex : studio-form.jpg)
+
   image_path           text,
   url                  text,
   position             integer not null default 0,
@@ -68,7 +51,6 @@ create table if not exists public.projects (
   created_at           timestamptz not null default now()
 );
 
--- Compétences (barres de progression)
 create table if not exists public.skills (
   id         uuid primary key default gen_random_uuid(),
   label      text not null,
@@ -77,10 +59,9 @@ create table if not exists public.skills (
   created_at timestamptz not null default now()
 );
 
--- Arguments différenciants (icône + titre + description)
 create table if not exists public.features (
   id          uuid primary key default gen_random_uuid(),
-  -- Clés disponibles : user, code, responsive, performance, design, star
+
   icon_key    text not null default 'star',
   title       text not null,
   description text not null default '',
@@ -88,7 +69,6 @@ create table if not exists public.features (
   created_at  timestamptz not null default now()
 );
 
--- Avis clients — un visiteur peut en déposer un, il reste "pending" jusqu'à validation
 create table if not exists public.testimonials (
   id          uuid primary key default gen_random_uuid(),
   quote       text not null check (char_length(quote) between 10 and 600),
@@ -103,12 +83,6 @@ create table if not exists public.testimonials (
 
 create index if not exists testimonials_status_idx on public.testimonials (status);
 create index if not exists projects_position_idx  on public.projects (position);
-
--- -----------------------------------------------------------------------------
--- 2. SÉCURITÉ (Row Level Security)
---    Le site utilise la clé "anon" : lecture publique du contenu publié,
---    et une seule écriture autorisée — déposer un avis en attente.
--- -----------------------------------------------------------------------------
 
 alter table public.site_settings enable row level security;
 alter table public.projects      enable row level security;
@@ -132,21 +106,13 @@ drop policy if exists "features_public_read" on public.features;
 create policy "features_public_read"
   on public.features for select to anon, authenticated using (true);
 
--- Seuls les avis approuvés sont visibles publiquement
 drop policy if exists "testimonials_public_read_approved" on public.testimonials;
 create policy "testimonials_public_read_approved"
   on public.testimonials for select to anon, authenticated using (status = 'approved');
 
--- Un visiteur peut déposer un avis, mais uniquement en statut "pending"
 drop policy if exists "testimonials_public_insert_pending" on public.testimonials;
 create policy "testimonials_public_insert_pending"
   on public.testimonials for insert to anon, authenticated with check (status = 'pending');
-
--- Aucune policy update/delete pour anon : la modération se fait dans le dashboard.
-
--- -----------------------------------------------------------------------------
--- 3. STOCKAGE DES IMAGES DE PROJET
--- -----------------------------------------------------------------------------
 
 insert into storage.buckets (id, name, public)
 values ('project-images', 'project-images', true)
@@ -156,11 +122,6 @@ drop policy if exists "project_images_public_read" on storage.objects;
 create policy "project_images_public_read"
   on storage.objects for select to anon, authenticated
   using (bucket_id = 'project-images');
-
--- -----------------------------------------------------------------------------
--- 4. CONTENU INITIAL (reprise de la maquette)
---    Ne s'exécute que si les tables sont vides.
--- -----------------------------------------------------------------------------
 
 insert into public.site_settings (
   id, role, hero_title, greeting, first_name, last_name, subrole, lede, signature,
@@ -229,8 +190,3 @@ select * from (values
    'David Carter', 'CEO, Studio Form', 'approved', 2)
 ) as seed
 where not exists (select 1 from public.testimonials);
-
--- =============================================================================
---  MODÉRATION D'UN AVIS (à faire dans Table Editor → testimonials)
---  Passer status de 'pending' à 'approved' pour le publier sur le site.
--- =============================================================================

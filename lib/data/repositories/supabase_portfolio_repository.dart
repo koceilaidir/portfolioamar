@@ -5,11 +5,6 @@ import '../models/portfolio_content.dart';
 import 'portfolio_repository.dart';
 import 'static_portfolio_repository.dart';
 
-/// Contenu servi par Supabase.
-///
-/// Tables lues : `site_settings`, `projects`, `skills`, `features`,
-/// `testimonials` (uniquement les avis approuvés).
-/// Voir `supabase/schema.sql` à la racine du projet.
 class SupabasePortfolioRepository implements PortfolioRepository {
   const SupabasePortfolioRepository(this._client);
 
@@ -117,8 +112,6 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       'status': 'pending',
     });
   }
-
-  // --- Helpers ---------------------------------------------------------------
 
   List<Map<String, dynamic>> _rows(dynamic value) {
     if (value is! List) return <Map<String, dynamic>>[];

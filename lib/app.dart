@@ -8,7 +8,6 @@ import 'data/models/portfolio_content.dart';
 import 'data/repositories/portfolio_repository.dart';
 import 'presentation/home/home_page.dart';
 
-/// Permet de faire défiler la page à la souris (utile sur le web).
 class AppScrollBehavior extends MaterialScrollBehavior {
   const AppScrollBehavior();
 

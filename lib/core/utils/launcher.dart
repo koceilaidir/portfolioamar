@@ -5,8 +5,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 
-/// Ouverture de liens externes (mailto, https…) avec repli sur le
-/// presse-papiers si le navigateur bloque l'ouverture.
 abstract final class AppLauncher {
   static Future<void> open(BuildContext context, Uri uri) async {
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);

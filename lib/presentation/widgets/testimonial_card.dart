@@ -4,7 +4,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/portfolio_content.dart';
 
-/// Carte témoignage — `.testi`.
 class TestimonialCard extends StatelessWidget {
   const TestimonialCard({super.key, required this.testimonial});
 
