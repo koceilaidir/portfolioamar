@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/portfolio_content.dart';
 import '../../widgets/grid_fade.dart';
+import '../../widgets/handwritten_signature.dart';
 import '../../widgets/hero_sentence.dart';
 import '../../widgets/pill_button.dart';
 
@@ -57,7 +58,7 @@ class HeroSection extends StatelessWidget {
                   SizedBox(
                     width: wordmarkWidth,
                     child: AspectRatio(
-                      aspectRatio: 1600 / 911,
+                      aspectRatio: 1600 / 1018,
                       child: Image.asset(
                         'assets/images/portfolio-wordmark.webp',
                         fit: BoxFit.contain,
@@ -90,9 +91,8 @@ class HeroSection extends StatelessWidget {
                     height: responsive<double>(size,
                         mobile: 10, tablet: 12, desktop: 14),
                   ),
-                  Text(
-                    profile.signature,
-                    textAlign: TextAlign.center,
+                  HandwrittenSignature(
+                    text: profile.signature,
                     style: AppText.signature(
                       responsive<double>(size,
                           mobile: 29, tablet: 32, desktop: 36),
@@ -100,7 +100,7 @@ class HeroSection extends StatelessWidget {
                   ),
                   SizedBox(
                     height: responsive<double>(size,
-                        mobile: 12, tablet: 14, desktop: 16),
+                        mobile: 17, tablet: 19, desktop: 21),
                   ),
                   Wrap(
                     alignment: WrapAlignment.center,
