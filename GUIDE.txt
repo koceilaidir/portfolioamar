@@ -284,7 +284,18 @@ C'est plus rapide que de republier deux fois.
                Le champ texte sous le bouton accepte aussi une URL complete
                d'image deja en ligne, si on prefere.
 
-  COMPETENCES  les barres de progression (intitule + niveau de 0 a 100).
+  COMPETENCES  la liste des logiciels : nom, niveau de 0 a 100, ordre.
+
+               "Icone du logiciel" : bouton "Choisir une image", on selectionne
+               le fichier telecharge (le logo Photoshop, Figma...). Il part
+               dans la base et s'affiche dans le nuage flottant a gauche de la
+               section. Format conseille : PNG carre, fond transparent,
+               au moins 256x256 px.
+               Sans icone, une pastille avec un sigle est affichee a la place.
+               "Sigle" : 2 lettres, ex Ps. Laisse vide, ce sont les initiales
+               du nom qui sont utilisees.
+               Le niveau fixe la longueur de la barre ET la taille de la
+               pastille dans le nuage.
 
   ATOUTS       les 4 arguments avec icone. Icones disponibles :
                user, code, responsive, performance, design, star

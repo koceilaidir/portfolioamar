@@ -70,6 +70,7 @@ create table if not exists public.skills (
   id          uuid primary key default gen_random_uuid(),
   label       text not null,
   short_label text not null default '',
+  icon_path   text,
   level      integer not null default 80 check (level between 0 and 100),
   position   integer not null default 0,
   created_at timestamptz not null default now()
@@ -125,6 +126,8 @@ alter table public.site_settings alter column hero_sentence drop not null;
 
 alter table public.skills
   add column if not exists short_label text not null default '';
+alter table public.skills
+  add column if not exists icon_path text;
 
 alter table public.projects
   add column if not exists description text;

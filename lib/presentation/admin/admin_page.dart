@@ -171,13 +171,21 @@ class _AdminPageState extends State<AdminPage> {
                     newRowDefaults: const <String, dynamic>{
                       'label': 'Nouveau logiciel',
                       'short_label': '',
+                      'icon_path': '',
                       'level': 80,
                     },
                     fields: const <AdminField>[
                       AdminField('label', 'Nom du logiciel'),
                       AdminField(
+                        'icon_path',
+                        'Icône du logiciel',
+                        kind: AdminFieldKind.image,
+                        hint: 'PNG carré conseillé, fond transparent. '
+                            'Sans icône, le sigle ci-dessous est utilisé',
+                      ),
+                      AdminField(
                         'short_label',
-                        'Sigle de la pastille',
+                        'Sigle (si aucune icône)',
                         hint: '2 lettres, ex : Ps. Vide = initiales du nom',
                       ),
                       AdminField('level', 'Niveau (0 à 100)',

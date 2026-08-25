@@ -85,7 +85,7 @@ class _FloatingBadgeState extends State<_FloatingBadge>
     duration: Duration(milliseconds: 3200 + widget.index * 430),
   );
 
-  late final Animation<double> _float = _controller.drive(
+  late final Animation<double> _drift = _controller.drive(
     Tween<double>(begin: -1, end: 1)
         .chain(CurveTween(curve: Curves.easeInOutSine)),
   );
@@ -111,8 +111,7 @@ class _FloatingBadgeState extends State<_FloatingBadge>
 
   bool get _isInk => widget.index % 3 == 2;
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _letterTile() {
     final double side = widget.size;
     final Color background = _isAccent
         ? AppColors.primary
@@ -125,47 +124,67 @@ class _FloatingBadgeState extends State<_FloatingBadge>
             ? AppColors.cream
             : AppColors.ink;
 
+    return Container(
+      width: side,
+      height: side,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: background,
+        border: Border.all(
+          color: _isAccent || _isInk ? Colors.transparent : AppColors.line,
+        ),
+        borderRadius: BorderRadius.circular(side * 0.28),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color:
+                _isAccent ? AppColors.buttonShadow : const Color(0x1A20201C),
+            blurRadius: side * 0.32,
+            offset: Offset(0, side * 0.11),
+          ),
+        ],
+      ),
+      child: Text(
+        widget.skill.badge,
+        style: AppText.softwareBadge(side * 0.34).copyWith(color: foreground),
+      ),
+    );
+  }
+
+  Widget _iconTile(String url) {
+    final double side = widget.size;
+    return SizedBox(
+      width: side,
+      height: side,
+      child: Image.network(
+        url,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.high,
+        errorBuilder:
+            (BuildContext context, Object error, StackTrace? stack) =>
+                _letterTile(),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final String url = (widget.skill.iconUrl ?? '').trim();
+
     return Tooltip(
       message: widget.skill.label,
       waitDuration: const Duration(milliseconds: 400),
       child: AnimatedBuilder(
-        animation: _float,
+        animation: _drift,
         builder: (BuildContext context, Widget? child) {
           return Transform.translate(
-            offset: Offset(0, _float.value * side * 0.07),
+            offset: Offset(0, _drift.value * widget.size * 0.07),
             child: Transform.rotate(
-              angle: _float.value * 0.035,
+              angle: _drift.value * 0.035,
               child: child,
             ),
           );
         },
-        child: Container(
-          width: side,
-          height: side,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: background,
-            border: Border.all(
-              color: _isAccent || _isInk ? Colors.transparent : AppColors.line,
-            ),
-            borderRadius: BorderRadius.circular(side * 0.28),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: _isAccent
-                    ? AppColors.buttonShadow
-                    : const Color(0x1A20201C),
-                blurRadius: side * 0.32,
-                offset: Offset(0, side * 0.11),
-              ),
-            ],
-          ),
-          child: Text(
-            widget.skill.badge,
-            style: AppText.softwareBadge(side * 0.34).copyWith(
-              color: foreground,
-            ),
-          ),
-        ),
+        child: url.isEmpty ? _letterTile() : _iconTile(url),
       ),
     );
   }

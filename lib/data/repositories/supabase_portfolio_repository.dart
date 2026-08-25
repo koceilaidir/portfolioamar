@@ -97,7 +97,10 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       ),
       skills: skillRows.isEmpty
           ? _fallback.skills
-          : skillRows.map(Skill.fromRow).toList(),
+          : skillRows
+              .map((Map<String, dynamic> row) =>
+                  Skill.fromRow(row, iconUrl: _imageUrl(row['icon_path'])))
+              .toList(),
       quote: _text(settings, 'quote', _fallback.quote),
       features: featureRows.isEmpty
           ? _fallback.features

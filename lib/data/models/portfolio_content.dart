@@ -155,6 +155,7 @@ class Skill {
     required this.label,
     required this.level,
     this.shortLabel = '',
+    this.iconUrl,
   });
 
   final String label;
@@ -162,6 +163,8 @@ class Skill {
   final int level;
 
   final String shortLabel;
+
+  final String? iconUrl;
 
   double get fraction => (level / 100).clamp(0.0, 1.0);
 
@@ -190,12 +193,14 @@ class Skill {
         label: json['label'] as String,
         level: (json['level'] as num).round(),
         shortLabel: json['shortLabel'] as String? ?? '',
+        iconUrl: json['iconUrl'] as String?,
       );
 
-  factory Skill.fromRow(Map<String, dynamic> row) => Skill(
+  factory Skill.fromRow(Map<String, dynamic> row, {String? iconUrl}) => Skill(
         label: (row['label'] ?? '') as String,
         level: ((row['level'] ?? 0) as num).round(),
         shortLabel: (row['short_label'] ?? '') as String,
+        iconUrl: iconUrl,
       );
 }
 

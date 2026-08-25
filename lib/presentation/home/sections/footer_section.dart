@@ -110,17 +110,70 @@ class FooterSection extends StatelessWidget {
             ),
             SizedBox(height: responsive<double>(size, mobile: 30, tablet: 40, desktop: 56)),
             Divider(color: AppColors.cream.withValues(alpha: 0.14), height: 1),
-            const SizedBox(height: 18),
-            Opacity(
-              opacity: 0.6,
-              child: Text(
-                '© 2026 $ownerName — Tous droits réservés.',
-                style: AppText.footerLegal,
-              ),
+            SizedBox(
+              height: responsive<double>(size, mobile: 20, tablet: 22, desktop: 24),
             ),
+            _BottomBar(size: size, ownerName: ownerName),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BottomBar extends StatelessWidget {
+  const _BottomBar({required this.size, required this.ownerName});
+
+  final ScreenSize size;
+  final String ownerName;
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget mark = Image.asset(
+      'assets/images/amar-logo.webp',
+      width: responsive<double>(size, mobile: 96, tablet: 104, desktop: 112),
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.high,
+      semanticLabel: ownerName,
+    );
+
+    final Widget legal = Opacity(
+      opacity: 0.6,
+      child: Text(
+        '© 2026 $ownerName — Tous droits réservés.',
+        style: AppText.footerLegal,
+      ),
+    );
+
+    if (size == ScreenSize.mobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          mark,
+          const SizedBox(height: 16),
+          legal,
+        ],
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        mark,
+        const SizedBox(width: 24),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 2),
+              child: DefaultTextStyle.merge(
+                textAlign: TextAlign.right,
+                child: legal,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
