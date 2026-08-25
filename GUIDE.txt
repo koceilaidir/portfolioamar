@@ -1,19 +1,49 @@
+===============================================================================
+  PORTFOLIO AMAR HAMMOUR - GUIDE D'UTILISATION
+  Site Flutter Web + base de donnees Supabase + hebergement GitHub Pages
+===============================================================================
+
+Ce fichier explique tout ce qu'il y a a savoir pour reprendre le projet :
+recuperer le code, le lancer, administrer le contenu et republier le site.
+
+SOMMAIRE
+  1. Recuperer le projet depuis GitHub
+  2. Comprendre l'organisation du code
+  3. Lancer le site sur son ordinateur
+  4. Preparer l'acces administrateur (a faire une seule fois)
+  5. Le cycle d'administration : afficher / administrer / cacher
+  6. Publier le site
+  7. Ce qui se modifie sans toucher au code
+  8. Securite : ce qu'il ne faut jamais faire
+  9. Depannage
 
 
-
-
+===============================================================================
   1. RECUPERER LE PROJET DEPUIS GITHUB
-
+===============================================================================
 
 Adresse du depot : https://github.com/koceilaidir/portfolioamar
 
-- Etape 1 : installer les outils
+--- Etape 1 : recevoir l'acces ---------------------------------------------
+
+Le proprietaire du depot doit t'ajouter comme collaborateur :
+  GitHub > le depot > Settings > Collaborators > Add people
+  > entrer ton nom d'utilisateur GitHub > Add
+
+Tu recois une invitation par email, il faut l'accepter.
+
+--- Etape 2 : installer les outils -----------------------------------------
+
   - Git             https://git-scm.com/downloads
+  - Flutter (SDK)   https://docs.flutter.dev/get-started/install
+  - VS Code         https://code.visualstudio.com
+    puis dans VS Code, installer les extensions "Flutter" et "Dart"
 
 Verifier que tout est en place, dans un terminal :
+
     flutter doctor
 
- Etape 2 : telecharger le projet
+--- Etape 3 : telecharger le projet ----------------------------------------
 
 Ouvrir un terminal (PowerShell sur Windows) dans le dossier ou tu veux
 ranger le projet, puis :
@@ -22,23 +52,24 @@ ranger le projet, puis :
     cd portfolioamar
     flutter pub get
 
-Le projet est maintenant sur ton ordinateur
+Le projet est maintenant sur ton ordinateur.
 
-- Etape 3 : recuperer les mises a jour plus tard 
+--- Etape 4 : recuperer les mises a jour plus tard --------------------------
 
 Chaque fois que quelqu'un modifie le code, pour recuperer les changements :
 
     git pull
 
-Si tu as toimeme modifie des fichiers et que tu veux les envoyer :
+Si tu as toi-meme modifie des fichiers et que tu veux les envoyer :
 
     git add -A
     git commit -m "decris ici ce que tu as change"
     git push
 
 
+===============================================================================
   2. COMPRENDRE L'ORGANISATION DU CODE
-
+===============================================================================
 
     lib/
       main.dart              point d'entree, choisit la source du contenu
@@ -75,10 +106,85 @@ Pour changer une couleur ou une police : lib/core/theme/
 Pour changer la mise en page d'une section : lib/presentation/home/sections/
 
 
-  3. LE CYCLE D'ADMINISTRATION : AFFICHER / ADMINISTRER / CACHER
+===============================================================================
+  3. LANCER LE SITE SUR SON ORDINATEUR
+===============================================================================
+
+--- Sans la base de donnees (le plus simple) -------------------------------
+
+    flutter run -d chrome
+
+Le site s'ouvre avec le contenu ecrit en dur dans le code. Suffisant pour
+travailler sur le design.
+
+--- Avec la base de donnees ------------------------------------------------
+
+Creer a la racine du projet un fichier nomme  env.json  contenant :
+
+    {
+      "SUPABASE_URL": "https://xxxxxxxx.supabase.co",
+      "SUPABASE_ANON_KEY": "sb_publishable_xxxxxxxxxxxx"
+    }
+
+Ces deux valeurs se trouvent dans Supabase :
+  Project Settings > API  (ou API Keys)
+Prendre la cle "publishable" ou "anon". JAMAIS la cle "service_role".
+
+Puis lancer :
+
+    flutter run -d chrome --dart-define-from-file=env.json
+
+Le fichier env.json n'est jamais envoye sur GitHub (il est dans .gitignore).
 
 
-Le bouton ADMIN  ouvre le panneau. On peut le
+===============================================================================
+  4. PREPARER L'ACCES ADMINISTRATEUR (A FAIRE UNE SEULE FOIS)
+===============================================================================
+
+Le panneau d'administration demande un email et un mot de passe. Voici
+comment creer ce compte.
+
+--- Etape 1 : creer les tables (si ce n'est pas deja fait) -----------------
+
+Dans Supabase > SQL Editor > New query :
+  - coller tout le contenu du fichier  supabase/schema.sql  > Run
+  - coller tout le contenu du fichier  supabase/admin.sql   > Run
+
+Attention : il faut coller le CONTENU du fichier, pas son nom.
+Astuce PowerShell pour copier un fichier dans le presse-papiers :
+
+    Get-Content .\supabase\schema.sql -Raw | Set-Clipboard
+
+--- Etape 2 : creer le compte administrateur -------------------------------
+
+Supabase > Authentication > Users > Add user > Create new user
+  Email    : celui que tu veux utiliser pour te connecter
+  Password : un mot de passe solide
+  Cocher "Auto Confirm User"
+
+--- Etape 3 : donner les droits a ce compte --------------------------------
+
+Supabase > SQL Editor, remplacer l'email puis Run :
+
+    insert into public.admins (user_id)
+    select id from auth.users where email = 'ton-email@exemple.com'
+    on conflict do nothing;
+
+Sans cette ligne, le compte peut se connecter mais ne peut rien modifier.
+
+--- Etape 4 : fermer les inscriptions publiques ----------------------------
+
+IMPORTANT. Supabase > Authentication > Sign In / Providers > Email
+  > desactiver "Allow new users to sign up"
+
+Sinon n'importe qui peut se creer un compte sur le projet.
+
+
+===============================================================================
+  5. LE CYCLE D'ADMINISTRATION : AFFICHER / ADMINISTRER / CACHER
+===============================================================================
+
+Le bouton ADMIN (en bas a gauche du site) ouvre le panneau. On peut le
 masquer pour que les visiteurs ne le voient pas.
 
 L'interrupteur se trouve dans le fichier :
@@ -92,7 +198,7 @@ Il contient une seule ligne :
     true   = le bouton ADMIN est visible
     false  = le bouton ADMIN est cache
 
---- Le cycle complet 
+--- Le cycle complet -------------------------------------------------------
 
   1) Afficher le bouton
        ouvrir lib/admin_mode.dart
@@ -122,10 +228,55 @@ Il contient une seule ligne :
        git commit -m "admin cache"
        git push
 
+Remarque : si tu preferes travailler en local, tu peux sauter les etapes 2
+et 5. Lance simplement le site avec :
+
+    flutter run -d chrome --dart-define-from-file=env.json
+
+Le bouton ADMIN sera la, tu administres, et les modifications partent quand
+meme dans la vraie base de donnees, donc le site en ligne est mis a jour.
+C'est plus rapide que de republier deux fois.
+
+--- Ce que contient le panneau ---------------------------------------------
+
+  TEXTES       tous les textes du site : la grande phrase du hero, les
+               titres de sections, la citation, l'email, le site, etc.
+
+               Dans la grande phrase du hero, deux marqueurs :
+                 *un mot*  ecrit le mot en terracotta
+                 •         insere un rond terracotta anime
+
+  PROJETS      ajouter, modifier, supprimer un projet.
+               "Visible sur le site" permet de preparer un projet sans
+               le publier tout de suite.
+               "Ordre" fixe l'ordre d'affichage (1, 2, 3...).
+
+               "Image du projet" : bouton "Choisir une image", on selectionne
+               un fichier sur son ordinateur, il part directement dans la
+               base et l'apercu s'affiche. Ne pas oublier de cliquer ensuite
+               sur "Enregistrer" pour valider le projet.
+               Format conseille : environ 1200x800 px, JPG ou WebP, 5 Mo
+               maximum. L'image est recadree au centre, donc eviter de
+               placer un element important tout au bord.
+               "Retirer" enleve l'image du projet.
+               Sans image, la vignette garde son degrade de couleur.
+               Le champ texte sous le bouton accepte aussi une URL complete
+               d'image deja en ligne, si on prefere.
+
+  COMPETENCES  les barres de progression (intitule + niveau de 0 a 100).
+
+  ATOUTS       les 4 arguments avec icone. Icones disponibles :
+               user, code, responsive, performance, design, star
+
+  AVIS         tous les avis laisses par les visiteurs.
+               "Publier" les rend visibles sur le site.
+               "Masquer" les retire sans les supprimer.
+               Un avis reste invisible tant qu'il n'est pas publie.
 
 
-  4. PUBLIER LE SITE
-
+===============================================================================
+  6. PUBLIER LE SITE
+===============================================================================
 
 Le site se republie tout seul a chaque envoi de code sur GitHub :
 
@@ -141,3 +292,98 @@ demarre. Quand il est vert, le site est a jour.
 Si le site semble inchange dans le navigateur, forcer le rechargement avec
 Ctrl + Shift + R (le navigateur garde l'ancienne version en memoire).
 
+
+===============================================================================
+  7. CE QUI SE MODIFIE SANS TOUCHER AU CODE
+===============================================================================
+
+Tout le contenu vit dans la base de donnees. Les changements faits depuis le
+panneau ADMIN (ou directement dans Supabase > Table Editor) apparaissent
+immediatement au rechargement de la page, SANS republier le site :
+
+    - les textes
+    - les projets
+    - les competences
+    - les atouts
+    - les avis
+
+Il faut republier le site uniquement quand on modifie le CODE : couleurs,
+polices, mise en page, ou l'interrupteur du bouton ADMIN.
+
+
+===============================================================================
+  8. SECURITE : CE QU'IL NE FAUT JAMAIS FAIRE
+===============================================================================
+
+  - Ne jamais mettre la cle "service_role" de Supabase dans le code ou dans
+    env.json. Cette cle contourne toutes les protections. Seule la cle
+    "publishable" / "anon" doit etre utilisee.
+
+  - Ne jamais envoyer le fichier env.json sur GitHub (il est deja ignore).
+
+  - Laisser les inscriptions publiques desactivees dans Supabase
+    (chapitre 4, etape 4).
+
+A savoir : cacher le bouton ADMIN ne protege rien en soi, le code reste
+present dans la page. La vraie protection, ce sont les regles de securite
+de la base (fichier supabase/admin.sql) : sans un compte inscrit dans la
+table "admins", personne ne peut modifier quoi que ce soit, meme en
+bidouillant le site. Le bouton est masque seulement pour que le site reste
+propre aux yeux des visiteurs.
+
+Ce que peut faire un visiteur non connecte :
+  - lire le contenu publie
+  - deposer un avis, qui restera invisible jusqu'a validation
+Rien d'autre.
+
+
+===============================================================================
+  9. DEPANNAGE
+===============================================================================
+
+Le bouton ADMIN n'apparait pas
+  - verifier que lib/admin_mode.dart contient  true
+  - verifier que le site a bien ete republie apres le changement
+  - en local, verifier que le fichier env.json existe et que la commande
+    contient bien  --dart-define-from-file=env.json
+
+"Ce compte n'a pas les droits d'administration"
+  - le compte existe mais n'est pas dans la table admins
+  - refaire l'etape 3 du chapitre 4
+
+"Email ou mot de passe incorrect"
+  - verifier le mot de passe dans Supabase > Authentication > Users
+  - il est possible de le reinitialiser depuis cette page
+
+Le site affiche l'ancien contenu
+  - Ctrl + Shift + R pour vider le cache du navigateur
+
+Une modification n'est pas enregistree
+  - un message rouge apparait en bas de l'ecran en cas d'erreur
+  - verifier que supabase/admin.sql a bien ete execute
+  - verifier que la session n'a pas expire (se deconnecter, se reconnecter)
+
+La publication GitHub echoue (point rouge dans Actions)
+  - cliquer sur le travail en rouge pour lire l'erreur
+  - les etapes qui echouent le plus souvent sont "flutter analyze" et
+    "flutter test" : le message indique le fichier et la ligne en cause
+
+Erreur au lancement en local
+  - flutter clean
+  - flutter pub get
+  - flutter run -d chrome
+
+
+===============================================================================
+  RESUME EXPRESS
+===============================================================================
+
+  Recuperer le code        git pull
+  Lancer en local          flutter run -d chrome --dart-define-from-file=env.json
+  Afficher le bouton admin lib/admin_mode.dart  ->  true
+  Cacher le bouton admin   lib/admin_mode.dart  ->  false
+  Publier                  git add -A && git commit -m "..." && git push
+  Adresse du site          https://koceilaidir.github.io/portfolioamar/
+  Base de donnees          https://supabase.com/dashboard
+
+===============================================================================
