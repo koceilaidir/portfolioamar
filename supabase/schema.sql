@@ -4,6 +4,7 @@ create table if not exists public.site_settings (
   role                     text not null default 'Web Designer',
   hero_title               text not null default 'Portfolio',
   hero_sentence            text,
+  background_color         text,
   about_visible            boolean not null default true,
   about_kicker             text not null default 'À PROPOS',
   about_title              text not null default '',
@@ -123,6 +124,9 @@ alter table public.site_settings
 
 alter table public.site_settings alter column hero_sentence drop default;
 alter table public.site_settings alter column hero_sentence drop not null;
+
+alter table public.site_settings
+  add column if not exists background_color text;
 
 alter table public.skills
   add column if not exists short_label text not null default '';

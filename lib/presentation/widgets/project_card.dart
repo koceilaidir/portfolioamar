@@ -35,7 +35,7 @@ class ProjectCard extends StatelessWidget {
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, hovered ? -6 : 0, 0),
           decoration: BoxDecoration(
-            color: AppColors.card,
+            color: AppColors.surface,
             border: Border.all(color: AppColors.line),
             borderRadius: BorderRadius.circular(18),
             boxShadow: hovered

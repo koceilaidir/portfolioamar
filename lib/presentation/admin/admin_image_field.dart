@@ -170,7 +170,7 @@ class _AdminImageFieldState extends State<AdminImageField> {
                 color: AppColors.inkSoft.withValues(alpha: 0.55),
               ),
               filled: true,
-              fillColor: AppColors.card,
+              fillColor: AppColors.surface,
               isDense: true,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -206,7 +206,7 @@ class _Preview extends StatelessWidget {
       height: 96,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.creamAlt,
+        color: AppColors.surfaceAlt,
         border: Border.all(color: AppColors.line),
         borderRadius: BorderRadius.circular(12),
       ),

@@ -34,7 +34,7 @@ class AdminEntryButton extends StatelessWidget {
           duration: const Duration(milliseconds: 220),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
           decoration: BoxDecoration(
-            color: hovered ? AppColors.ink : AppColors.card,
+            color: hovered ? AppColors.ink : AppColors.surface,
             border: Border.all(color: AppColors.line),
             borderRadius: BorderRadius.circular(999),
           ),

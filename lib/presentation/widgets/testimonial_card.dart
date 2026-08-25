@@ -14,7 +14,7 @@ class TestimonialCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.surface,
         border: Border.all(color: AppColors.line),
         borderRadius: BorderRadius.circular(16),
       ),

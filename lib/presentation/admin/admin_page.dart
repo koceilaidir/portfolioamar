@@ -50,9 +50,9 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     if (_checking) {
-      return const Scaffold(
-        backgroundColor: AppColors.cream,
-        body: Center(
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
         ),
       );
@@ -68,9 +68,9 @@ class _AdminPageState extends State<AdminPage> {
     return DefaultTabController(
       length: 6,
       child: Scaffold(
-        backgroundColor: AppColors.cream,
+        backgroundColor: AppColors.background,
         appBar: AppBar(
-          backgroundColor: AppColors.cream,
+          backgroundColor: AppColors.background,
           surfaceTintColor: Colors.transparent,
           foregroundColor: AppColors.ink,
           elevation: 0,
@@ -320,9 +320,9 @@ class _LoginScreenState extends State<_LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: AppColors.cream,
+        backgroundColor: AppColors.background,
         surfaceTintColor: Colors.transparent,
         foregroundColor: AppColors.ink,
         elevation: 0,

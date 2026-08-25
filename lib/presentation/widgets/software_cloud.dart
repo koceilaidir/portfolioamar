@@ -117,7 +117,7 @@ class _FloatingBadgeState extends State<_FloatingBadge>
         ? AppColors.primary
         : _isInk
             ? AppColors.ink
-            : AppColors.card;
+            : AppColors.surface;
     final Color foreground = _isAccent
         ? Colors.white
         : _isInk
@@ -159,7 +159,7 @@ class _FloatingBadgeState extends State<_FloatingBadge>
       height: side,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.surface,
         borderRadius: radius,
         boxShadow: <BoxShadow>[
           BoxShadow(

@@ -50,12 +50,19 @@ class _PortfolioAppState extends State<PortfolioApp> {
   @override
   void initState() {
     super.initState();
-    _contentFuture = widget.repository.loadContent();
+    _contentFuture = _load();
+  }
+
+  Future<PortfolioContent> _load() async {
+    final PortfolioContent content = await widget.repository.loadContent();
+    AppColors.applyBackground(content.backgroundColor);
+    if (mounted) setState(() {});
+    return content;
   }
 
   void _reload() {
     setState(() {
-      _contentFuture = widget.repository.loadContent();
+      _contentFuture = _load();
     });
   }
 
@@ -93,9 +100,9 @@ class _LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.cream,
-      body: Center(
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: const Center(
         child: SizedBox(
           width: 28,
           height: 28,
@@ -117,7 +124,7 @@ class _ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: AppColors.background,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(32),

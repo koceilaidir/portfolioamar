@@ -33,7 +33,7 @@ class SkillBar extends StatelessWidget {
               height: 4,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: AppColors.creamAlt,
+                  color: AppColors.surfaceAlt,
                   borderRadius: BorderRadius.circular(99),
                 ),
                 child: Align(

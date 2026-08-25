@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     final ScreenSize size = Breakpoints.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: AppColors.background,
       body: ScrollOffsetProvider(
         offset: _scrollOffset,
         child: Stack(

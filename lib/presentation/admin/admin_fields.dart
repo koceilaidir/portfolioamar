@@ -63,7 +63,7 @@ class AdminInput extends StatelessWidget {
                 color: AppColors.inkSoft.withValues(alpha: 0.55),
               ),
               filled: true,
-              fillColor: AppColors.card,
+              fillColor: AppColors.surface,
               isDense: true,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
@@ -184,7 +184,7 @@ class AdminCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 14),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.surface,
         border: Border.all(color: AppColors.line),
         borderRadius: BorderRadius.circular(16),
       ),

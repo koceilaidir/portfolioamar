@@ -115,6 +115,7 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       ),
       testimonials: testimonialRows.map(Testimonial.fromRow).toList(),
       testimonialsVisible: settings['testimonials_visible'] != false,
+      backgroundColor: _stored(settings, 'background_color', ''),
       contact: ContactInfo(
         email: _text(settings, 'contact_email', _fallback.contact.email),
         website: _text(settings, 'contact_website', _fallback.contact.website),

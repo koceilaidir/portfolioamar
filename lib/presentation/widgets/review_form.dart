@@ -81,7 +81,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.cream,
+      backgroundColor: AppColors.background,
       insetPadding: const EdgeInsets.all(20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
@@ -296,7 +296,7 @@ class _Field extends StatelessWidget {
               color: AppColors.inkSoft.withValues(alpha: 0.6),
             ),
             filled: true,
-            fillColor: AppColors.card,
+            fillColor: AppColors.surface,
             isDense: true,
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

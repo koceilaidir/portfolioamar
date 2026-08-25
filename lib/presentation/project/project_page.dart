@@ -84,7 +84,7 @@ class _ProjectPageState extends State<ProjectPage> {
     final Project project = widget.project;
 
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: AppColors.background,
       body: ScrollOffsetProvider(
         offset: _offset,
         child: Stack(
@@ -462,7 +462,7 @@ class _Shot extends StatelessWidget {
         Container(
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: AppColors.creamAlt,
+            color: AppColors.surfaceAlt,
             borderRadius: BorderRadius.circular(18),
           ),
           foregroundDecoration: BoxDecoration(

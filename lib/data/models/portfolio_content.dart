@@ -402,6 +402,7 @@ class PortfolioContent {
     required this.testimonials,
     required this.contact,
     this.testimonialsVisible = true,
+    this.backgroundColor = '',
   });
 
   final ProfileInfo profile;
@@ -417,6 +418,8 @@ class PortfolioContent {
   final ContactInfo contact;
 
   final bool testimonialsVisible;
+
+  final String backgroundColor;
 
   factory PortfolioContent.fromJson(Map<String, dynamic> json) =>
       PortfolioContent(
@@ -445,5 +448,6 @@ class PortfolioContent {
             .toList(),
         contact: ContactInfo.fromJson(json['contact'] as Map<String, dynamic>),
         testimonialsVisible: json['testimonialsVisible'] as bool? ?? true,
+        backgroundColor: json['backgroundColor'] as String? ?? '',
       );
 }

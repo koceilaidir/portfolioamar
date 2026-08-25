@@ -19,6 +19,11 @@ class SettingsTab extends StatefulWidget {
       kind: AdminFieldKind.multiline,
       hint: '*mot* = mis en avant en gras',
     ),
+    AdminField(
+      'background_color',
+      'Couleur de fond du site',
+      hint: 'Code hexadécimal, ex : F2EBDD. Vide = crème par défaut',
+    ),
     AdminField('subrole', 'Métier (sous la signature du hero)'),
     AdminField('signature', 'Signature manuscrite'),
     AdminField('first_name', 'Prénom'),
@@ -106,7 +111,23 @@ class _SettingsTabState extends State<SettingsTab> {
     try {
       await widget.repository.saveSettings(values);
       if (!mounted) return;
-      showAdminMessage(context, 'Textes enregistrés.');
+      final String colour = (values['background_color'] ?? '') as String;
+      if (colour.isNotEmpty && AppColors.parseHex(colour) == null) {
+        showAdminMessage(
+          context,
+          'Textes enregistrés, mais la couleur de fond n’est pas un code '
+          'hexadécimal valide : le crème par défaut sera utilisé.',
+          error: true,
+        );
+      } else if (AppColors.isTooDark(colour)) {
+        showAdminMessage(
+          context,
+          'Textes enregistrés. Attention : ce fond est sombre, le texte '
+          'risque d’être difficile à lire.',
+        );
+      } else {
+        showAdminMessage(context, 'Textes enregistrés.');
+      }
     } catch (error) {
       if (!mounted) return;
       showAdminMessage(context, "Échec : ${adminErrorText(error)}", error: true);
@@ -618,7 +639,7 @@ class _RowEditorState extends State<RowEditor> {
     final bool? confirmed = await showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: AppColors.cream,
+        backgroundColor: AppColors.background,
         title: Text('Supprimer ?', style: AppText.sectionKicker(22)),
         content: Text(
           'Cette suppression est définitive.',

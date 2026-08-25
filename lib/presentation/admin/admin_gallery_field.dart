@@ -296,7 +296,7 @@ class _PhotoRowState extends State<_PhotoRow> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.cream,
+        color: AppColors.background,
         border: Border.all(color: AppColors.line),
         borderRadius: BorderRadius.circular(14),
       ),
@@ -308,7 +308,7 @@ class _PhotoRowState extends State<_PhotoRow> {
             height: 52,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
-              color: AppColors.creamAlt,
+              color: AppColors.surfaceAlt,
               borderRadius: BorderRadius.circular(9),
             ),
             child: Image.network(
@@ -352,7 +352,7 @@ class _PhotoRowState extends State<_PhotoRow> {
                       color: AppColors.inkSoft.withValues(alpha: 0.55),
                     ),
                     filled: true,
-                    fillColor: AppColors.card,
+                    fillColor: AppColors.surface,
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 9),
@@ -428,7 +428,7 @@ class _SquareButton extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Material(
-        color: AppColors.card,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(9),
         child: InkWell(
           borderRadius: BorderRadius.circular(9),

@@ -159,7 +159,7 @@ class _QuoteCard extends StatelessWidget {
         vertical: responsive<double>(size, mobile: 20, tablet: 26, desktop: 28),
       ),
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: AppColors.surface,
         border: Border.all(color: AppColors.line),
         borderRadius: BorderRadius.circular(18),
       ),
@@ -267,7 +267,7 @@ class _Tag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 9),
       decoration: BoxDecoration(
-        color: filled ? AppColors.ink : AppColors.card,
+        color: filled ? AppColors.ink : AppColors.surface,
         border: Border.all(color: filled ? AppColors.ink : AppColors.line),
         borderRadius: BorderRadius.circular(999),
       ),

@@ -11,7 +11,7 @@ abstract final class AppTheme {
       primary: AppColors.primary,
       onPrimary: Colors.white,
       secondary: AppColors.primaryDeep,
-      surface: AppColors.cream,
+      surface: AppColors.background,
       onSurface: AppColors.ink,
       brightness: Brightness.light,
     );
@@ -19,7 +19,7 @@ abstract final class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.cream,
+      scaffoldBackgroundColor: AppColors.background,
       fontFamily: AppFonts.sans,
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
