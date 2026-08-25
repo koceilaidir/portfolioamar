@@ -72,7 +72,7 @@ class HeroSection extends StatelessWidget {
                       ),
                       SizedBox(
                         height: responsive<double>(size,
-                            mobile: 18, tablet: 22, desktop: 26),
+                            mobile: 4, tablet: 6, desktop: 8),
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: ledeWidth),
@@ -90,7 +90,7 @@ class HeroSection extends StatelessWidget {
                       ),
                       SizedBox(
                         height: responsive<double>(size,
-                            mobile: 16, tablet: 20, desktop: 22),
+                            mobile: 12, tablet: 15, desktop: 17),
                       ),
                       Text(
                         profile.signature,
@@ -102,7 +102,7 @@ class HeroSection extends StatelessWidget {
                       ),
                       SizedBox(
                         height: responsive<double>(size,
-                            mobile: 18, tablet: 22, desktop: 24),
+                            mobile: 14, tablet: 17, desktop: 19),
                       ),
                       Wrap(
                         alignment: WrapAlignment.center,
