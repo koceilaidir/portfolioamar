@@ -52,7 +52,7 @@ class SiteHeader extends StatelessWidget {
         final double t = (offset / 48).clamp(0.0, 1.0);
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColors.cream.withValues(alpha: t),
+            color: AppColors.cream,
             border: Border(
               bottom: BorderSide(
                 color: AppColors.line.withValues(alpha: 0.14 * t),

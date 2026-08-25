@@ -153,13 +153,19 @@ class _AdminPageState extends State<AdminPage> {
                     repository: widget.repository,
                     table: 'skills',
                     titleColumn: 'label',
-                    addLabel: 'Ajouter une compétence',
+                    addLabel: 'Ajouter un logiciel',
                     newRowDefaults: const <String, dynamic>{
-                      'label': 'Nouvelle compétence',
+                      'label': 'Nouveau logiciel',
+                      'short_label': '',
                       'level': 80,
                     },
                     fields: const <AdminField>[
-                      AdminField('label', 'Intitulé'),
+                      AdminField('label', 'Nom du logiciel'),
+                      AdminField(
+                        'short_label',
+                        'Sigle de la pastille',
+                        hint: '2 lettres, ex : Ps. Vide = initiales du nom',
+                      ),
                       AdminField('level', 'Niveau (0 à 100)',
                           kind: AdminFieldKind.number),
                       AdminField('position', 'Ordre',

@@ -14,7 +14,7 @@ create table if not exists public.site_settings (
   greeting                 text not null default 'Hello, I''m',
   first_name               text not null default 'Amar',
   last_name                text not null default 'Hammour',
-  subrole                  text not null default 'Web Designer & Digital Creative',
+  subrole                  text not null default 'Designer graphique',
   lede                     text not null default '',
   signature                text not null default 'Amar Hammour',
 
@@ -25,6 +25,7 @@ create table if not exists public.site_settings (
 
   skills_title             text not null default 'Skills &',
   skills_accent            text not null default 'Expertise',
+  skills_description       text,
   quote                    text not null default '',
 
   testimonials_title       text not null default 'What Clients',
@@ -61,8 +62,9 @@ create table if not exists public.projects (
 );
 
 create table if not exists public.skills (
-  id         uuid primary key default gen_random_uuid(),
-  label      text not null,
+  id          uuid primary key default gen_random_uuid(),
+  label       text not null,
+  short_label text not null default '',
   level      integer not null default 80 check (level between 0 and 100),
   position   integer not null default 0,
   created_at timestamptz not null default now()
@@ -107,6 +109,16 @@ alter table public.site_settings
 alter table public.site_settings alter column hero_sentence drop default;
 alter table public.site_settings alter column hero_sentence drop not null;
 
+alter table public.skills
+  add column if not exists short_label text not null default '';
+
+alter table public.site_settings
+  add column if not exists skills_description text;
+
+update public.site_settings set
+  skills_description = 'Les outils que j''utilise au quotidien, et le niveau auquel je les maîtrise.'
+where id = 1 and coalesce(skills_description, '') = '';
+
 alter table public.site_settings
   add column if not exists about_visible boolean not null default true;
 alter table public.site_settings
@@ -129,6 +141,10 @@ obsédé par les *détails*.',
 Je travaille en direct, sans intermédiaire. Des allers-retours courts, un seul interlocuteur du premier croquis à la mise en ligne.',
   about_tags  = 'Identité visuelle, UI / Web design, Direction artistique, Édition & print'
 where id = 1 and coalesce(about_title, '') = '';
+
+update public.site_settings
+  set subrole = 'Designer graphique'
+  where id = 1 and subrole = 'Web Designer & Digital Creative';
 
 create index if not exists about_steps_position_idx on public.about_steps (position);
 create index if not exists testimonials_status_idx on public.testimonials (status);
@@ -181,7 +197,7 @@ create policy "project_images_public_read"
 insert into public.site_settings (
   id, role, hero_title, greeting, first_name, last_name, subrole, lede, signature,
   projects_title, projects_accent, projects_description, projects_link_label,
-  skills_title, skills_accent, quote,
+  skills_title, skills_accent, skills_description, quote,
   testimonials_title, testimonials_accent, testimonials_description,
   contact_email, contact_website, contact_availability,
   contact_headline, contact_headline_accent, contact_pitch
@@ -192,13 +208,14 @@ insert into public.site_settings (
   'Hello, I''m',
   'Amar',
   'Hammour',
-  'Web Designer & Digital Creative',
+  'Designer graphique',
   'Je conçois des visuels clairs, modernes et centrés sur l''utilisateur qui aident les marques à se démarquer.',
   'Amar Hammour',
   'Selected', 'Projects',
   'Une sélection de travaux récents mêlant design, développement et résolution de problèmes.',
   'Voir tous les projets',
   'Skills &', 'Expertise',
+  'Les outils que j''utilise au quotidien, et le niveau auquel je les maîtrise.',
   'Je conçois et développe des expériences digitales qui ne sont pas seulement belles, mais aussi fonctionnelles, intuitives et marquantes.',
   'What Clients', 'Say',
   'Retours sincères de clients avec qui j''ai eu le plaisir de travailler.',
@@ -218,13 +235,14 @@ select * from (values
 ) as seed
 where not exists (select 1 from public.projects);
 
-insert into public.skills (label, level, position)
+insert into public.skills (label, short_label, level, position)
 select * from (values
-  ('UI / UX Design',     95, 1),
-  ('Web Development',    90, 2),
-  ('Branding',           85, 3),
-  ('Responsive Design',  90, 4),
-  ('Interaction Design', 80, 5)
+  ('Photoshop',      'Ps', 95, 1),
+  ('Illustrator',    'Ai', 92, 2),
+  ('InDesign',       'Id', 85, 3),
+  ('Figma',          'Fi', 88, 4),
+  ('After Effects',  'Ae', 75, 5),
+  ('Lightroom',      'Lr', 80, 6)
 ) as seed
 where not exists (select 1 from public.skills);
 

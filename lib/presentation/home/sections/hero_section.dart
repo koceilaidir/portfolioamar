@@ -61,17 +61,11 @@ class HeroSection extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
+                  _Wordmark(
                     width: wordmarkWidth,
-                    child: AspectRatio(
-                      aspectRatio: 1600 / 1018,
-                      child: Image.asset(
-                        'assets/images/portfolio-wordmark.webp',
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.high,
-                        semanticLabel: 'Portfolio',
-                      ),
-                    ),
+                    aspectRatio: 1600 / 1018,
+                    topTrim: 0.078,
+                    bottomTrim: 0.057,
                   ),
                   if (hasSentence) ...<Widget>[
                     SizedBox(
@@ -104,6 +98,17 @@ class HeroSection extends StatelessWidget {
                           mobile: 29, tablet: 32, desktop: 36),
                     ),
                   ),
+                  if (profile.subrole.trim().isNotEmpty) ...<Widget>[
+                    SizedBox(
+                      height: responsive<double>(size,
+                          mobile: 9, tablet: 10, desktop: 11),
+                    ),
+                    _Subrole(
+                      label: profile.subrole,
+                      fontSize: responsive<double>(size,
+                          mobile: 10.5, tablet: 11.5, desktop: 12.5),
+                    ),
+                  ],
                   SizedBox(
                     height: responsive<double>(size,
                         mobile: 17, tablet: 19, desktop: 21),
@@ -128,6 +133,75 @@ class HeroSection extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _Subrole extends StatelessWidget {
+  const _Subrole({required this.label, required this.fontSize});
+
+  final String label;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle style = AppText.subrole(fontSize);
+    return Padding(
+      padding: EdgeInsets.only(left: style.letterSpacing ?? 0),
+      child: Text(
+        label.toUpperCase(),
+        textAlign: TextAlign.center,
+        style: style,
+      ),
+    );
+  }
+}
+
+class _Wordmark extends StatelessWidget {
+  const _Wordmark({
+    required this.width,
+    required this.aspectRatio,
+    required this.topTrim,
+    required this.bottomTrim,
+  });
+
+  final double width;
+  final double aspectRatio;
+  final double topTrim;
+  final double bottomTrim;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double drawWidth =
+            constraints.hasBoundedWidth && constraints.maxWidth < width
+                ? constraints.maxWidth
+                : width;
+        final double height = drawWidth / aspectRatio;
+        final double trimmed = topTrim + bottomTrim;
+        final double alignY = trimmed <= 0 ? 0 : (2 * topTrim / trimmed) - 1;
+
+        return SizedBox(
+          width: drawWidth,
+          height: height * (1 - trimmed),
+          child: ClipRect(
+            child: OverflowBox(
+              minWidth: drawWidth,
+              maxWidth: drawWidth,
+              minHeight: height,
+              maxHeight: height,
+              alignment: Alignment(0, alignY),
+              child: Image.asset(
+                'assets/images/portfolio-wordmark.webp',
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
+                semanticLabel: 'Portfolio',
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -30,7 +30,7 @@ class StaticPortfolioRepository implements PortfolioRepository {
       heroSentence: '',
       firstName: 'Amar',
       lastName: 'Hammour',
-      subrole: 'Web Designer & Digital Creative',
+      subrole: 'Designer graphique',
       signature: 'Amar Hammour',
     ),
     about: AboutInfo(
@@ -109,13 +109,20 @@ class StaticPortfolioRepository implements PortfolioRepository {
         gradient: <Color>[Color(0xFF1C1C1A), Color(0xFF3A352E)],
       ),
     ],
-    skillsSection: SectionCopy(title: 'Skills &', accent: 'Expertise'),
+    skillsSection: SectionCopy(
+      title: 'Skills &',
+      accent: 'Expertise',
+      description:
+          "Les outils que j'utilise au quotidien, et le niveau auquel je les "
+          'maîtrise.',
+    ),
     skills: <Skill>[
-      Skill(label: 'UI / UX Design', level: 95),
-      Skill(label: 'Web Development', level: 90),
-      Skill(label: 'Branding', level: 85),
-      Skill(label: 'Responsive Design', level: 90),
-      Skill(label: 'Interaction Design', level: 80),
+      Skill(label: 'Photoshop', shortLabel: 'Ps', level: 95),
+      Skill(label: 'Illustrator', shortLabel: 'Ai', level: 92),
+      Skill(label: 'InDesign', shortLabel: 'Id', level: 85),
+      Skill(label: 'Figma', shortLabel: 'Fi', level: 88),
+      Skill(label: 'After Effects', shortLabel: 'Ae', level: 75),
+      Skill(label: 'Lightroom', shortLabel: 'Lr', level: 80),
     ],
     quote:
         'Je conçois et développe des expériences digitales qui ne sont pas '

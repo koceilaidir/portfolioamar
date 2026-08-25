@@ -120,8 +120,7 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     HeroSection(
                       profile: content.profile,
-                      topPadding: SiteHeader.totalHeight(context) -
-                          SiteHeader.barHeight(context) * 0.45,
+                      topPadding: SiteHeader.totalHeight(context),
                       onProjects: () => _scrollTo(_projectsKey, extra: 12),
                       onContact: () => _scrollTo(_contactKey),
                     ),
@@ -142,7 +141,6 @@ class _HomePageState extends State<HomePage> {
                       copy: content.skillsSection,
                       skills: content.skills,
                       quote: content.quote,
-                      features: content.features,
                     ),
                     ProjectsSection(
                       key: _projectsKey,

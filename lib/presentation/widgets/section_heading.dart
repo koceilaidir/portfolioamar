@@ -36,7 +36,7 @@ class SectionHeading extends StatelessWidget {
           style: AppText.sectionKicker(titleSize)
               .copyWith(color: AppColors.primary),
         ),
-        if (copy.description != null) ...<Widget>[
+        if (copy.description != null && copy.description!.trim().isNotEmpty) ...<Widget>[
           const SizedBox(height: 8),
           ConstrainedBox(
             constraints: BoxConstraints(

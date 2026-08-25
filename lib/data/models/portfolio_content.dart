@@ -96,22 +96,51 @@ class Project {
 
 @immutable
 class Skill {
-  const Skill({required this.label, required this.level});
+  const Skill({
+    required this.label,
+    required this.level,
+    this.shortLabel = '',
+  });
 
   final String label;
 
   final int level;
 
+  final String shortLabel;
+
   double get fraction => (level / 100).clamp(0.0, 1.0);
+
+  String get badge {
+    final String custom = shortLabel.trim();
+    if (custom.isNotEmpty) return custom;
+    final List<String> words = label
+        .trim()
+        .split(RegExp(r'[\s/&+.-]+'))
+        .where((String word) => word.isNotEmpty)
+        .toList();
+    if (words.isEmpty) return '?';
+    if (words.length == 1) {
+      final String word = words.first;
+      if (word.length == 1) return word.toUpperCase();
+      return word.substring(0, 1).toUpperCase() +
+          word.substring(1, 2).toLowerCase();
+    }
+    return words
+        .take(2)
+        .map((String word) => word.substring(0, 1).toUpperCase())
+        .join();
+  }
 
   factory Skill.fromJson(Map<String, dynamic> json) => Skill(
         label: json['label'] as String,
         level: (json['level'] as num).round(),
+        shortLabel: json['shortLabel'] as String? ?? '',
       );
 
   factory Skill.fromRow(Map<String, dynamic> row) => Skill(
         label: (row['label'] ?? '') as String,
         level: ((row['level'] ?? 0) as num).round(),
+        shortLabel: (row['short_label'] ?? '') as String,
       );
 }
 

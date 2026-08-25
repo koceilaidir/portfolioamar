@@ -53,15 +53,6 @@ class SkillBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          SizedBox(
-            width: 34,
-            child: Text(
-              '${skill.level}%',
-              textAlign: TextAlign.right,
-              style: AppText.skillValue,
-            ),
-          ),
         ],
       ),
     );

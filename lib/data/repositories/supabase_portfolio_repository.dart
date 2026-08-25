@@ -85,6 +85,8 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       skillsSection: SectionCopy(
         title: _text(settings, 'skills_title', _fallback.skillsSection.title),
         accent: _text(settings, 'skills_accent', _fallback.skillsSection.accent),
+        description: _optional(
+            settings, 'skills_description', _fallback.skillsSection.description),
       ),
       skills: skillRows.isEmpty
           ? _fallback.skills
@@ -143,6 +145,14 @@ class SupabasePortfolioRepository implements PortfolioRepository {
     } catch (_) {
       return null;
     }
+  }
+
+  String? _optional(Map<String, dynamic> row, String key, String? fallback) {
+    if (!row.containsKey(key)) return fallback;
+    final Object? value = row[key];
+    if (value is! String) return null;
+    final String trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
   }
 
   String _stored(Map<String, dynamic> row, String key, String fallback) {

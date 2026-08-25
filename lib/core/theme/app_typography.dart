@@ -59,14 +59,14 @@ abstract final class AppText {
     color: AppColors.inkSoft,
   );
 
-  static const TextStyle subrole = TextStyle(
-    fontFamily: AppFonts.sans,
-    fontWeight: FontWeight.w700,
-    fontSize: 12,
-    height: 1.3,
-    letterSpacing: 2,
-    color: AppColors.primaryDeep,
-  );
+  static TextStyle subrole(double fontSize) => TextStyle(
+        fontFamily: AppFonts.display,
+        fontWeight: FontWeight.w300,
+        fontSize: fontSize,
+        height: 1.3,
+        letterSpacing: fontSize * 0.26,
+        color: AppColors.inkSoft,
+      );
 
   static const TextStyle lede = TextStyle(
     fontFamily: AppFonts.sans,
@@ -152,14 +152,6 @@ abstract final class AppText {
     color: AppColors.ink,
   );
 
-  static const TextStyle skillValue = TextStyle(
-    fontFamily: AppFonts.sans,
-    fontWeight: FontWeight.w700,
-    fontSize: 11,
-    height: 1.3,
-    color: AppColors.inkSoft,
-  );
-
   static TextStyle quote(double fontSize) => TextStyle(
         fontFamily: AppFonts.serif,
         fontWeight: FontWeight.w400,
@@ -167,6 +159,14 @@ abstract final class AppText {
         fontSize: fontSize,
         height: 1.45,
         color: AppColors.ink,
+      );
+
+  static TextStyle softwareBadge(double fontSize) => TextStyle(
+        fontFamily: AppFonts.display,
+        fontWeight: FontWeight.w600,
+        fontSize: fontSize,
+        height: 1.1,
+        letterSpacing: -fontSize * 0.02,
       );
 
   static const TextStyle featureTitle = TextStyle(

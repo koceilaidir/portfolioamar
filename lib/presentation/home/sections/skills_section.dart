@@ -5,9 +5,9 @@ import '../../../core/layout/breakpoints.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/portfolio_content.dart';
-import '../../widgets/feature_tile.dart';
 import '../../widgets/section_heading.dart';
 import '../../widgets/skill_bar.dart';
+import '../../widgets/software_cloud.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({
@@ -15,13 +15,11 @@ class SkillsSection extends StatelessWidget {
     required this.copy,
     required this.skills,
     required this.quote,
-    required this.features,
   });
 
   final SectionCopy copy;
   final List<Skill> skills;
   final String quote;
-  final List<Feature> features;
 
   @override
   Widget build(BuildContext context) {
@@ -40,31 +38,27 @@ class SkillsSection extends StatelessWidget {
             const SizedBox(height: 22),
             if (wide)
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _SkillList(skills: skills),
-                        const SizedBox(height: 8),
-                        _QuoteBlock(quote: quote, size: size),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 56),
-                  Expanded(
                     flex: 5,
-                    child: _FeatureList(features: features, spacing: 26),
+                    child: Reveal(child: SoftwareCloud(skills: skills)),
                   ),
+                  const SizedBox(width: 48),
+                  Expanded(flex: 6, child: _SkillList(skills: skills)),
                 ],
               )
             else ...<Widget>[
+              Reveal(child: SoftwareCloud(skills: skills)),
+              const SizedBox(height: 20),
               _SkillList(skills: skills),
+            ],
+            if (quote.trim().isNotEmpty) ...<Widget>[
+              SizedBox(
+                height:
+                    responsive<double>(size, mobile: 22, tablet: 34, desktop: 44),
+              ),
               _QuoteBlock(quote: quote, size: size),
-              const SizedBox(height: 18),
-              _FeatureList(features: features, spacing: 18),
             ],
           ],
         ),
@@ -103,50 +97,36 @@ class _QuoteBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double fontSize =
-        responsive<double>(size, mobile: 20, tablet: 22, desktop: 24);
+        responsive<double>(size, mobile: 20, tablet: 23, desktop: 26);
 
     return Reveal(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              '"',
-              style: AppText.quote(fontSize * 2).copyWith(
-                color: AppColors.primary,
-                height: 0.7,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth:
+                responsive<double>(size, mobile: 520, tablet: 640, desktop: 760),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '"',
+                textAlign: TextAlign.center,
+                style: AppText.quote(fontSize * 2).copyWith(
+                  color: AppColors.primary,
+                  height: 0.7,
+                ),
               ),
-            ),
-            Text(quote, style: AppText.quote(fontSize)),
-          ],
+              SizedBox(height: fontSize * 0.24),
+              Text(
+                quote,
+                textAlign: TextAlign.center,
+                style: AppText.quote(fontSize),
+              ),
+            ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-class _FeatureList extends StatelessWidget {
-  const _FeatureList({required this.features, required this.spacing});
-
-  final List<Feature> features;
-  final double spacing;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        for (int i = 0; i < features.length; i++)
-          Padding(
-            padding: EdgeInsets.only(bottom: i == features.length - 1 ? 0 : spacing),
-            child: Reveal(
-              offsetY: 16,
-              delay: Duration(milliseconds: 80 * i),
-              child: FeatureTile(feature: features[i]),
-            ),
-          ),
-      ],
     );
   }
 }
