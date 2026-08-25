@@ -141,6 +141,89 @@ class Feature {
 }
 
 @immutable
+class AboutStep {
+  const AboutStep({required this.title, required this.description});
+
+  final String title;
+  final String description;
+
+  factory AboutStep.fromJson(Map<String, dynamic> json) => AboutStep(
+        title: json['title'] as String,
+        description: json['description'] as String,
+      );
+
+  factory AboutStep.fromRow(Map<String, dynamic> row) => AboutStep(
+        title: (row['title'] ?? '') as String,
+        description: (row['description'] ?? '') as String,
+      );
+}
+
+@immutable
+class AboutInfo {
+  const AboutInfo({
+    required this.visible,
+    required this.kicker,
+    required this.title,
+    required this.quote,
+    required this.body,
+    required this.tags,
+    required this.steps,
+  });
+
+  final bool visible;
+  final String kicker;
+  final String title;
+  final String quote;
+  final String body;
+  final List<String> tags;
+  final List<AboutStep> steps;
+
+  static const AboutInfo empty = AboutInfo(
+    visible: false,
+    kicker: '',
+    title: '',
+    quote: '',
+    body: '',
+    tags: <String>[],
+    steps: <AboutStep>[],
+  );
+
+  static List<String> splitTags(String raw) => raw
+      .split(RegExp(r'[,\n]'))
+      .map((String value) => value.trim())
+      .where((String value) => value.isNotEmpty)
+      .toList(growable: false);
+
+  List<String> get paragraphs => body
+      .split(RegExp(r'\n\s*\n'))
+      .map((String value) => value.trim())
+      .where((String value) => value.isNotEmpty)
+      .toList(growable: false);
+
+  bool get hasContent =>
+      title.trim().isNotEmpty ||
+      quote.trim().isNotEmpty ||
+      paragraphs.isNotEmpty ||
+      steps.isNotEmpty;
+
+  bool get isShown => visible && hasContent;
+
+  factory AboutInfo.fromJson(Map<String, dynamic> json) => AboutInfo(
+        visible: json['visible'] as bool? ?? true,
+        kicker: json['kicker'] as String? ?? '',
+        title: json['title'] as String? ?? '',
+        quote: json['quote'] as String? ?? '',
+        body: json['body'] as String? ?? '',
+        tags: (json['tags'] as List<dynamic>? ?? <dynamic>[])
+            .map((dynamic e) => e as String)
+            .toList(),
+        steps: (json['steps'] as List<dynamic>? ?? <dynamic>[])
+            .map((dynamic e) => AboutStep.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+}
+
+@immutable
 class Testimonial {
   const Testimonial({
     required this.quote,
@@ -219,6 +302,7 @@ class SectionCopy {
 class PortfolioContent {
   const PortfolioContent({
     required this.profile,
+    this.about = AboutInfo.empty,
     required this.projectsSection,
     required this.projects,
     required this.skillsSection,
@@ -232,6 +316,7 @@ class PortfolioContent {
   });
 
   final ProfileInfo profile;
+  final AboutInfo about;
   final SectionCopy projectsSection;
   final List<Project> projects;
   final SectionCopy skillsSection;
@@ -247,6 +332,9 @@ class PortfolioContent {
   factory PortfolioContent.fromJson(Map<String, dynamic> json) =>
       PortfolioContent(
         profile: ProfileInfo.fromJson(json['profile'] as Map<String, dynamic>),
+        about: json['about'] == null
+            ? AboutInfo.empty
+            : AboutInfo.fromJson(json['about'] as Map<String, dynamic>),
         projectsSection:
             SectionCopy.fromJson(json['projectsSection'] as Map<String, dynamic>),
         projects: (json['projects'] as List<dynamic>)

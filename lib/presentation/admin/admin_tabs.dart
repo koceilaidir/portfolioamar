@@ -154,6 +154,271 @@ class _SettingsTabState extends State<SettingsTab> {
   }
 }
 
+class AboutTab extends StatefulWidget {
+  const AboutTab({super.key, required this.repository});
+
+  final AdminRepository repository;
+
+  static const List<AdminField> fields = <AdminField>[
+    AdminField('about_kicker', 'Petit titre au-dessus', hint: 'À PROPOS'),
+    AdminField(
+      'about_title',
+      'Grand titre',
+      kind: AdminFieldKind.multiline,
+      hint: '*mot* = mot en rouge. Entrée = retour à la ligne.',
+    ),
+    AdminField(
+      'about_quote',
+      'Phrase mise en avant (encadré)',
+      kind: AdminFieldKind.multiline,
+      hint: 'Laisser vide pour retirer l’encadré',
+    ),
+    AdminField(
+      'about_body',
+      'Texte de présentation',
+      kind: AdminFieldKind.multiline,
+      hint: 'Une ligne vide entre deux paragraphes. *mot* = mot en gras.',
+    ),
+    AdminField(
+      'about_tags',
+      'Étiquettes',
+      kind: AdminFieldKind.multiline,
+      hint: 'Séparées par des virgules. Laisser vide pour les retirer.',
+    ),
+  ];
+
+  static const List<AdminField> stepFields = <AdminField>[
+    AdminField('title', 'Titre de l’étape'),
+    AdminField('description', 'Description',
+        kind: AdminFieldKind.multiline),
+    AdminField('position', 'Ordre', kind: AdminFieldKind.number),
+  ];
+
+  @override
+  State<AboutTab> createState() => _AboutTabState();
+}
+
+class _AboutTabState extends State<AboutTab> {
+  final Map<String, TextEditingController> _controllers =
+      <String, TextEditingController>{};
+  List<Map<String, dynamic>> _steps = <Map<String, dynamic>>[];
+  bool _loading = true;
+  bool _saving = false;
+  bool _visible = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void dispose() {
+    for (final TextEditingController c in _controllers.values) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    try {
+      final Map<String, dynamic> row = await widget.repository.loadSettings();
+      final List<Map<String, dynamic>> steps =
+          await widget.repository.loadRows('about_steps');
+      final Map<String, TextEditingController> next =
+          <String, TextEditingController>{
+        for (final AdminField field in AboutTab.fields)
+          field.column:
+              TextEditingController(text: (row[field.column] ?? '').toString()),
+      };
+      if (!mounted) {
+        for (final TextEditingController c in next.values) {
+          c.dispose();
+        }
+        return;
+      }
+      _controllers.addAll(next);
+      setState(() {
+        _steps = steps;
+        _visible = row['about_visible'] != false;
+        _loading = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _error = error.toString();
+      });
+    }
+  }
+
+  Future<void> _reloadSteps() async {
+    try {
+      final List<Map<String, dynamic>> steps =
+          await widget.repository.loadRows('about_steps');
+      if (!mounted) return;
+      setState(() => _steps = steps);
+    } catch (error) {
+      if (!mounted) return;
+      showAdminMessage(context, "Rechargement impossible : ${adminErrorText(error)}",
+          error: true);
+    }
+  }
+
+  Future<void> _setVisible(bool value) async {
+    final bool previous = _visible;
+    setState(() => _visible = value);
+    try {
+      await widget.repository.saveSettings(<String, dynamic>{
+        'about_visible': value,
+      });
+      if (!mounted) return;
+      showAdminMessage(
+        context,
+        value
+            ? 'La section À propos est affichée sur le site.'
+            : 'La section À propos est masquée du site.',
+      );
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _visible = previous);
+      showAdminMessage(context, "Action impossible : ${adminErrorText(error)}",
+          error: true);
+    }
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    final Map<String, dynamic> values = <String, dynamic>{
+      for (final AdminField field in AboutTab.fields)
+        field.column: _controllers[field.column]!.text.trim(),
+    };
+    try {
+      await widget.repository.saveSettings(values);
+      if (!mounted) return;
+      showAdminMessage(context, 'Textes enregistrés.');
+    } catch (error) {
+      if (!mounted) return;
+      showAdminMessage(context, "Échec : ${adminErrorText(error)}", error: true);
+    }
+    if (mounted) setState(() => _saving = false);
+  }
+
+  Future<void> _addStep() async {
+    try {
+      final int position = await widget.repository.nextPosition('about_steps');
+      await widget.repository.insertRow('about_steps', <String, dynamic>{
+        'title': 'Nouvelle étape',
+        'description': '',
+        'position': position,
+      });
+      await _reloadSteps();
+      if (!mounted) return;
+      showAdminMessage(context, 'Étape ajoutée.');
+    } catch (error) {
+      if (!mounted) return;
+      showAdminMessage(context, "Ajout impossible : ${adminErrorText(error)}",
+          error: true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
+    }
+    if (_error != null) {
+      return Center(child: Text(_error!, style: AppText.sectionDesc));
+    }
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(4, 4, 4, 40),
+      children: <Widget>[
+        AdminCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AdminToggle(
+                label: 'Afficher la section À propos sur le site',
+                value: _visible,
+                onChanged: _setVisible,
+              ),
+              Text(
+                _visible
+                    ? 'La section apparaît sous le hero, avec son lien dans le menu.'
+                    : 'La section et son lien dans le menu sont masqués. Les textes restent enregistrés ici.',
+                style: AppText.sectionDesc,
+              ),
+            ],
+          ),
+        ),
+        AdminCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              for (final AdminField field in AboutTab.fields)
+                AdminInput(
+                  controller: _controllers[field.column]!,
+                  label: field.label,
+                  hint: field.hint,
+                  maxLines: field.kind == AdminFieldKind.multiline ? 4 : 1,
+                ),
+              const SizedBox(height: 4),
+              Align(
+                alignment: Alignment.centerRight,
+                child: AdminActionButton(
+                  label: _saving ? 'Enregistrement…' : 'Enregistrer',
+                  icon: Icons.check_rounded,
+                  onPressed: _saving ? null : _save,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(2, 6, 2, 12),
+          child: Text('LES ÉTAPES DE LA MÉTHODE', style: AppText.skillLabel),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: AdminActionButton(
+            label: 'Ajouter une étape',
+            icon: Icons.add_rounded,
+            onPressed: _addStep,
+          ),
+        ),
+        if (_steps.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Text(
+              'Aucune étape. La colonne de droite ne sera pas affichée.',
+              textAlign: TextAlign.center,
+              style: AppText.sectionDesc,
+            ),
+          ),
+        for (final Map<String, dynamic> row in _steps)
+          RowEditor(
+            key: ValueKey<Object?>(row['id']),
+            repository: widget.repository,
+            row: row,
+            fields: AboutTab.stepFields,
+            title: (row['title'] ?? 'Sans titre').toString(),
+            onSave: (Map<String, dynamic> values) => widget.repository
+                .updateRow('about_steps', row['id'] as Object, values),
+            onDelete: () async {
+              await widget.repository
+                  .deleteRow('about_steps', row['id'] as Object);
+              await _reloadSteps();
+            },
+          ),
+      ],
+    );
+  }
+}
+
 class TableTab extends StatefulWidget {
   const TableTab({
     super.key,

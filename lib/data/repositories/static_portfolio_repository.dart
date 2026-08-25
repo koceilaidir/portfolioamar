@@ -33,6 +33,43 @@ class StaticPortfolioRepository implements PortfolioRepository {
       subrole: 'Web Designer & Digital Creative',
       signature: 'Amar Hammour',
     ),
+    about: AboutInfo(
+      visible: true,
+      kicker: 'À PROPOS',
+      title: 'Designer indépendant,\nobsédé par les *détails*.',
+      quote: 'Un bon design ne se remarque pas. Il se comprend.',
+      body: "J'accompagne des marques et des indépendants sur tout ce qui se "
+          "voit : *identité, site, supports*. J'aime les projets où il faut "
+          "d'abord démêler l'idée avant de sortir un crayon.\n\n"
+          "Je travaille en direct, sans intermédiaire. Des allers-retours "
+          "courts, un seul interlocuteur du premier croquis à la mise en ligne.",
+      tags: <String>[
+        'Identité visuelle',
+        'UI / Web design',
+        'Direction artistique',
+        'Édition & print',
+      ],
+      steps: <AboutStep>[
+        AboutStep(
+          title: 'Écouter',
+          description:
+              'On parle de votre marque, de vos clients et de ce qui bloque. '
+              'Aucun design à ce stade.',
+        ),
+        AboutStep(
+          title: 'Cadrer',
+          description:
+              'Je pose une direction claire : intentions, références, '
+              'périmètre et délais.',
+        ),
+        AboutStep(
+          title: 'Dessiner',
+          description:
+              'Création, itérations serrées, livraison de fichiers propres et '
+              "prêts à l'emploi.",
+        ),
+      ],
+    ),
     projectsSection: SectionCopy(
       title: 'Selected',
       accent: 'Projects',

@@ -44,6 +44,12 @@ create policy "features_admin_write"
   using (public.is_admin())
   with check (public.is_admin());
 
+drop policy if exists "about_steps_admin_write" on public.about_steps;
+create policy "about_steps_admin_write"
+  on public.about_steps for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
 drop policy if exists "testimonials_admin_write" on public.testimonials;
 create policy "testimonials_admin_write"
   on public.testimonials for all to authenticated

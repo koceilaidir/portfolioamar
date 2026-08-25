@@ -4,6 +4,13 @@ create table if not exists public.site_settings (
   role                     text not null default 'Web Designer',
   hero_title               text not null default 'Portfolio',
   hero_sentence            text,
+  about_visible            boolean not null default true,
+  about_kicker             text not null default 'À PROPOS',
+  about_title              text not null default '',
+  about_quote              text not null default '',
+  about_body               text not null default '',
+  about_tags               text not null default '',
+
   greeting                 text not null default 'Hello, I''m',
   first_name               text not null default 'Amar',
   last_name                text not null default 'Hammour',
@@ -71,6 +78,14 @@ create table if not exists public.features (
   created_at  timestamptz not null default now()
 );
 
+create table if not exists public.about_steps (
+  id          uuid primary key default gen_random_uuid(),
+  title       text not null,
+  description text not null default '',
+  position    integer not null default 0,
+  created_at  timestamptz not null default now()
+);
+
 create table if not exists public.testimonials (
   id          uuid primary key default gen_random_uuid(),
   quote       text not null check (char_length(quote) between 10 and 600),
@@ -92,6 +107,30 @@ alter table public.site_settings
 alter table public.site_settings alter column hero_sentence drop default;
 alter table public.site_settings alter column hero_sentence drop not null;
 
+alter table public.site_settings
+  add column if not exists about_visible boolean not null default true;
+alter table public.site_settings
+  add column if not exists about_kicker text not null default 'À PROPOS';
+alter table public.site_settings
+  add column if not exists about_title text not null default '';
+alter table public.site_settings
+  add column if not exists about_quote text not null default '';
+alter table public.site_settings
+  add column if not exists about_body text not null default '';
+alter table public.site_settings
+  add column if not exists about_tags text not null default '';
+
+update public.site_settings set
+  about_title = 'Designer indépendant,
+obsédé par les *détails*.',
+  about_quote = 'Un bon design ne se remarque pas. Il se comprend.',
+  about_body  = 'J''accompagne des marques et des indépendants sur tout ce qui se voit : *identité, site, supports*. J''aime les projets où il faut d''abord démêler l''idée avant de sortir un crayon.
+
+Je travaille en direct, sans intermédiaire. Des allers-retours courts, un seul interlocuteur du premier croquis à la mise en ligne.',
+  about_tags  = 'Identité visuelle, UI / Web design, Direction artistique, Édition & print'
+where id = 1 and coalesce(about_title, '') = '';
+
+create index if not exists about_steps_position_idx on public.about_steps (position);
 create index if not exists testimonials_status_idx on public.testimonials (status);
 create index if not exists projects_position_idx  on public.projects (position);
 
@@ -99,6 +138,7 @@ alter table public.site_settings enable row level security;
 alter table public.projects      enable row level security;
 alter table public.skills        enable row level security;
 alter table public.features      enable row level security;
+alter table public.about_steps   enable row level security;
 alter table public.testimonials  enable row level security;
 
 drop policy if exists "site_settings_public_read" on public.site_settings;
@@ -116,6 +156,10 @@ create policy "skills_public_read"
 drop policy if exists "features_public_read" on public.features;
 create policy "features_public_read"
   on public.features for select to anon, authenticated using (true);
+
+drop policy if exists "about_steps_public_read" on public.about_steps;
+create policy "about_steps_public_read"
+  on public.about_steps for select to anon, authenticated using (true);
 
 drop policy if exists "testimonials_public_read_approved" on public.testimonials;
 create policy "testimonials_public_read_approved"
@@ -192,6 +236,14 @@ select * from (values
   ('performance', 'Performance Driven',   'Vitesse, SEO et bonnes pratiques intégrées.',             4)
 ) as seed
 where not exists (select 1 from public.features);
+
+insert into public.about_steps (title, description, position)
+select * from (values
+  ('Écouter', 'On parle de votre marque, de vos clients et de ce qui bloque. Aucun design à ce stade.', 1),
+  ('Cadrer',  'Je pose une direction claire : intentions, références, périmètre et délais.',            2),
+  ('Dessiner','Création, itérations serrées, livraison de fichiers propres et prêts à l''emploi.',      3)
+) as seed
+where not exists (select 1 from public.about_steps);
 
 insert into public.testimonials (quote, author, author_role, status, position)
 select * from (values

@@ -66,7 +66,7 @@ class _AdminPageState extends State<AdminPage> {
     }
 
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         backgroundColor: AppColors.cream,
         appBar: AppBar(
@@ -93,6 +93,7 @@ class _AdminPageState extends State<AdminPage> {
             unselectedLabelStyle: AppText.navLink.copyWith(fontSize: 12),
             tabs: const <Widget>[
               Tab(text: 'TEXTES'),
+              Tab(text: 'À PROPOS'),
               Tab(text: 'PROJETS'),
               Tab(text: 'COMPÉTENCES'),
               Tab(text: 'ATOUTS'),
@@ -108,6 +109,7 @@ class _AdminPageState extends State<AdminPage> {
               child: TabBarView(
                 children: <Widget>[
                   SettingsTab(repository: widget.repository),
+                  AboutTab(repository: widget.repository),
                   TableTab(
                     repository: widget.repository,
                     table: 'projects',

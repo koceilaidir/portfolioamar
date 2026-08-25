@@ -9,6 +9,7 @@ import '../../data/models/portfolio_content.dart';
 import '../../data/repositories/admin_repository.dart';
 import '../../data/repositories/portfolio_repository.dart';
 import '../widgets/admin_entry_button.dart';
+import 'sections/about_section.dart';
 import 'sections/footer_section.dart';
 import 'sections/hero_section.dart';
 import 'sections/projects_section.dart';
@@ -38,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<double> _scrollOffset = ValueNotifier<double>(0);
 
+  final GlobalKey _aboutKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _skillsKey = GlobalKey();
   final GlobalKey _testimonialsKey = GlobalKey();
@@ -129,18 +131,24 @@ class _HomePageState extends State<HomePage> {
                         child: Container(height: 1, color: AppColors.line),
                       ),
                     ),
-                    ProjectsSection(
-                      key: _projectsKey,
-                      copy: content.projectsSection,
-                      projects: content.projects,
-                      onSeeAll: () => _scrollTo(_projectsKey, extra: 12),
-                    ),
+                    if (content.about.isShown)
+                      AboutSection(
+                        key: _aboutKey,
+                        about: content.about,
+                        signature: content.profile.signature,
+                      ),
                     SkillsSection(
                       key: _skillsKey,
                       copy: content.skillsSection,
                       skills: content.skills,
                       quote: content.quote,
                       features: content.features,
+                    ),
+                    ProjectsSection(
+                      key: _projectsKey,
+                      copy: content.projectsSection,
+                      projects: content.projects,
+                      onSeeAll: () => _scrollTo(_projectsKey, extra: 12),
                     ),
                     if (content.testimonialsVisible)
                       TestimonialsSection(
@@ -169,6 +177,11 @@ class _HomePageState extends State<HomePage> {
                 onContact: () => _scrollTo(_contactKey),
                 onLogoTap: _goHome,
                 navItems: <NavItem>[
+                  if (content.about.isShown)
+                    NavItem(
+                      label: 'À propos',
+                      onTap: () => _scrollTo(_aboutKey, extra: 12),
+                    ),
                   NavItem(
                     label: 'Projets',
                     onTap: () => _scrollTo(_projectsKey, extra: 12),

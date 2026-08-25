@@ -32,6 +32,7 @@ class SupabasePortfolioRepository implements PortfolioRepository {
           .eq('status', 'approved')
           .order('position', ascending: true)
           .order('created_at', ascending: true),
+      _aboutStepRows(),
     ]);
 
     final Map<String, dynamic> settings =
@@ -40,6 +41,8 @@ class SupabasePortfolioRepository implements PortfolioRepository {
     final List<Map<String, dynamic>> skillRows = _rows(results[2]);
     final List<Map<String, dynamic>> featureRows = _rows(results[3]);
     final List<Map<String, dynamic>> testimonialRows = _rows(results[4]);
+    final List<Map<String, dynamic>>? aboutStepRows =
+        results[5] as List<Map<String, dynamic>>?;
 
     final List<Project> projects = projectRows
         .map((Map<String, dynamic> row) =>
@@ -55,6 +58,19 @@ class SupabasePortfolioRepository implements PortfolioRepository {
         lastName: _text(settings, 'last_name', _fallback.profile.lastName),
         subrole: _text(settings, 'subrole', _fallback.profile.subrole),
         signature: _text(settings, 'signature', _fallback.profile.signature),
+      ),
+      about: AboutInfo(
+        visible: settings['about_visible'] != false,
+        kicker: _stored(settings, 'about_kicker', _fallback.about.kicker),
+        title: _stored(settings, 'about_title', _fallback.about.title),
+        quote: _stored(settings, 'about_quote', _fallback.about.quote),
+        body: _stored(settings, 'about_body', _fallback.about.body),
+        tags: settings.containsKey('about_tags')
+            ? AboutInfo.splitTags(_stored(settings, 'about_tags', ''))
+            : _fallback.about.tags,
+        steps: aboutStepRows == null
+            ? _fallback.about.steps
+            : aboutStepRows.map(AboutStep.fromRow).toList(),
       ),
       projectsSection: SectionCopy(
         title: _text(settings, 'projects_title', _fallback.projectsSection.title),
@@ -115,6 +131,25 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       if (email != null && email.trim().isNotEmpty) 'email': email.trim(),
       'status': 'pending',
     });
+  }
+
+  Future<List<Map<String, dynamic>>?> _aboutStepRows() async {
+    try {
+      final List<dynamic> rows = await _client
+          .from('about_steps')
+          .select()
+          .order('position', ascending: true);
+      return rows.whereType<Map<String, dynamic>>().toList(growable: false);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _stored(Map<String, dynamic> row, String key, String fallback) {
+    if (!row.containsKey(key)) return fallback;
+    final Object? value = row[key];
+    if (value is! String) return '';
+    return value.trim();
   }
 
   List<Map<String, dynamic>> _rows(dynamic value) {
