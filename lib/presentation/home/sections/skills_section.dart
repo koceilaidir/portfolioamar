@@ -114,7 +114,7 @@ class _QuoteBlock extends StatelessWidget {
             Text(
               '"',
               style: AppText.quote(fontSize * 2).copyWith(
-                color: AppColors.terracotta,
+                color: AppColors.primary,
                 height: 0.7,
               ),
             ),

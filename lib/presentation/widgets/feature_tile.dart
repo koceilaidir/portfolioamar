@@ -19,7 +19,7 @@ class FeatureTile extends StatelessWidget {
           width: 38,
           height: 38,
           decoration: const BoxDecoration(
-            color: AppColors.terracotta,
+            color: AppColors.primary,
             shape: BoxShape.circle,
           ),
           alignment: Alignment.center,

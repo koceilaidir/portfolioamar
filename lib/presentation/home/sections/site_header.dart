@@ -123,7 +123,7 @@ class _HeaderLink extends StatelessWidget {
               duration: const Duration(milliseconds: 220),
               height: 1.5,
               width: hovered ? 18 : 0,
-              color: AppColors.terracotta,
+              color: AppColors.primary,
             ),
           ],
         );

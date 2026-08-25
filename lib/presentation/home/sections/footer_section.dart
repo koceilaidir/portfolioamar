@@ -34,7 +34,7 @@ class FooterSection extends StatelessWidget {
         Text(
           contact.headlineAccent,
           style: AppText.footerTitle(titleSize)
-              .copyWith(color: AppColors.terracottaLight),
+              .copyWith(color: AppColors.primaryLight),
         ),
         const SizedBox(height: 10),
         ConstrainedBox(
@@ -156,11 +156,11 @@ class _ContactRow extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: hovered && onTap != null
-                      ? AppColors.terracotta
+                      ? AppColors.primary
                       : Colors.transparent,
                   border: Border.all(
                     color: hovered && onTap != null
-                        ? AppColors.terracotta
+                        ? AppColors.primary
                         : AppColors.cream.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
@@ -170,7 +170,7 @@ class _ContactRow extends StatelessWidget {
                   size: 15,
                   color: hovered && onTap != null
                       ? Colors.white
-                      : AppColors.terracottaLight,
+                      : AppColors.primaryLight,
                 ),
               ),
               const SizedBox(width: 12),
@@ -181,7 +181,7 @@ class _ContactRow extends StatelessWidget {
                     decoration: hovered && onTap != null
                         ? TextDecoration.underline
                         : TextDecoration.none,
-                    decorationColor: AppColors.terracottaLight,
+                    decorationColor: AppColors.primaryLight,
                   ),
                 ),
               ),

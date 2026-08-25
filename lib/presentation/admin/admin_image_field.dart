@@ -184,7 +184,7 @@ class _AdminImageFieldState extends State<AdminImageField> {
               ),
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(12)),
-                borderSide: BorderSide(color: AppColors.terracotta, width: 1.5),
+                borderSide: BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),

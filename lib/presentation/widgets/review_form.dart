@@ -110,7 +110,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.terracotta,
+            color: AppColors.primary,
           ),
           child: const Icon(Icons.check_rounded, color: Colors.white, size: 22),
         ),
@@ -151,7 +151,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
                     Text(
                       'avis',
                       style: AppText.sectionKicker(26)
-                          .copyWith(color: AppColors.terracotta),
+                          .copyWith(color: AppColors.primary),
                     ),
                   ],
                 ),
@@ -226,7 +226,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
             const SizedBox(height: 12),
             Text(
               _error!,
-              style: AppText.sectionDesc.copyWith(color: AppColors.terracottaDeep),
+              style: AppText.sectionDesc.copyWith(color: AppColors.primaryDeep),
             ),
           ],
           const SizedBox(height: 20),
@@ -240,7 +240,7 @@ class _ReviewFormDialogState extends State<ReviewFormDialog> {
                       height: 22,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppColors.terracotta,
+                        color: AppColors.primary,
                       ),
                     ),
                   )
@@ -303,17 +303,17 @@ class _Field extends StatelessWidget {
             border: base,
             enabledBorder: base,
             focusedBorder: base.copyWith(
-              borderSide: const BorderSide(color: AppColors.terracotta, width: 1.5),
+              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
             ),
             errorBorder: base.copyWith(
-              borderSide: const BorderSide(color: AppColors.terracottaDeep),
+              borderSide: const BorderSide(color: AppColors.primaryDeep),
             ),
             focusedErrorBorder: base.copyWith(
               borderSide:
-                  const BorderSide(color: AppColors.terracottaDeep, width: 1.5),
+                  const BorderSide(color: AppColors.primaryDeep, width: 1.5),
             ),
             errorStyle: AppText.testimonialRole
-                .copyWith(color: AppColors.terracottaDeep),
+                .copyWith(color: AppColors.primaryDeep),
           ),
         ),
       ],

@@ -101,7 +101,7 @@ class _LoadingScreen extends StatelessWidget {
           height: 28,
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            color: AppColors.terracotta,
+            color: AppColors.primary,
           ),
         ),
       ),
@@ -138,7 +138,7 @@ class _ErrorScreen extends StatelessWidget {
               TextButton(
                 onPressed: onRetry,
                 style: TextButton.styleFrom(
-                  foregroundColor: AppColors.terracottaDeep,
+                  foregroundColor: AppColors.primaryDeep,
                 ),
                 child: const Text('Réessayer'),
               ),

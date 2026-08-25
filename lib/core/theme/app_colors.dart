@@ -6,11 +6,11 @@ abstract final class AppColors {
 
   static const Color creamAlt = Color(0xFFE9E0CE);
 
-  static const Color terracotta = Color(0xFFC15A34);
+  static const Color primary = Color(0xFFE73035);
 
-  static const Color terracottaDeep = Color(0xFF9E4A1E);
+  static const Color primaryDeep = Color(0xFFBF161B);
 
-  static const Color terracottaLight = Color(0xFFE08A57);
+  static const Color primaryLight = Color(0xFFEE7073);
 
   static const Color ink = Color(0xFF20201C);
 
@@ -22,7 +22,5 @@ abstract final class AppColors {
 
   static const Color gridLine = Color(0x0D20201C);
 
-  static const Color titleGlow = Color(0x479E4A1E);
-
-  static const Color buttonShadow = Color(0x59C15A34);
+  static const Color buttonShadow = Color(0x59E73035);
 }

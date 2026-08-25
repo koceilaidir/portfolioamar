@@ -127,7 +127,7 @@ class ProjectCard extends StatelessWidget {
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppColors.terracotta,
+                              color: AppColors.primary,
                             ),
                             child: const Icon(
                               Icons.north_east_rounded,
@@ -160,7 +160,7 @@ class ProjectCard extends StatelessWidget {
                               project.title,
                               style: AppText.projectTitle.copyWith(
                                 color: hovered
-                                    ? AppColors.terracottaDeep
+                                    ? AppColors.primaryDeep
                                     : AppColors.ink,
                               ),
                             ),

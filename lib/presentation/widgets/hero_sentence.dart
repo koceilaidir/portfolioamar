@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
-import '../../core/theme/app_typography.dart';
 
 class HeroSentence extends StatelessWidget {
   const HeroSentence({
     super.key,
     required this.text,
-    required this.fontSize,
+    required this.style,
+    this.accentStyle,
+    this.dotSize,
+    this.textAlign = TextAlign.center,
   });
 
   final String text;
-  final double fontSize;
+  final TextStyle style;
+  final TextStyle? accentStyle;
+  final double? dotSize;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
+    final double? dot = dotSize;
+    final String source =
+        dot == null ? text.replaceAll(RegExp(r'\s*•\s*'), ' ') : text;
+
     final List<InlineSpan> spans = <InlineSpan>[];
     final StringBuffer buffer = StringBuffer();
     bool accent = false;
@@ -26,24 +35,24 @@ class HeroSentence extends StatelessWidget {
         TextSpan(
           text: buffer.toString(),
           style: accent
-              ? const TextStyle(color: AppColors.terracotta)
+              ? (accentStyle ?? const TextStyle(color: AppColors.primary))
               : null,
         ),
       );
       buffer.clear();
     }
 
-    for (final int rune in text.runes) {
+    for (final int rune in source.runes) {
       final String char = String.fromCharCode(rune);
       if (char == '*') {
         flush();
         accent = !accent;
-      } else if (char == '•') {
+      } else if (char == '•' && dot != null) {
         flush();
         spans.add(
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
-            child: _FloatingDot(size: fontSize * 0.42, index: dotIndex),
+            child: _FloatingDot(size: dot, index: dotIndex),
           ),
         );
         dotIndex++;
@@ -55,8 +64,8 @@ class HeroSentence extends StatelessWidget {
 
     return Text.rich(
       TextSpan(children: spans),
-      textAlign: TextAlign.center,
-      style: AppText.heroSentence(fontSize),
+      textAlign: textAlign,
+      style: style,
     );
   }
 }
@@ -105,7 +114,7 @@ class _FloatingDotState extends State<_FloatingDot>
           height: widget.size,
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.terracotta,
+            color: AppColors.primary,
           ),
         ),
       ),

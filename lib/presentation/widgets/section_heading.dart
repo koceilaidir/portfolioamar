@@ -34,7 +34,7 @@ class SectionHeading extends StatelessWidget {
         Text(
           copy.accent,
           style: AppText.sectionKicker(titleSize)
-              .copyWith(color: AppColors.terracotta),
+              .copyWith(color: AppColors.primary),
         ),
         if (copy.description != null) ...<Widget>[
           const SizedBox(height: 8),
@@ -76,7 +76,7 @@ class _SectionLink extends StatelessWidget {
             Text(
               label.toUpperCase(),
               style: AppText.linkAll.copyWith(
-                color: hovered ? AppColors.terracotta : AppColors.terracottaDeep,
+                color: hovered ? AppColors.primary : AppColors.primaryDeep,
               ),
             ),
             const SizedBox(width: 6),
@@ -86,7 +86,7 @@ class _SectionLink extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_rounded,
                 size: 14,
-                color: hovered ? AppColors.terracotta : AppColors.terracottaDeep,
+                color: hovered ? AppColors.primary : AppColors.primaryDeep,
               ),
             ),
           ],

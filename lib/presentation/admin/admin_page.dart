@@ -53,7 +53,7 @@ class _AdminPageState extends State<AdminPage> {
       return const Scaffold(
         backgroundColor: AppColors.cream,
         body: Center(
-          child: CircularProgressIndicator(color: AppColors.terracotta),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
       );
     }
@@ -85,9 +85,9 @@ class _AdminPageState extends State<AdminPage> {
           ],
           bottom: TabBar(
             isScrollable: true,
-            labelColor: AppColors.terracottaDeep,
+            labelColor: AppColors.primaryDeep,
             unselectedLabelColor: AppColors.inkSoft,
-            indicatorColor: AppColors.terracotta,
+            indicatorColor: AppColors.primary,
             dividerColor: AppColors.line,
             labelStyle: AppText.navLink.copyWith(fontSize: 12),
             unselectedLabelStyle: AppText.navLink.copyWith(fontSize: 12),
@@ -329,7 +329,7 @@ class _LoginScreenState extends State<_LoginScreen> {
                     Text(
                       _error!,
                       style: AppText.sectionDesc
-                          .copyWith(color: AppColors.terracottaDeep),
+                          .copyWith(color: AppColors.primaryDeep),
                     ),
                     const SizedBox(height: 12),
                   ],

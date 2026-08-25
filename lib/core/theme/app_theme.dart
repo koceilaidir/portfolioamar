@@ -7,10 +7,10 @@ import 'app_typography.dart';
 abstract final class AppTheme {
   static ThemeData build() {
     final ColorScheme scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.terracotta,
-      primary: AppColors.terracotta,
+      seedColor: AppColors.primary,
+      primary: AppColors.primary,
       onPrimary: Colors.white,
-      secondary: AppColors.terracottaDeep,
+      secondary: AppColors.primaryDeep,
       surface: AppColors.cream,
       onSurface: AppColors.ink,
       brightness: Brightness.light,
@@ -24,8 +24,8 @@ abstract final class AppTheme {
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
       textSelectionTheme: const TextSelectionThemeData(
-        cursorColor: AppColors.terracotta,
-        selectionColor: Color(0x33C15A34),
+        cursorColor: AppColors.primary,
+        selectionColor: Color(0x33E73035),
       ),
       textTheme: const TextTheme(
         bodyMedium: AppText.lede,

@@ -26,10 +26,12 @@ class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScreenSize size = Breakpoints.of(context);
-    final double fontSize =
-        responsive<double>(size, mobile: 29, tablet: 46, desktop: 62);
-    final double sentenceWidth =
-        responsive<double>(size, mobile: 560, tablet: 780, desktop: 1020);
+    final double wordmarkWidth =
+        responsive<double>(size, mobile: 320, tablet: 470, desktop: 610);
+    final double ledeSize =
+        responsive<double>(size, mobile: 14.5, tablet: 17, desktop: 19);
+    final double ledeWidth =
+        responsive<double>(size, mobile: 520, tablet: 580, desktop: 660);
     final double minHeight =
         (MediaQuery.sizeOf(context).height - topPadding).clamp(440.0, 880.0);
 
@@ -56,33 +58,51 @@ class HeroSection extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      _Kicker(label: profile.subrole),
                       SizedBox(
-                        height: responsive<double>(size,
-                            mobile: 22, tablet: 30, desktop: 34),
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: sentenceWidth),
-                        child: HeroSentence(
-                          text: profile.heroSentence,
-                          fontSize: fontSize,
+                        width: wordmarkWidth,
+                        child: AspectRatio(
+                          aspectRatio: 1600 / 1018,
+                          child: Image.asset(
+                            'assets/images/portfolio-wordmark.webp',
+                            fit: BoxFit.contain,
+                            filterQuality: FilterQuality.high,
+                            semanticLabel: 'Portfolio',
+                          ),
                         ),
                       ),
                       SizedBox(
                         height: responsive<double>(size,
-                            mobile: 24, tablet: 30, desktop: 34),
+                            mobile: 18, tablet: 22, desktop: 26),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: ledeWidth),
+                        child: HeroSentence(
+                          text: profile.heroSentence,
+                          style: AppText.lede.copyWith(
+                            fontSize: ledeSize,
+                            height: 1.6,
+                          ),
+                          accentStyle: const TextStyle(
+                            color: AppColors.ink,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: responsive<double>(size,
+                            mobile: 16, tablet: 20, desktop: 22),
                       ),
                       Text(
                         profile.signature,
                         textAlign: TextAlign.center,
                         style: AppText.signature(
                           responsive<double>(size,
-                              mobile: 30, tablet: 34, desktop: 38),
+                              mobile: 29, tablet: 32, desktop: 36),
                         ),
                       ),
                       SizedBox(
                         height: responsive<double>(size,
-                            mobile: 20, tablet: 24, desktop: 28),
+                            mobile: 18, tablet: 22, desktop: 24),
                       ),
                       Wrap(
                         alignment: WrapAlignment.center,
@@ -104,29 +124,6 @@ class HeroSection extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _Kicker extends StatelessWidget {
-  const _Kicker({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-      decoration: BoxDecoration(
-        color: AppColors.card,
-        border: Border.all(color: AppColors.line),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        textAlign: TextAlign.center,
-        style: AppText.kicker,
       ),
     );
   }

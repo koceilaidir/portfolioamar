@@ -13,7 +13,7 @@ Future<void> _settle(WidgetTester tester) async {
 }
 
 void main() {
-  testWidgets('Le hero affiche la phrase, la pastille et la signature',
+  testWidgets('Le hero affiche la phrase et la signature',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -25,12 +25,6 @@ void main() {
     await _settle(tester);
 
     expect(find.byType(HeroSentence), findsOneWidget);
-    expect(
-      find.text(
-        StaticPortfolioRepository.content.profile.subrole.toUpperCase(),
-      ),
-      findsOneWidget,
-    );
     expect(
       find.text(StaticPortfolioRepository.content.profile.signature),
       findsWidgets,

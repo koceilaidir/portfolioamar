@@ -80,7 +80,7 @@ class _Fill extends StatelessWidget {
       heightFactor: 1,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColors.terracotta,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(99),
         ),
       ),

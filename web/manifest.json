@@ -4,7 +4,7 @@
     "start_url": ".",
     "display": "standalone",
     "background_color": "#F2EBDD",
-    "theme_color": "#C15A34",
+    "theme_color": "#E73035",
     "description": "Portfolio d'Amar Hammour, Web Designer & Digital Creative.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,

@@ -71,7 +71,7 @@ class AdminInput extends StatelessWidget {
               enabledBorder: base,
               focusedBorder: base.copyWith(
                 borderSide:
-                    const BorderSide(color: AppColors.terracotta, width: 1.5),
+                    const BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),
@@ -101,7 +101,7 @@ class AdminToggle extends StatelessWidget {
         children: <Widget>[
           Switch(
             value: value,
-            activeTrackColor: AppColors.terracotta,
+            activeTrackColor: AppColors.primary,
             onChanged: onChanged,
           ),
           const SizedBox(width: 10),
@@ -131,7 +131,7 @@ class AdminActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color accent =
-        destructive ? AppColors.terracottaDeep : AppColors.terracotta;
+        destructive ? AppColors.primaryDeep : AppColors.primary;
 
     if (outlined) {
       return OutlinedButton(
@@ -209,7 +209,7 @@ void showAdminMessage(BuildContext context, String message,
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        backgroundColor: error ? AppColors.terracottaDeep : AppColors.ink,
+        backgroundColor: error ? AppColors.primaryDeep : AppColors.ink,
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: error ? 10 : 3),
         showCloseIcon: error,

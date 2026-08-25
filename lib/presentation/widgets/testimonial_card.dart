@@ -25,7 +25,7 @@ class TestimonialCard extends StatelessWidget {
           Text(
             '"',
             style: AppText.quote(34).copyWith(
-              color: AppColors.terracotta,
+              color: AppColors.primary,
               fontStyle: FontStyle.normal,
               height: 0.7,
             ),
@@ -44,8 +44,8 @@ class TestimonialCard extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: <Color>[
-                      AppColors.terracottaLight,
-                      AppColors.terracottaDeep,
+                      AppColors.primaryLight,
+                      AppColors.primaryDeep,
                     ],
                   ),
                 ),

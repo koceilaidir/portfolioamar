@@ -65,7 +65,7 @@ abstract final class AppText {
     fontSize: 12,
     height: 1.3,
     letterSpacing: 2,
-    color: AppColors.terracottaDeep,
+    color: AppColors.primaryDeep,
   );
 
   static const TextStyle lede = TextStyle(
@@ -107,7 +107,7 @@ abstract final class AppText {
     fontSize: 11,
     height: 1.2,
     letterSpacing: 1,
-    color: AppColors.terracottaDeep,
+    color: AppColors.primaryDeep,
   );
 
   static TextStyle projectThumb(double fontSize) => TextStyle(
@@ -124,7 +124,7 @@ abstract final class AppText {
     fontWeight: FontWeight.w700,
     fontSize: 20,
     height: 1.1,
-    color: AppColors.terracotta,
+    color: AppColors.primary,
   );
 
   static const TextStyle projectTitle = TextStyle(

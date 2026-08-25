@@ -31,25 +31,25 @@ class PillButton extends StatelessWidget {
       builder: (BuildContext context, bool hovered) {
         final Color background = switch (variant) {
           PillVariant.solid =>
-            hovered ? AppColors.terracottaDeep : AppColors.terracotta,
+            hovered ? AppColors.primaryDeep : AppColors.primary,
           PillVariant.ghost =>
-            hovered ? AppColors.terracotta : Colors.transparent,
+            hovered ? AppColors.primary : Colors.transparent,
           PillVariant.ghostOnDark =>
-            hovered ? AppColors.terracottaLight : Colors.transparent,
+            hovered ? AppColors.primaryLight : Colors.transparent,
         };
         final Color foreground = switch (variant) {
           PillVariant.solid => Colors.white,
           PillVariant.ghost =>
-            hovered ? Colors.white : AppColors.terracottaDeep,
+            hovered ? Colors.white : AppColors.primaryDeep,
           PillVariant.ghostOnDark =>
-            hovered ? AppColors.ink : AppColors.terracottaLight,
+            hovered ? AppColors.ink : AppColors.primaryLight,
         };
         final Border? border = switch (variant) {
           PillVariant.solid => null,
           PillVariant.ghost =>
-            Border.all(color: AppColors.terracotta, width: 1.5),
+            Border.all(color: AppColors.primary, width: 1.5),
           PillVariant.ghostOnDark =>
-            Border.all(color: AppColors.terracottaLight, width: 1.5),
+            Border.all(color: AppColors.primaryLight, width: 1.5),
         };
 
         return AnimatedContainer(
@@ -112,7 +112,7 @@ class PillLink extends StatelessWidget {
       onTap: onTap,
       builder: (BuildContext context, bool hovered) {
         final Color accent =
-            onDark ? AppColors.terracottaLight : AppColors.terracotta;
+            onDark ? AppColors.primaryLight : AppColors.primary;
         return AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
@@ -126,7 +126,7 @@ class PillLink extends StatelessWidget {
             style: AppText.pill.copyWith(
               color: hovered
                   ? (onDark ? AppColors.ink : Colors.white)
-                  : (onDark ? AppColors.terracottaLight : AppColors.terracottaDeep),
+                  : (onDark ? AppColors.primaryLight : AppColors.primaryDeep),
             ),
           ),
         );

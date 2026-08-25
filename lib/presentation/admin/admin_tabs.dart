@@ -14,28 +14,28 @@ class SettingsTab extends StatefulWidget {
   static const List<AdminField> fields = <AdminField>[
     AdminField(
       'hero_sentence',
-      'Grande phrase du hero',
+      'Phrase de présentation du hero',
       kind: AdminFieldKind.multiline,
-      hint: '*mot* = en terracotta   •  = rond terracotta',
+      hint: '*mot* = mis en avant en gras',
     ),
     AdminField('subrole', 'Pastille sous le hero'),
     AdminField('signature', 'Signature manuscrite'),
     AdminField('first_name', 'Prénom'),
     AdminField('last_name', 'Nom'),
     AdminField('projects_title', 'Projets : titre'),
-    AdminField('projects_accent', 'Projets : mot en terracotta'),
+    AdminField('projects_accent', 'Projets : mot en rouge'),
     AdminField('projects_description', 'Projets : description',
         kind: AdminFieldKind.multiline),
     AdminField('projects_link_label', 'Projets : libellé du lien'),
     AdminField('skills_title', 'Compétences : titre'),
-    AdminField('skills_accent', 'Compétences : mot en terracotta'),
+    AdminField('skills_accent', 'Compétences : mot en rouge'),
     AdminField('quote', 'Citation', kind: AdminFieldKind.multiline),
     AdminField('testimonials_title', 'Avis : titre'),
-    AdminField('testimonials_accent', 'Avis : mot en terracotta'),
+    AdminField('testimonials_accent', 'Avis : mot en rouge'),
     AdminField('testimonials_description', 'Avis : description',
         kind: AdminFieldKind.multiline),
     AdminField('contact_headline', 'Pied de page : titre'),
-    AdminField('contact_headline_accent', 'Pied de page : mot en terracotta'),
+    AdminField('contact_headline_accent', 'Pied de page : mot en rouge'),
     AdminField('contact_pitch', 'Pied de page : texte',
         kind: AdminFieldKind.multiline),
     AdminField('contact_email', 'Email de contact'),
@@ -115,7 +115,7 @@ class _SettingsTabState extends State<SettingsTab> {
   Widget build(BuildContext context) {
     if (_loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.terracotta),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
     if (_error != null) {
@@ -231,7 +231,7 @@ class _TableTabState extends State<TableTab> {
   Widget build(BuildContext context) {
     if (_loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.terracotta),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
     if (_error != null) {
@@ -384,7 +384,7 @@ class _RowEditorState extends State<RowEditor> {
         child: ExpansionTile(
           tilePadding: EdgeInsets.zero,
           childrenPadding: const EdgeInsets.only(top: 8),
-          iconColor: AppColors.terracotta,
+          iconColor: AppColors.primary,
           collapsedIconColor: AppColors.inkSoft,
           title: Text(widget.title, style: AppText.projectTitle),
           children: <Widget>[
@@ -541,7 +541,7 @@ class _ReviewsTabState extends State<ReviewsTab> {
   Widget build(BuildContext context) {
     if (_loading) {
       return const Center(
-        child: CircularProgressIndicator(color: AppColors.terracotta),
+        child: CircularProgressIndicator(color: AppColors.primary),
       );
     }
     if (_error != null) {
@@ -637,10 +637,10 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String label = 'En attente';
-    Color color = AppColors.terracottaDeep;
+    Color color = AppColors.primaryDeep;
     if (status == 'approved') {
       label = 'En ligne';
-      color = AppColors.terracotta;
+      color = AppColors.primary;
     } else if (status == 'rejected') {
       label = 'Rejeté';
       color = AppColors.inkSoft;
