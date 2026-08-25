@@ -34,11 +34,14 @@ class HeroSection extends StatelessWidget {
     final double ledeWidth =
         responsive<double>(size, mobile: 520, tablet: 580, desktop: 660);
     final bool hasSentence = profile.heroSentence.trim().isNotEmpty;
+    final bool fillScreen = size == ScreenSize.mobile;
+    final double bottomPadding =
+        responsive<double>(size, mobile: 34, tablet: 54, desktop: 74);
 
     return Padding(
       padding: EdgeInsets.only(
         top: topPadding,
-        bottom: responsive<double>(size, mobile: 34, tablet: 54, desktop: 74),
+        bottom: bottomPadding,
       ),
       child: Stack(
         children: <Widget>[
@@ -48,10 +51,13 @@ class HeroSection extends StatelessWidget {
               center: const Alignment(0, -0.1),
             ),
           ),
-          ContentContainer(
-            child: Reveal(
-              offsetY: 20,
-              child: Column(
+          _FillScreen(
+            enabled: fillScreen,
+            reserved: topPadding + bottomPadding,
+            child: ContentContainer(
+              child: Reveal(
+                offsetY: 20,
+                child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -115,11 +121,38 @@ class HeroSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FillScreen extends StatelessWidget {
+  const _FillScreen({
+    required this.enabled,
+    required this.reserved,
+    required this.child,
+  });
+
+  final bool enabled;
+  final double reserved;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!enabled) return child;
+    final double available =
+        (MediaQuery.sizeOf(context).height - reserved).clamp(360.0, 1200.0);
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: available),
+      child: Align(
+        alignment: const Alignment(0, -0.12),
+        child: child,
       ),
     );
   }
