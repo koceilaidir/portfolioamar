@@ -27,18 +27,17 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScreenSize size = Breakpoints.of(context);
     final double wordmarkWidth =
-        responsive<double>(size, mobile: 320, tablet: 470, desktop: 610);
+        responsive<double>(size, mobile: 344, tablet: 600, desktop: 790);
     final double ledeSize =
         responsive<double>(size, mobile: 14.5, tablet: 17, desktop: 19);
     final double ledeWidth =
         responsive<double>(size, mobile: 520, tablet: 580, desktop: 660);
-    final double minHeight =
-        (MediaQuery.sizeOf(context).height - topPadding).clamp(440.0, 880.0);
+    final bool hasSentence = profile.heroSentence.trim().isNotEmpty;
 
     return Padding(
       padding: EdgeInsets.only(
         top: topPadding,
-        bottom: responsive<double>(size, mobile: 30, tablet: 50, desktop: 70),
+        bottom: responsive<double>(size, mobile: 34, tablet: 54, desktop: 74),
       ),
       child: Stack(
         children: <Widget>[
@@ -48,78 +47,75 @@ class HeroSection extends StatelessWidget {
               center: const Alignment(0, -0.1),
             ),
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(minHeight: minHeight),
-            child: Center(
-              child: ContentContainer(
-                child: Reveal(
-                  offsetY: 20,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+          ContentContainer(
+            child: Reveal(
+              offsetY: 20,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: wordmarkWidth,
+                    child: AspectRatio(
+                      aspectRatio: 1600 / 911,
+                      child: Image.asset(
+                        'assets/images/portfolio-wordmark.webp',
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                        semanticLabel: 'Portfolio',
+                      ),
+                    ),
+                  ),
+                  if (hasSentence) ...<Widget>[
+                    SizedBox(
+                      height: responsive<double>(size,
+                          mobile: 0, tablet: 2, desktop: 4),
+                    ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: ledeWidth),
+                      child: HeroSentence(
+                        text: profile.heroSentence,
+                        style: AppText.lede.copyWith(
+                          fontSize: ledeSize,
+                          height: 1.6,
+                        ),
+                        accentStyle: const TextStyle(
+                          color: AppColors.ink,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                  SizedBox(
+                    height: responsive<double>(size,
+                        mobile: 10, tablet: 12, desktop: 14),
+                  ),
+                  Text(
+                    profile.signature,
+                    textAlign: TextAlign.center,
+                    style: AppText.signature(
+                      responsive<double>(size,
+                          mobile: 29, tablet: 32, desktop: 36),
+                    ),
+                  ),
+                  SizedBox(
+                    height: responsive<double>(size,
+                        mobile: 12, tablet: 14, desktop: 16),
+                  ),
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 10,
+                    runSpacing: 10,
                     children: <Widget>[
-                      SizedBox(
-                        width: wordmarkWidth,
-                        child: AspectRatio(
-                          aspectRatio: 1600 / 1018,
-                          child: Image.asset(
-                            'assets/images/portfolio-wordmark.webp',
-                            fit: BoxFit.contain,
-                            filterQuality: FilterQuality.high,
-                            semanticLabel: 'Portfolio',
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: responsive<double>(size,
-                            mobile: 4, tablet: 6, desktop: 8),
-                      ),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: ledeWidth),
-                        child: HeroSentence(
-                          text: profile.heroSentence,
-                          style: AppText.lede.copyWith(
-                            fontSize: ledeSize,
-                            height: 1.6,
-                          ),
-                          accentStyle: const TextStyle(
-                            color: AppColors.ink,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: responsive<double>(size,
-                            mobile: 12, tablet: 15, desktop: 17),
-                      ),
-                      Text(
-                        profile.signature,
-                        textAlign: TextAlign.center,
-                        style: AppText.signature(
-                          responsive<double>(size,
-                              mobile: 29, tablet: 32, desktop: 36),
-                        ),
-                      ),
-                      SizedBox(
-                        height: responsive<double>(size,
-                            mobile: 14, tablet: 17, desktop: 19),
-                      ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: <Widget>[
-                          PillButton(label: 'Mes projets', onTap: onProjects),
-                          PillButton(
-                            label: 'Me contacter',
-                            variant: PillVariant.ghost,
-                            onTap: onContact,
-                          ),
-                        ],
+                      PillButton(label: 'Mes projets', onTap: onProjects),
+                      PillButton(
+                        label: 'Me contacter',
+                        variant: PillVariant.ghost,
+                        onTap: onContact,
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
             ),
           ),

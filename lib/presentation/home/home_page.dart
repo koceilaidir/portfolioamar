@@ -83,11 +83,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _scrollToTop() {
+    if (!_scrollController.hasClients) return Future<void>.value();
     return _scrollController.animateTo(
       0,
       duration: const Duration(milliseconds: 650),
       curve: Curves.easeInOutCubic,
     );
+  }
+
+  void _goHome() {
+    final NavigatorState navigator = Navigator.of(context);
+    if (navigator.canPop()) {
+      navigator.popUntil((Route<dynamic> route) => route.isFirst);
+    }
+    _scrollToTop();
   }
 
   @override
@@ -109,7 +118,8 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     HeroSection(
                       profile: content.profile,
-                      topPadding: SiteHeader.totalHeight(context),
+                      topPadding: SiteHeader.totalHeight(context) -
+                          SiteHeader.barHeight(context) * 0.45,
                       onProjects: () => _scrollTo(_projectsKey, extra: 12),
                       onContact: () => _scrollTo(_contactKey),
                     ),
@@ -157,6 +167,7 @@ class _HomePageState extends State<HomePage> {
               child: SiteHeader(
                 scrollOffset: _scrollOffset,
                 onContact: () => _scrollTo(_contactKey),
+                onLogoTap: _goHome,
                 navItems: <NavItem>[
                   NavItem(
                     label: 'Projets',

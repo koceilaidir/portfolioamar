@@ -27,9 +27,7 @@ class StaticPortfolioRepository implements PortfolioRepository {
   static const PortfolioContent content = PortfolioContent(
     profile: ProfileInfo(
       role: 'Web Designer',
-      heroSentence:
-          "Bonjour, moi c'est • *Amar Hammour*. Je conçois des • expériences "
-          'digitales qui aident les marques à se démarquer.',
+      heroSentence: '',
       firstName: 'Amar',
       lastName: 'Hammour',
       subrole: 'Web Designer & Digital Creative',

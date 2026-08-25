@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:portfolio/app.dart';
 import 'package:portfolio/data/repositories/static_portfolio_repository.dart';
-import 'package:portfolio/presentation/widgets/hero_sentence.dart';
 import 'package:portfolio/presentation/widgets/project_card.dart';
 import 'package:portfolio/presentation/widgets/testimonial_card.dart';
 
@@ -13,7 +12,7 @@ Future<void> _settle(WidgetTester tester) async {
 }
 
 void main() {
-  testWidgets('Le hero affiche la phrase et la signature',
+  testWidgets('Le hero affiche la signature et les boutons',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -24,11 +23,12 @@ void main() {
     );
     await _settle(tester);
 
-    expect(find.byType(HeroSentence), findsOneWidget);
     expect(
       find.text(StaticPortfolioRepository.content.profile.signature),
       findsWidgets,
     );
+    expect(find.text('Mes projets'), findsOneWidget);
+    expect(find.text('Me contacter'), findsWidgets);
   });
 
   testWidgets('Tous les projets et témoignages sont rendus',

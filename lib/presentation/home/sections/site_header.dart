@@ -19,19 +19,21 @@ class SiteHeader extends StatelessWidget {
     super.key,
     required this.scrollOffset,
     required this.onContact,
+    required this.onLogoTap,
     this.navItems = const <NavItem>[],
   });
 
   final ValueListenable<double> scrollOffset;
   final VoidCallback onContact;
+  final VoidCallback onLogoTap;
   final List<NavItem> navItems;
 
   static double barHeight(BuildContext context) {
     return responsive<double>(
       Breakpoints.of(context),
-      mobile: 74,
-      tablet: 76,
-      desktop: 82,
+      mobile: 58,
+      tablet: 60,
+      desktop: 64,
     );
   }
 
@@ -50,7 +52,7 @@ class SiteHeader extends StatelessWidget {
         final double t = (offset / 48).clamp(0.0, 1.0);
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColors.cream.withValues(alpha: 0.72 + 0.28 * t),
+            color: AppColors.cream.withValues(alpha: t),
             border: Border(
               bottom: BorderSide(
                 color: AppColors.line.withValues(alpha: 0.14 * t),
@@ -74,12 +76,26 @@ class SiteHeader extends StatelessWidget {
           child: ContentContainer(
             child: Row(
               children: <Widget>[
-                Image.asset(
-                  'assets/logo/logo.png',
-                  height: responsive<double>(size,
-                      mobile: 32, tablet: 36, desktop: 40),
-                  filterQuality: FilterQuality.high,
-                  semanticLabel: 'Amar Hammour',
+                Tooltip(
+                  message: 'Retour en haut',
+                  waitDuration: const Duration(milliseconds: 600),
+                  child: HoverRegion(
+                    onTap: onLogoTap,
+                    builder: (BuildContext context, bool hovered) {
+                      return AnimatedScale(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                        scale: hovered ? 1.08 : 1,
+                        child: Image.asset(
+                          'assets/logo/logo.png',
+                          height: responsive<double>(size,
+                              mobile: 30, tablet: 32, desktop: 36),
+                          filterQuality: FilterQuality.high,
+                          semanticLabel: 'Amar Hammour, retour en haut',
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 const Spacer(),
                 if (showNav) ...<Widget>[

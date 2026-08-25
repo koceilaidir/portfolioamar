@@ -14,7 +14,7 @@ class SettingsTab extends StatefulWidget {
   static const List<AdminField> fields = <AdminField>[
     AdminField(
       'hero_sentence',
-      'Phrase de présentation du hero',
+      'Phrase du hero (optionnelle, vide = rien)',
       kind: AdminFieldKind.multiline,
       hint: '*mot* = mis en avant en gras',
     ),
