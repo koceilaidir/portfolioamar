@@ -1,1 +1,1 @@
-const bool kAdminVisible = true;
+const bool kAdminVisible = false;
