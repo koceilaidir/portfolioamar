@@ -132,14 +132,15 @@ class _HomePageState extends State<HomePage> {
                       quote: content.quote,
                       features: content.features,
                     ),
-                    TestimonialsSection(
-                      key: _testimonialsKey,
-                      copy: content.testimonialsSection,
-                      testimonials: content.testimonials,
-                      onSubmitReview: widget.repository.acceptsReviews
-                          ? widget.repository.submitReview
-                          : null,
-                    ),
+                    if (content.testimonialsVisible)
+                      TestimonialsSection(
+                        key: _testimonialsKey,
+                        copy: content.testimonialsSection,
+                        testimonials: content.testimonials,
+                        onSubmitReview: widget.repository.acceptsReviews
+                            ? widget.repository.submitReview
+                            : null,
+                      ),
                     FooterSection(
                       key: _contactKey,
                       contact: content.contact,
@@ -154,7 +155,6 @@ class _HomePageState extends State<HomePage> {
               left: 0,
               right: 0,
               child: SiteHeader(
-                role: content.profile.role,
                 scrollOffset: _scrollOffset,
                 onContact: () => _scrollTo(_contactKey),
                 navItems: <NavItem>[
@@ -162,14 +162,11 @@ class _HomePageState extends State<HomePage> {
                     label: 'Projets',
                     onTap: () => _scrollTo(_projectsKey, extra: 12),
                   ),
-                  NavItem(
-                    label: 'Expertise',
-                    onTap: () => _scrollTo(_skillsKey, extra: 12),
-                  ),
-                  NavItem(
-                    label: 'Avis',
-                    onTap: () => _scrollTo(_testimonialsKey, extra: 12),
-                  ),
+                  if (content.testimonialsVisible)
+                    NavItem(
+                      label: 'Avis',
+                      onTap: () => _scrollTo(_testimonialsKey, extra: 12),
+                    ),
                 ],
               ),
             ),

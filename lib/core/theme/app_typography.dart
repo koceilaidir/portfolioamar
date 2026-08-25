@@ -4,9 +4,9 @@ import 'app_colors.dart';
 
 abstract final class AppFonts {
 
-  static const String display = 'FrauncesDisplay';
+  static const String display = 'Poppins';
 
-  static const String serif = 'Fraunces';
+  static const String serif = 'Poppins';
 
   static const String sans = 'Manrope';
 
@@ -43,10 +43,10 @@ abstract final class AppText {
 
   static TextStyle heroSentence(double fontSize) => TextStyle(
         fontFamily: AppFonts.display,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w700,
         fontSize: fontSize,
-        height: 1.04,
-        letterSpacing: -fontSize * 0.018,
+        height: 1.1,
+        letterSpacing: -fontSize * 0.022,
         color: AppColors.ink,
       );
 
@@ -88,7 +88,8 @@ abstract final class AppText {
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w700,
         fontSize: fontSize,
-        height: 1.05,
+        height: 1.14,
+        letterSpacing: -fontSize * 0.015,
         color: AppColors.ink,
       );
 
@@ -113,7 +114,8 @@ abstract final class AppText {
         fontFamily: AppFonts.serif,
         fontWeight: FontWeight.w700,
         fontSize: fontSize,
-        height: 1.05,
+        height: 1.12,
+        letterSpacing: -fontSize * 0.01,
         color: Colors.white,
       );
 
@@ -127,9 +129,9 @@ abstract final class AppText {
 
   static const TextStyle projectTitle = TextStyle(
     fontFamily: AppFonts.serif,
-    fontWeight: FontWeight.w700,
-    fontSize: 16,
-    height: 1.2,
+    fontWeight: FontWeight.w600,
+    fontSize: 15,
+    height: 1.3,
     color: AppColors.ink,
   );
 
@@ -163,7 +165,7 @@ abstract final class AppText {
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.italic,
         fontSize: fontSize,
-        height: 1.35,
+        height: 1.45,
         color: AppColors.ink,
       );
 
@@ -212,7 +214,8 @@ abstract final class AppText {
         fontFamily: AppFonts.display,
         fontWeight: FontWeight.w700,
         fontSize: fontSize,
-        height: 1.05,
+        height: 1.14,
+        letterSpacing: -fontSize * 0.015,
         color: AppColors.cream,
       );
 

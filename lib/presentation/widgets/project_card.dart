@@ -24,7 +24,7 @@ class ProjectCard extends StatelessWidget {
     final double thumbHeight =
         responsive<double>(size, mobile: 150, tablet: 190, desktop: 230);
     final double labelSize =
-        responsive<double>(size, mobile: 22, tablet: 26, desktop: 30);
+        responsive<double>(size, mobile: 20, tablet: 24, desktop: 27);
 
     return HoverRegion(
       onTap: onTap,

@@ -228,6 +228,7 @@ class PortfolioContent {
     required this.testimonialsSection,
     required this.testimonials,
     required this.contact,
+    this.testimonialsVisible = true,
   });
 
   final ProfileInfo profile;
@@ -240,6 +241,8 @@ class PortfolioContent {
   final SectionCopy testimonialsSection;
   final List<Testimonial> testimonials;
   final ContactInfo contact;
+
+  final bool testimonialsVisible;
 
   factory PortfolioContent.fromJson(Map<String, dynamic> json) =>
       PortfolioContent(
@@ -264,5 +267,6 @@ class PortfolioContent {
             .map((dynamic e) => Testimonial.fromJson(e as Map<String, dynamic>))
             .toList(),
         contact: ContactInfo.fromJson(json['contact'] as Map<String, dynamic>),
+        testimonialsVisible: json['testimonialsVisible'] as bool? ?? true,
       );
 }

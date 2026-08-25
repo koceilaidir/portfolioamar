@@ -22,7 +22,7 @@ class SectionHeading extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScreenSize size = Breakpoints.of(context);
     final double titleSize =
-        responsive<double>(size, mobile: 26, tablet: 34, desktop: 42);
+        responsive<double>(size, mobile: 25, tablet: 31, desktop: 38);
 
     return Column(
       crossAxisAlignment: alignment,

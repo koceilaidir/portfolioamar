@@ -23,6 +23,7 @@ create table if not exists public.site_settings (
   testimonials_title       text not null default 'What Clients',
   testimonials_accent      text not null default 'Say',
   testimonials_description text,
+  testimonials_visible     boolean not null default true,
 
   contact_email            text not null default '',
   contact_website          text not null default '',
@@ -81,6 +82,9 @@ create table if not exists public.testimonials (
   position    integer not null default 0,
   created_at  timestamptz not null default now()
 );
+
+alter table public.site_settings
+  add column if not exists testimonials_visible boolean not null default true;
 
 alter table public.site_settings
   add column if not exists hero_sentence text not null

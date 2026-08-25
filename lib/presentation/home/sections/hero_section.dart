@@ -27,7 +27,7 @@ class HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScreenSize size = Breakpoints.of(context);
     final double fontSize =
-        responsive<double>(size, mobile: 32, tablet: 54, desktop: 74);
+        responsive<double>(size, mobile: 29, tablet: 46, desktop: 62);
     final double sentenceWidth =
         responsive<double>(size, mobile: 560, tablet: 780, desktop: 1020);
     final double minHeight =

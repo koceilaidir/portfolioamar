@@ -25,7 +25,7 @@ class FooterSection extends StatelessWidget {
     final ScreenSize size = Breakpoints.of(context);
     final bool wide = size == ScreenSize.desktop;
     final double titleSize =
-        responsive<double>(size, mobile: 30, tablet: 40, desktop: 52);
+        responsive<double>(size, mobile: 28, tablet: 36, desktop: 46);
 
     final Widget headline = Column(
       crossAxisAlignment: CrossAxisAlignment.start,

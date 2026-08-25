@@ -17,13 +17,11 @@ class NavItem {
 class SiteHeader extends StatelessWidget {
   const SiteHeader({
     super.key,
-    required this.role,
     required this.scrollOffset,
     required this.onContact,
     this.navItems = const <NavItem>[],
   });
 
-  final String role;
   final ValueListenable<double> scrollOffset;
   final VoidCallback onContact;
   final List<NavItem> navItems;
@@ -76,16 +74,14 @@ class SiteHeader extends StatelessWidget {
           child: ContentContainer(
             child: Row(
               children: <Widget>[
-                Expanded(
-                  child: Text(
-                    role.toUpperCase(),
-                    style: AppText.role,
-                    maxLines: 1,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                Image.asset(
+                  'assets/logo/logo.png',
+                  height: responsive<double>(size,
+                      mobile: 32, tablet: 36, desktop: 40),
+                  filterQuality: FilterQuality.high,
+                  semanticLabel: 'Amar Hammour',
                 ),
-                const SizedBox(width: 12),
+                const Spacer(),
                 if (showNav) ...<Widget>[
                   for (final NavItem item in navItems)
                     Padding(

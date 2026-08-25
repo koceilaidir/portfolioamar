@@ -12,7 +12,6 @@ class SettingsTab extends StatefulWidget {
   final AdminRepository repository;
 
   static const List<AdminField> fields = <AdminField>[
-    AdminField('role', 'Rôle affiché en haut du site'),
     AdminField(
       'hero_sentence',
       'Grande phrase du hero',
@@ -450,6 +449,7 @@ class ReviewsTab extends StatefulWidget {
 class _ReviewsTabState extends State<ReviewsTab> {
   List<Map<String, dynamic>> _rows = <Map<String, dynamic>>[];
   bool _loading = true;
+  bool _visible = true;
   String? _error;
 
   @override
@@ -467,9 +467,12 @@ class _ReviewsTabState extends State<ReviewsTab> {
     try {
       final List<Map<String, dynamic>> rows =
           await widget.repository.loadTestimonials();
+      final Map<String, dynamic> settings =
+          await widget.repository.loadSettings();
       if (!mounted) return;
       setState(() {
         _rows = rows;
+        _visible = settings['testimonials_visible'] != false;
         _loading = false;
       });
     } catch (error) {
@@ -478,6 +481,28 @@ class _ReviewsTabState extends State<ReviewsTab> {
         _loading = false;
         _error = error.toString();
       });
+    }
+  }
+
+  Future<void> _setVisible(bool value) async {
+    final bool previous = _visible;
+    setState(() => _visible = value);
+    try {
+      await widget.repository.saveSettings(<String, dynamic>{
+        'testimonials_visible': value,
+      });
+      if (!mounted) return;
+      showAdminMessage(
+        context,
+        value
+            ? 'La section Avis est affichée sur le site.'
+            : 'La section Avis est masquée du site.',
+      );
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _visible = previous);
+      showAdminMessage(context, "Action impossible : ${adminErrorText(error)}",
+          error: true);
     }
   }
 
@@ -522,15 +547,36 @@ class _ReviewsTabState extends State<ReviewsTab> {
     if (_error != null) {
       return Center(child: Text(_error!, style: AppText.sectionDesc));
     }
-    if (_rows.isEmpty) {
-      return Center(
-        child: Text('Aucun avis pour le moment.', style: AppText.sectionDesc),
-      );
-    }
-
     return ListView(
       padding: const EdgeInsets.fromLTRB(4, 4, 4, 40),
       children: <Widget>[
+        AdminCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AdminToggle(
+                label: 'Afficher la section Avis sur le site',
+                value: _visible,
+                onChanged: _setVisible,
+              ),
+              Text(
+                _visible
+                    ? "La section apparaît sur le site avec les avis publiés et le bouton « Laisser un avis »."
+                    : "La section est entièrement masquée : ni les avis, ni le bouton, ni le lien dans le menu. Les avis restent enregistrés ici.",
+                style: AppText.sectionDesc,
+              ),
+            ],
+          ),
+        ),
+        if (_rows.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: Text(
+              'Aucun avis pour le moment.',
+              textAlign: TextAlign.center,
+              style: AppText.sectionDesc,
+            ),
+          ),
         for (final Map<String, dynamic> row in _rows)
           AdminCard(
             child: Column(
