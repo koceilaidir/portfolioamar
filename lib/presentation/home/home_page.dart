@@ -8,6 +8,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/models/portfolio_content.dart';
 import '../../data/repositories/admin_repository.dart';
 import '../../data/repositories/portfolio_repository.dart';
+import '../project/project_page.dart';
 import '../widgets/admin_entry_button.dart';
 import 'sections/about_section.dart';
 import 'sections/footer_section.dart';
@@ -93,6 +94,38 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Project? _nextProject(Project current) {
+    final List<Project> projects = widget.content.projects;
+    final int index = projects.indexWhere((Project p) => p.id == current.id);
+    if (index == -1) return null;
+    for (int step = 1; step < projects.length; step++) {
+      final Project candidate = projects[(index + step) % projects.length];
+      if (candidate.hasDetail) return candidate;
+    }
+    return null;
+  }
+
+  Route<void> _projectRoute(Project project) {
+    return MaterialPageRoute<void>(
+      builder: (BuildContext context) => ProjectPage(
+        project: project,
+        contact: widget.content.contact,
+        ownerName: widget.content.profile.fullName,
+        next: _nextProject(project),
+        onOpenNext: _replaceProject,
+      ),
+    );
+  }
+
+  void _openProject(Project project) {
+    if (!project.hasDetail) return;
+    Navigator.of(context).push(_projectRoute(project));
+  }
+
+  void _replaceProject(Project project) {
+    Navigator.of(context).pushReplacement(_projectRoute(project));
+  }
+
   void _goHome() {
     final NavigatorState navigator = Navigator.of(context);
     if (navigator.canPop()) {
@@ -147,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                       copy: content.projectsSection,
                       projects: content.projects,
                       onSeeAll: () => _scrollTo(_projectsKey, extra: 12),
+                      onProjectTap: _openProject,
                     ),
                     if (content.testimonialsVisible)
                       TestimonialsSection(

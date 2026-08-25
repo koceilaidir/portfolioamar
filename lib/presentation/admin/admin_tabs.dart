@@ -4,6 +4,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/repositories/admin_repository.dart';
 import 'admin_fields.dart';
+import 'admin_gallery_field.dart';
 import 'admin_image_field.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -568,7 +569,9 @@ class _RowEditorState extends State<RowEditor> {
     super.initState();
     for (final AdminField field in widget.fields) {
       final Object? value = widget.row[field.column];
-      if (field.kind == AdminFieldKind.toggle) {
+      if (field.kind == AdminFieldKind.gallery) {
+        continue;
+      } else if (field.kind == AdminFieldKind.toggle) {
         _toggles[field.column] = value == true;
       } else {
         _controllers[field.column] =
@@ -589,7 +592,9 @@ class _RowEditorState extends State<RowEditor> {
     setState(() => _busy = true);
     final Map<String, dynamic> values = <String, dynamic>{};
     for (final AdminField field in widget.fields) {
-      if (field.kind == AdminFieldKind.toggle) {
+      if (field.kind == AdminFieldKind.gallery) {
+        continue;
+      } else if (field.kind == AdminFieldKind.toggle) {
         values[field.column] = _toggles[field.column] ?? false;
       } else if (field.kind == AdminFieldKind.number) {
         values[field.column] =
@@ -656,7 +661,12 @@ class _RowEditorState extends State<RowEditor> {
           title: Text(widget.title, style: AppText.projectTitle),
           children: <Widget>[
             for (final AdminField field in widget.fields)
-              if (field.kind == AdminFieldKind.toggle)
+              if (field.kind == AdminFieldKind.gallery)
+                AdminGalleryField(
+                  repository: widget.repository,
+                  projectId: widget.row['id'] as Object,
+                )
+              else if (field.kind == AdminFieldKind.toggle)
                 AdminToggle(
                   label: field.label,
                   value: _toggles[field.column] ?? false,

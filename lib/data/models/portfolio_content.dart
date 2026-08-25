@@ -38,6 +38,19 @@ class ProfileInfo {
 }
 
 @immutable
+class ProjectPhoto {
+  const ProjectPhoto({required this.url, this.caption = ''});
+
+  final String url;
+  final String caption;
+
+  factory ProjectPhoto.fromJson(Map<String, dynamic> json) => ProjectPhoto(
+        url: json['url'] as String,
+        caption: json['caption'] as String? ?? '',
+      );
+}
+
+@immutable
 class Project {
   const Project({
     required this.id,
@@ -48,6 +61,11 @@ class Project {
     this.thumbnailTextColor = Colors.white,
     this.imageUrl,
     this.url,
+    this.description = '',
+    this.client = '',
+    this.year = '',
+    this.role = '',
+    this.photos = const <ProjectPhoto>[],
   });
 
   final String id;
@@ -62,6 +80,26 @@ class Project {
   final String? imageUrl;
   final String? url;
 
+  final String description;
+  final String client;
+  final String year;
+  final String role;
+  final List<ProjectPhoto> photos;
+
+  bool get hasDetail =>
+      description.trim().isNotEmpty ||
+      client.trim().isNotEmpty ||
+      year.trim().isNotEmpty ||
+      role.trim().isNotEmpty ||
+      photos.isNotEmpty;
+
+  List<ProjectPhoto> get gallery {
+    if (photos.isNotEmpty) return photos;
+    final String? cover = imageUrl;
+    if (cover == null || cover.trim().isEmpty) return const <ProjectPhoto>[];
+    return <ProjectPhoto>[ProjectPhoto(url: cover)];
+  }
+
   factory Project.fromJson(Map<String, dynamic> json) => Project(
         id: json['id'] as String,
         title: json['title'] as String,
@@ -75,9 +113,21 @@ class Project {
             : colorFromHex(json['thumbnailTextColor'] as String),
         imageUrl: json['imageUrl'] as String?,
         url: json['url'] as String?,
+        description: json['description'] as String? ?? '',
+        client: json['client'] as String? ?? '',
+        year: json['year'] as String? ?? '',
+        role: json['role'] as String? ?? '',
+        photos: (json['photos'] as List<dynamic>? ?? <dynamic>[])
+            .map((dynamic e) =>
+                ProjectPhoto.fromJson(e as Map<String, dynamic>))
+            .toList(),
       );
 
-  factory Project.fromRow(Map<String, dynamic> row, {String? imageUrl}) =>
+  factory Project.fromRow(
+    Map<String, dynamic> row, {
+    String? imageUrl,
+    List<ProjectPhoto> photos = const <ProjectPhoto>[],
+  }) =>
       Project(
         id: row['id'].toString(),
         title: (row['title'] ?? '') as String,
@@ -91,6 +141,11 @@ class Project {
             colorFromHex((row['thumbnail_text_color'] ?? '#FFFFFF') as String),
         imageUrl: imageUrl,
         url: row['url'] as String?,
+        description: ((row['description'] ?? '') as String).trim(),
+        client: ((row['client'] ?? '') as String).trim(),
+        year: ((row['project_year'] ?? '') as String).trim(),
+        role: ((row['project_role'] ?? '') as String).trim(),
+        photos: photos,
       );
 }
 

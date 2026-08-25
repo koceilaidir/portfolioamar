@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_typography.dart';
 
-enum AdminFieldKind { text, multiline, number, toggle, image }
+enum AdminFieldKind { text, multiline, number, toggle, image, gallery }
 
 class AdminField {
   const AdminField(

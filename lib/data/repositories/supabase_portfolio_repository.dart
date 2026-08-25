@@ -33,6 +33,7 @@ class SupabasePortfolioRepository implements PortfolioRepository {
           .order('position', ascending: true)
           .order('created_at', ascending: true),
       _aboutStepRows(),
+      _projectImageRows(),
     ]);
 
     final Map<String, dynamic> settings =
@@ -44,9 +45,15 @@ class SupabasePortfolioRepository implements PortfolioRepository {
     final List<Map<String, dynamic>>? aboutStepRows =
         results[5] as List<Map<String, dynamic>>?;
 
+    final Map<String, List<ProjectPhoto>> photos =
+        _groupPhotos(results[6] as List<Map<String, dynamic>>?);
+
     final List<Project> projects = projectRows
-        .map((Map<String, dynamic> row) =>
-            Project.fromRow(row, imageUrl: _imageUrl(row['image_path'])))
+        .map((Map<String, dynamic> row) => Project.fromRow(
+              row,
+              imageUrl: _imageUrl(row['image_path']),
+              photos: photos[row['id'].toString()] ?? const <ProjectPhoto>[],
+            ))
         .toList();
 
     return PortfolioContent(
@@ -145,6 +152,39 @@ class SupabasePortfolioRepository implements PortfolioRepository {
     } catch (_) {
       return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>?> _projectImageRows() async {
+    try {
+      final List<dynamic> rows = await _client
+          .from('project_images')
+          .select()
+          .order('position', ascending: true)
+          .order('created_at', ascending: true);
+      return rows.whereType<Map<String, dynamic>>().toList(growable: false);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Map<String, List<ProjectPhoto>> _groupPhotos(
+    List<Map<String, dynamic>>? rows,
+  ) {
+    final Map<String, List<ProjectPhoto>> grouped =
+        <String, List<ProjectPhoto>>{};
+    if (rows == null) return grouped;
+    for (final Map<String, dynamic> row in rows) {
+      final String? url = _imageUrl(row['image_path']);
+      if (url == null) continue;
+      final String key = row['project_id'].toString();
+      grouped.putIfAbsent(key, () => <ProjectPhoto>[]).add(
+            ProjectPhoto(
+              url: url,
+              caption: ((row['caption'] ?? '') as String).trim(),
+            ),
+          );
+    }
+    return grouped;
   }
 
   String? _optional(Map<String, dynamic> row, String key, String? fallback) {

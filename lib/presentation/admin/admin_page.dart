@@ -123,7 +123,19 @@ class _AdminPageState extends State<AdminPage> {
                     },
                     fields: const <AdminField>[
                       AdminField('title', 'Titre'),
-                      AdminField('subtitle', 'Sous-titre'),
+                      AdminField('subtitle', 'Catégorie',
+                          hint: 'Ex : Identité visuelle. Sert aussi de '
+                              'sous-titre sur la vignette'),
+                      AdminField(
+                        'description',
+                        'Description du projet',
+                        kind: AdminFieldKind.multiline,
+                        hint: 'Vide = la page projet ne montre pas de texte',
+                      ),
+                      AdminField('client', 'Client'),
+                      AdminField('project_year', 'Année'),
+                      AdminField('project_role', 'Rôle',
+                          kind: AdminFieldKind.multiline),
                       AdminField(
                         'thumbnail_label',
                         'Texte sur la vignette',
@@ -147,6 +159,8 @@ class _AdminPageState extends State<AdminPage> {
                           kind: AdminFieldKind.number),
                       AdminField('published', 'Visible sur le site',
                           kind: AdminFieldKind.toggle),
+                      AdminField('project_images', 'Photos',
+                          kind: AdminFieldKind.gallery),
                     ],
                   ),
                   TableTab(

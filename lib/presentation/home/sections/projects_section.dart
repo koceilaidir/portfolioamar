@@ -53,7 +53,8 @@ class ProjectsSection extends StatelessWidget {
                           child: ProjectCard(
                             project: projects[i],
                             index: i + 1,
-                            onTap: onProjectTap == null
+                            onTap: onProjectTap == null ||
+                                    !projects[i].hasDetail
                                 ? null
                                 : () => onProjectTap!(projects[i]),
                           ),

@@ -54,6 +54,11 @@ create table if not exists public.projects (
   gradient_end         text not null default '#4A453D',
   thumbnail_text_color text not null default '#FFFFFF',
 
+  description          text,
+  client               text,
+  project_year         text,
+  project_role         text,
+
   image_path           text,
   url                  text,
   position             integer not null default 0,
@@ -76,6 +81,15 @@ create table if not exists public.features (
   icon_key    text not null default 'star',
   title       text not null,
   description text not null default '',
+  position    integer not null default 0,
+  created_at  timestamptz not null default now()
+);
+
+create table if not exists public.project_images (
+  id          uuid primary key default gen_random_uuid(),
+  project_id  uuid not null references public.projects (id) on delete cascade,
+  image_path  text not null,
+  caption     text not null default '',
   position    integer not null default 0,
   created_at  timestamptz not null default now()
 );
@@ -112,6 +126,15 @@ alter table public.site_settings alter column hero_sentence drop not null;
 alter table public.skills
   add column if not exists short_label text not null default '';
 
+alter table public.projects
+  add column if not exists description text;
+alter table public.projects
+  add column if not exists client text;
+alter table public.projects
+  add column if not exists project_year text;
+alter table public.projects
+  add column if not exists project_role text;
+
 alter table public.site_settings
   add column if not exists skills_description text;
 
@@ -147,6 +170,7 @@ update public.site_settings
   where id = 1 and subrole = 'Web Designer & Digital Creative';
 
 create index if not exists about_steps_position_idx on public.about_steps (position);
+create index if not exists project_images_project_idx on public.project_images (project_id, position);
 create index if not exists testimonials_status_idx on public.testimonials (status);
 create index if not exists projects_position_idx  on public.projects (position);
 
@@ -154,6 +178,7 @@ alter table public.site_settings enable row level security;
 alter table public.projects      enable row level security;
 alter table public.skills        enable row level security;
 alter table public.features      enable row level security;
+alter table public.project_images enable row level security;
 alter table public.about_steps   enable row level security;
 alter table public.testimonials  enable row level security;
 
@@ -172,6 +197,16 @@ create policy "skills_public_read"
 drop policy if exists "features_public_read" on public.features;
 create policy "features_public_read"
   on public.features for select to anon, authenticated using (true);
+
+drop policy if exists "project_gallery_public_read" on public.project_images;
+create policy "project_gallery_public_read"
+  on public.project_images for select to anon, authenticated
+  using (
+    exists (
+      select 1 from public.projects p
+      where p.id = project_id and p.published
+    )
+  );
 
 drop policy if exists "about_steps_public_read" on public.about_steps;
 create policy "about_steps_public_read"

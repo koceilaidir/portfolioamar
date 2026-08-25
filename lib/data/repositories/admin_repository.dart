@@ -52,6 +52,36 @@ class AdminRepository {
     return rows.cast<Map<String, dynamic>>().toList();
   }
 
+  Future<List<Map<String, dynamic>>> loadProjectImages(Object projectId) async {
+    final List<dynamic> rows = await client
+        .from('project_images')
+        .select()
+        .eq('project_id', projectId)
+        .order('position', ascending: true)
+        .order('created_at', ascending: true);
+    return rows.cast<Map<String, dynamic>>().toList();
+  }
+
+  Future<void> addProjectImage({
+    required Object projectId,
+    required String imagePath,
+    required int position,
+  }) async {
+    await client.from('project_images').insert(<String, dynamic>{
+      'project_id': projectId,
+      'image_path': imagePath,
+      'position': position,
+    });
+  }
+
+  Future<void> reorderProjectImages(List<Object> orderedIds) async {
+    for (int i = 0; i < orderedIds.length; i++) {
+      await client
+          .from('project_images')
+          .update(<String, dynamic>{'position': i + 1}).eq('id', orderedIds[i]);
+    }
+  }
+
   Future<Map<String, dynamic>> insertRow(
     String table,
     Map<String, dynamic> values,
@@ -83,6 +113,18 @@ class AdminRepository {
           fileOptions: const FileOptions(upsert: true, cacheControl: '3600'),
         );
     return fileName;
+  }
+
+  Future<void> removeStoredImage(String path) async {
+    final String name = path.trim();
+    if (name.isEmpty || name.startsWith('http')) return;
+    try {
+      await client.storage
+          .from(AppConfig.projectImagesBucket)
+          .remove(<String>[name]);
+    } catch (_) {
+      return;
+    }
   }
 
   String publicImageUrl(String path) {
