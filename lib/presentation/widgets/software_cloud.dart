@@ -152,12 +152,30 @@ class _FloatingBadgeState extends State<_FloatingBadge>
 
   Widget _iconTile(String url) {
     final double side = widget.size;
-    return SizedBox(
+    final BorderRadius radius = BorderRadius.circular(side * 0.28);
+
+    return Container(
       width: side,
       height: side,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: AppColors.card,
+        borderRadius: radius,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: const Color(0x1A20201C),
+            blurRadius: side * 0.32,
+            offset: Offset(0, side * 0.11),
+          ),
+        ],
+      ),
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(color: AppColors.line),
+        borderRadius: radius,
+      ),
       child: Image.network(
         url,
-        fit: BoxFit.contain,
+        fit: BoxFit.cover,
         filterQuality: FilterQuality.high,
         errorBuilder:
             (BuildContext context, Object error, StackTrace? stack) =>
