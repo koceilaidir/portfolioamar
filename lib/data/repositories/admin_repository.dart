@@ -66,11 +66,15 @@ class AdminRepository {
     required Object projectId,
     required String imagePath,
     required int position,
+    int? width,
+    int? height,
   }) async {
     await client.from('project_images').insert(<String, dynamic>{
       'project_id': projectId,
       'image_path': imagePath,
       'position': position,
+      if (width != null && width > 0) 'width': width,
+      if (height != null && height > 0) 'height': height,
     });
   }
 

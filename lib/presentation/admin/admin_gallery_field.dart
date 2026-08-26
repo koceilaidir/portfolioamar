@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +92,18 @@ class _AdminGalleryFieldState extends State<AdminGalleryField> {
         continue;
       }
       try {
+        int? width;
+        int? height;
+        try {
+          final ui.Image decoded = await decodeImageFromList(bytes);
+          width = decoded.width;
+          height = decoded.height;
+          decoded.dispose();
+        } catch (_) {
+          width = null;
+          height = null;
+        }
+
         final String path = await widget.repository.uploadProjectImage(
           fileName: _safeName(file.name),
           bytes: bytes,
@@ -100,6 +113,8 @@ class _AdminGalleryFieldState extends State<AdminGalleryField> {
           projectId: widget.projectId,
           imagePath: path,
           position: position,
+          width: width,
+          height: height,
         );
         added += 1;
       } catch (_) {
@@ -199,8 +214,8 @@ class _AdminGalleryFieldState extends State<AdminGalleryField> {
           Text('PHOTOS DE LA PAGE PROJET', style: AppText.skillLabel),
           const SizedBox(height: 6),
           Text(
-            'La première photo sert de couverture. Les suivantes alternent '
-            'automatiquement deux par ligne puis pleine largeur.',
+            'La première photo sert de couverture. Les suivantes sont '
+            'disposées en mosaïque et gardent leurs proportions d’origine.',
             style: AppText.testimonialRole,
           ),
           const SizedBox(height: 12),

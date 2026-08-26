@@ -116,6 +116,7 @@ class SupabasePortfolioRepository implements PortfolioRepository {
       testimonials: testimonialRows.map(Testimonial.fromRow).toList(),
       testimonialsVisible: settings['testimonials_visible'] != false,
       backgroundColor: _stored(settings, 'background_color', ''),
+      headerColor: _stored(settings, 'header_color', ''),
       contact: ContactInfo(
         email: _text(settings, 'contact_email', _fallback.contact.email),
         website: _text(settings, 'contact_website', _fallback.contact.website),
@@ -185,6 +186,7 @@ class SupabasePortfolioRepository implements PortfolioRepository {
             ProjectPhoto(
               url: url,
               caption: ((row['caption'] ?? '') as String).trim(),
+              aspectRatio: ProjectPhoto.ratioFrom(row['width'], row['height']),
             ),
           );
     }

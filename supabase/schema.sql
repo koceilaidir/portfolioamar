@@ -5,6 +5,7 @@ create table if not exists public.site_settings (
   hero_title               text not null default 'Portfolio',
   hero_sentence            text,
   background_color         text,
+  header_color             text,
   about_visible            boolean not null default true,
   about_kicker             text not null default 'À PROPOS',
   about_title              text not null default '',
@@ -92,6 +93,8 @@ create table if not exists public.project_images (
   project_id  uuid not null references public.projects (id) on delete cascade,
   image_path  text not null,
   caption     text not null default '',
+  width       integer,
+  height      integer,
   position    integer not null default 0,
   created_at  timestamptz not null default now()
 );
@@ -125,8 +128,15 @@ alter table public.site_settings
 alter table public.site_settings alter column hero_sentence drop default;
 alter table public.site_settings alter column hero_sentence drop not null;
 
+alter table public.project_images
+  add column if not exists width integer;
+alter table public.project_images
+  add column if not exists height integer;
+
 alter table public.site_settings
   add column if not exists background_color text;
+alter table public.site_settings
+  add column if not exists header_color text;
 
 alter table public.skills
   add column if not exists short_label text not null default '';

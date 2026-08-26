@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../core/animation/reveal.dart';
@@ -10,6 +12,7 @@ import '../../data/models/portfolio_content.dart';
 import '../home/sections/footer_section.dart';
 import '../home/sections/site_header.dart';
 import '../widgets/pill_button.dart';
+import 'photo_viewer.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({
@@ -387,8 +390,39 @@ class _Facts extends StatelessWidget {
 class _Gallery extends StatelessWidget {
   const _Gallery({required this.photos, required this.size});
 
+  static const double _fallbackRatio = 4 / 3;
+
   final List<ProjectPhoto> photos;
   final ScreenSize size;
+
+  int get _columns => photos.length < 2
+      ? 1
+      : responsive<int>(size, mobile: 1, tablet: 2, desktop: 2);
+
+  List<List<int>> _distribute() {
+    final int count = _columns;
+    final List<List<int>> columns =
+        List<List<int>>.generate(count, (_) => <int>[]);
+    if (count == 1) {
+      for (int i = 0; i < photos.length; i++) {
+        columns.first.add(i);
+      }
+      return columns;
+    }
+
+    final List<double> weights = List<double>.filled(count, 0);
+    for (int index = 0; index < photos.length; index++) {
+      final ProjectPhoto photo = photos[index];
+      int target = 0;
+      for (int i = 1; i < count; i++) {
+        if (weights[i] < weights[target]) target = i;
+      }
+      columns[target].add(index);
+      final double ratio = photo.aspectRatio ?? _fallbackRatio;
+      weights[target] += 1 / ratio + (photo.caption.isEmpty ? 0.06 : 0.12);
+    }
+    return columns;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -396,100 +430,199 @@ class _Gallery extends StatelessWidget {
 
     final double gap =
         responsive<double>(size, mobile: 12, tablet: 16, desktop: 18);
-    final bool wide = size != ScreenSize.mobile;
-    final List<Widget> blocks = <Widget>[];
+    final List<List<int>> columns = _distribute();
 
-    blocks.add(
-      Reveal(
-        offsetY: 18,
-        child: _Shot(photo: photos.first, ratio: 16 / 9),
-      ),
-    );
+    if (columns.length == 1) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          for (int i = 0; i < photos.length; i++) ...<Widget>[
+            if (i > 0) SizedBox(height: gap),
+            Reveal(
+              offsetY: 18,
+              child: _Shot(
+                key: ValueKey<String>('$i|${photos[i].url}'),
+                photo: photos[i],
+                onTap: () => showPhotoViewer(context,
+                    photos: photos, index: i),
+              ),
+            ),
+          ],
+        ],
+      );
+    }
 
-    int index = 1;
-    int step = 0;
-    while (index < photos.length) {
-      final bool pair = wide && step.isEven && index + 1 < photos.length;
-      blocks.add(SizedBox(height: gap));
-      if (pair) {
-        blocks.add(
-          Reveal(
-            offsetY: 18,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        for (int c = 0; c < columns.length; c++) ...<Widget>[
+          if (c > 0) SizedBox(width: gap),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Expanded(child: _Shot(photo: photos[index], ratio: 4 / 3)),
-                SizedBox(width: gap),
-                Expanded(child: _Shot(photo: photos[index + 1], ratio: 4 / 3)),
+                for (int i = 0; i < columns[c].length; i++) ...<Widget>[
+                  if (i > 0) SizedBox(height: gap),
+                  Reveal(
+                    offsetY: 18,
+                    delay: Duration(milliseconds: 60 * c + 40 * i),
+                    child: _Shot(
+                      key: ValueKey<String>(
+                          '${columns[c][i]}|${photos[columns[c][i]].url}'),
+                      photo: photos[columns[c][i]],
+                      onTap: () => showPhotoViewer(context,
+                          photos: photos, index: columns[c][i]),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
-        );
-        index += 2;
-      } else {
-        blocks.add(
-          Reveal(
-            offsetY: 18,
-            child: _Shot(
-              photo: photos[index],
-              ratio: wide ? 21 / 9 : 4 / 3,
-            ),
-          ),
-        );
-        index += 1;
-      }
-      step += 1;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: blocks,
+        ],
+      ],
     );
   }
 }
 
-class _Shot extends StatelessWidget {
-  const _Shot({required this.photo, required this.ratio});
+class _Shot extends StatefulWidget {
+  const _Shot({super.key, required this.photo, this.onTap});
 
   final ProjectPhoto photo;
-  final double ratio;
+  final VoidCallback? onTap;
+
+  @override
+  State<_Shot> createState() => _ShotState();
+}
+
+class _ShotState extends State<_Shot> {
+  ImageStream? _stream;
+  ImageStreamListener? _listener;
+  double? _measured;
+
+  late final ImageProvider _provider = NetworkImage(widget.photo.url);
+
+  double get _ratio =>
+      widget.photo.aspectRatio ?? _measured ?? _Gallery._fallbackRatio;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.photo.aspectRatio != null || _stream != null) return;
+    _stream = _provider.resolve(createLocalImageConfiguration(context));
+    _listener = ImageStreamListener(_onFrame, onError: _onError);
+    _stream!.addListener(_listener!);
+  }
+
+  void _detach() {
+    final ImageStream? stream = _stream;
+    final ImageStreamListener? listener = _listener;
+    if (stream != null && listener != null) stream.removeListener(listener);
+    _listener = null;
+  }
+
+  void _onFrame(ImageInfo info, bool _) {
+    final double ratio = info.image.width / info.image.height;
+    info.dispose();
+    scheduleMicrotask(_detach);
+    if (!mounted || ratio <= 0) return;
+    setState(() => _measured = ratio.clamp(0.4, 3.0));
+  }
+
+  void _onError(Object error, StackTrace? stack) {
+    scheduleMicrotask(_detach);
+    if (!mounted) return;
+    setState(() => _measured = _Gallery._fallbackRatio);
+  }
+
+  @override
+  void dispose() {
+    _detach();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: AppColors.surfaceAlt,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          foregroundDecoration: BoxDecoration(
-            border: Border.all(color: AppColors.line),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: AspectRatio(
-            aspectRatio: ratio,
-            child: Image.network(
-              photo.url,
-              fit: BoxFit.cover,
-              errorBuilder:
-                  (BuildContext context, Object error, StackTrace? stack) =>
-                      const Center(
-                child: Icon(
-                  Icons.broken_image_outlined,
-                  color: AppColors.inkSoft,
-                  size: 22,
+        AnimatedSize(
+          duration: const Duration(milliseconds: 260),
+          curve: Curves.easeOut,
+          alignment: Alignment.topCenter,
+          child: HoverRegion(
+            onTap: widget.onTap,
+            cursor: widget.onTap == null
+                ? MouseCursor.defer
+                : SystemMouseCursors.zoomIn,
+            builder: (BuildContext context, bool hovered) {
+              return Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceAlt,
+                  borderRadius: BorderRadius.circular(18),
                 ),
-              ),
-            ),
+                foregroundDecoration: BoxDecoration(
+                  border: Border.all(color: AppColors.line),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: AspectRatio(
+                  aspectRatio: _ratio,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      AnimatedScale(
+                        duration: const Duration(milliseconds: 420),
+                        curve: Curves.easeOut,
+                        scale: hovered && widget.onTap != null ? 1.03 : 1,
+                        child: Image(
+                          image: _provider,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                          errorBuilder: (BuildContext context, Object error,
+                                  StackTrace? stack) =>
+                              const Center(
+                            child: Icon(
+                              Icons.broken_image_outlined,
+                              color: AppColors.inkSoft,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (widget.onTap != null)
+                        Positioned(
+                          top: 12,
+                          right: 12,
+                          child: AnimatedOpacity(
+                            duration: const Duration(milliseconds: 220),
+                            opacity: hovered ? 1 : 0,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              alignment: Alignment.center,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primary,
+                              ),
+                              child: const Icon(
+                                Icons.open_in_full_rounded,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
-        if (photo.caption.isNotEmpty) ...<Widget>[
+        if (widget.photo.caption.isNotEmpty) ...<Widget>[
           const SizedBox(height: 8),
           Text(
-            photo.caption,
+            widget.photo.caption,
             style: AppText.testimonialRole.copyWith(
               fontStyle: FontStyle.italic,
             ),

@@ -39,15 +39,29 @@ class ProfileInfo {
 
 @immutable
 class ProjectPhoto {
-  const ProjectPhoto({required this.url, this.caption = ''});
+  const ProjectPhoto({
+    required this.url,
+    this.caption = '',
+    this.aspectRatio,
+  });
 
   final String url;
   final String caption;
 
+  final double? aspectRatio;
+
   factory ProjectPhoto.fromJson(Map<String, dynamic> json) => ProjectPhoto(
         url: json['url'] as String,
         caption: json['caption'] as String? ?? '',
+        aspectRatio: (json['aspectRatio'] as num?)?.toDouble(),
       );
+
+  static double? ratioFrom(Object? width, Object? height) {
+    final double w = (width as num?)?.toDouble() ?? 0;
+    final double h = (height as num?)?.toDouble() ?? 0;
+    if (!w.isFinite || !h.isFinite || w <= 0 || h <= 0) return null;
+    return (w / h).clamp(0.4, 3.0);
+  }
 }
 
 @immutable
@@ -403,6 +417,7 @@ class PortfolioContent {
     required this.contact,
     this.testimonialsVisible = true,
     this.backgroundColor = '',
+    this.headerColor = '',
   });
 
   final ProfileInfo profile;
@@ -420,6 +435,8 @@ class PortfolioContent {
   final bool testimonialsVisible;
 
   final String backgroundColor;
+
+  final String headerColor;
 
   factory PortfolioContent.fromJson(Map<String, dynamic> json) =>
       PortfolioContent(
@@ -449,5 +466,6 @@ class PortfolioContent {
         contact: ContactInfo.fromJson(json['contact'] as Map<String, dynamic>),
         testimonialsVisible: json['testimonialsVisible'] as bool? ?? true,
         backgroundColor: json['backgroundColor'] as String? ?? '',
+        headerColor: json['headerColor'] as String? ?? '',
       );
 }

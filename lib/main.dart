@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,6 +21,7 @@ Future<void> main() async {
     try {
       await Supabase.initialize(
         url: AppConfig.supabaseUrl,
+        // ignore: deprecated_member_use
         anonKey: AppConfig.supabaseAnonKey,
       );
       final SupabaseClient client = Supabase.instance.client;

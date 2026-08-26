@@ -32,6 +32,12 @@ abstract final class AppColors {
 
   static Color surfaceAlt = creamAlt;
 
+  static Color header = defaultBackground;
+
+  static Color headerText = ink;
+
+  static Color headerTextSoft = inkSoft;
+
   static Color? parseHex(String? value) {
     if (value == null) return null;
     String hex = value.trim().replaceAll('#', '').replaceAll(' ', '');
@@ -63,6 +69,20 @@ abstract final class AppColors {
     final double direction = lightness > 0.85 ? -1.0 : 1.0;
     surface = _shift(chosen, 0.035 * direction);
     surfaceAlt = _shift(chosen, -0.045 * direction);
+  }
+
+  static void applyHeader(String? hex) {
+    final Color? chosen = parseHex(hex);
+    if (chosen == null) {
+      header = background;
+      headerText = ink;
+      headerTextSoft = inkSoft;
+      return;
+    }
+    header = chosen;
+    final bool dark = chosen.computeLuminance() < 0.5;
+    headerText = dark ? cream : ink;
+    headerTextSoft = dark ? cream.withValues(alpha: 0.72) : inkSoft;
   }
 
   static bool isTooDark(String? hex) {

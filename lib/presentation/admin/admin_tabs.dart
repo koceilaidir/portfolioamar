@@ -24,6 +24,11 @@ class SettingsTab extends StatefulWidget {
       'Couleur de fond du site',
       hint: 'Code hexadécimal, ex : F2EBDD. Vide = crème par défaut',
     ),
+    AdminField(
+      'header_color',
+      'Couleur de la barre de navigation',
+      hint: 'Code hexadécimal. Vide = identique au fond du site',
+    ),
     AdminField('subrole', 'Métier (sous la signature du hero)'),
     AdminField('signature', 'Signature manuscrite'),
     AdminField('first_name', 'Prénom'),

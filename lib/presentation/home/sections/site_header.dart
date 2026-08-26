@@ -52,7 +52,7 @@ class SiteHeader extends StatelessWidget {
         final double t = (offset / 48).clamp(0.0, 1.0);
         return DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color: AppColors.header,
             border: Border(
               bottom: BorderSide(
                 color: AppColors.line.withValues(alpha: 0.14 * t),
@@ -131,7 +131,7 @@ class _HeaderLink extends StatelessWidget {
             Text(
               item.label.toUpperCase(),
               style: AppText.navLink.copyWith(
-                color: hovered ? AppColors.ink : AppColors.inkSoft,
+                color: hovered ? AppColors.headerText : AppColors.headerTextSoft,
               ),
             ),
             const SizedBox(height: 4),

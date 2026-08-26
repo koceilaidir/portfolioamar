@@ -56,6 +56,7 @@ class _PortfolioAppState extends State<PortfolioApp> {
   Future<PortfolioContent> _load() async {
     final PortfolioContent content = await widget.repository.loadContent();
     AppColors.applyBackground(content.backgroundColor);
+    AppColors.applyHeader(content.headerColor);
     if (mounted) setState(() {});
     return content;
   }
