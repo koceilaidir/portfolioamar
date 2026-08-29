@@ -40,7 +40,7 @@ class SectionHeading extends StatelessWidget {
           const SizedBox(height: 8),
           ConstrainedBox(
             constraints: BoxConstraints(
-              maxWidth: responsive<double>(size, mobile: 280, tablet: 420, desktop: 460),
+              maxWidth: responsive<double>(size, mobile: 280, tablet: 400, desktop: 420),
             ),
             child: Text(
               copy.description!,

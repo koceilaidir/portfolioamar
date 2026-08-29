@@ -13,7 +13,7 @@ Future<void> _settle(WidgetTester tester) async {
 }
 
 void main() {
-  testWidgets('Le hero affiche la signature et les boutons',
+  testWidgets('Le hero affiche les boutons',
       (WidgetTester tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1.0;
@@ -24,10 +24,6 @@ void main() {
     );
     await _settle(tester);
 
-    expect(
-      find.text(StaticPortfolioRepository.content.profile.signature),
-      findsWidgets,
-    );
     expect(find.text('Mes projets'), findsOneWidget);
     expect(find.text('Me contacter'), findsWidgets);
   });

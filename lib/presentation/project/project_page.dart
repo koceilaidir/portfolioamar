@@ -308,7 +308,7 @@ class _Heading extends StatelessWidget {
           ConstrainedBox(
             constraints: BoxConstraints(
               maxWidth: responsive<double>(size,
-                  mobile: 520, tablet: 540, desktop: 580),
+                  mobile: 520, tablet: 500, desktop: 540),
             ),
             child: Text(
               project.description,

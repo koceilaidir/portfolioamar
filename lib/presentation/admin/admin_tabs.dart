@@ -63,6 +63,7 @@ class SettingsTab extends StatefulWidget {
 class _SettingsTabState extends State<SettingsTab> {
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
+  final Map<String, String> _initial = <String, String>{};
   bool _loading = true;
   bool _saving = false;
   String? _error;
@@ -97,6 +98,12 @@ class _SettingsTabState extends State<SettingsTab> {
         return;
       }
       _controllers.addAll(next);
+      _initial
+        ..clear()
+        ..addAll(<String, String>{
+          for (final AdminField field in SettingsTab.fields)
+            field.column: (row[field.column] ?? '').toString(),
+        });
       setState(() => _loading = false);
     } catch (error) {
       if (!mounted) return;
@@ -108,13 +115,23 @@ class _SettingsTabState extends State<SettingsTab> {
   }
 
   Future<void> _save() async {
+    final Map<String, dynamic> values = <String, dynamic>{};
+    for (final AdminField field in SettingsTab.fields) {
+      final String current = _controllers[field.column]!.text.trim();
+      if (current != (_initial[field.column] ?? '').trim()) {
+        values[field.column] = current;
+      }
+    }
+    if (values.isEmpty) {
+      showAdminMessage(context, 'Aucune modification à enregistrer.');
+      return;
+    }
     setState(() => _saving = true);
-    final Map<String, dynamic> values = <String, dynamic>{
-      for (final AdminField field in SettingsTab.fields)
-        field.column: _controllers[field.column]!.text.trim(),
-    };
     try {
       await widget.repository.saveSettings(values);
+      values.forEach((String key, dynamic value) {
+        _initial[key] = value as String;
+      });
       if (!mounted) return;
       final String colour = (values['background_color'] ?? '') as String;
       if (colour.isNotEmpty && AppColors.parseHex(colour) == null) {
@@ -230,6 +247,7 @@ class AboutTab extends StatefulWidget {
 class _AboutTabState extends State<AboutTab> {
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
+  final Map<String, String> _initial = <String, String>{};
   List<Map<String, dynamic>> _steps = <Map<String, dynamic>>[];
   bool _loading = true;
   bool _saving = false;
@@ -268,6 +286,12 @@ class _AboutTabState extends State<AboutTab> {
         return;
       }
       _controllers.addAll(next);
+      _initial
+        ..clear()
+        ..addAll(<String, String>{
+          for (final AdminField field in AboutTab.fields)
+            field.column: (row[field.column] ?? '').toString(),
+        });
       setState(() {
         _steps = steps;
         _visible = row['about_visible'] != false;
@@ -318,13 +342,23 @@ class _AboutTabState extends State<AboutTab> {
   }
 
   Future<void> _save() async {
+    final Map<String, dynamic> values = <String, dynamic>{};
+    for (final AdminField field in AboutTab.fields) {
+      final String current = _controllers[field.column]!.text.trim();
+      if (current != (_initial[field.column] ?? '').trim()) {
+        values[field.column] = current;
+      }
+    }
+    if (values.isEmpty) {
+      showAdminMessage(context, 'Aucune modification à enregistrer.');
+      return;
+    }
     setState(() => _saving = true);
-    final Map<String, dynamic> values = <String, dynamic>{
-      for (final AdminField field in AboutTab.fields)
-        field.column: _controllers[field.column]!.text.trim(),
-    };
     try {
       await widget.repository.saveSettings(values);
+      values.forEach((String key, dynamic value) {
+        _initial[key] = value as String;
+      });
       if (!mounted) return;
       showAdminMessage(context, 'Textes enregistrés.');
     } catch (error) {
@@ -588,6 +622,7 @@ class _RowEditorState extends State<RowEditor> {
   final Map<String, TextEditingController> _controllers =
       <String, TextEditingController>{};
   final Map<String, bool> _toggles = <String, bool>{};
+  final Map<String, Object?> _initial = <String, Object?>{};
   bool _busy = false;
 
   @override
@@ -603,6 +638,7 @@ class _RowEditorState extends State<RowEditor> {
         _controllers[field.column] =
             TextEditingController(text: (value ?? '').toString());
       }
+      _initial[field.column] = value;
     }
   }
 
@@ -615,22 +651,35 @@ class _RowEditorState extends State<RowEditor> {
   }
 
   Future<void> _save() async {
-    setState(() => _busy = true);
     final Map<String, dynamic> values = <String, dynamic>{};
     for (final AdminField field in widget.fields) {
-      if (field.kind == AdminFieldKind.gallery) {
-        continue;
-      } else if (field.kind == AdminFieldKind.toggle) {
-        values[field.column] = _toggles[field.column] ?? false;
+      if (field.kind == AdminFieldKind.gallery) continue;
+
+      final Object? before = _initial[field.column];
+      if (field.kind == AdminFieldKind.toggle) {
+        final bool current = _toggles[field.column] ?? false;
+        if (current != (before == true)) values[field.column] = current;
       } else if (field.kind == AdminFieldKind.number) {
-        values[field.column] =
+        final int current =
             int.tryParse(_controllers[field.column]!.text.trim()) ?? 0;
+        if (current != ((before as num?)?.toInt() ?? 0)) {
+          values[field.column] = current;
+        }
       } else {
-        values[field.column] = _controllers[field.column]!.text.trim();
+        final String current = _controllers[field.column]!.text.trim();
+        if (current != (before ?? '').toString().trim()) {
+          values[field.column] = current;
+        }
       }
     }
+    if (values.isEmpty) {
+      showAdminMessage(context, 'Aucune modification à enregistrer.');
+      return;
+    }
+    setState(() => _busy = true);
     try {
       await widget.onSave(values);
+      values.forEach((String key, dynamic value) => _initial[key] = value);
       if (!mounted) return;
       showAdminMessage(context, 'Modifications enregistrées.');
     } catch (error) {

@@ -8,14 +8,9 @@ import '../../../data/models/portfolio_content.dart';
 import '../../widgets/hero_sentence.dart';
 
 class AboutSection extends StatelessWidget {
-  const AboutSection({
-    super.key,
-    required this.about,
-    required this.signature,
-  });
+  const AboutSection({super.key, required this.about});
 
   final AboutInfo about;
-  final String signature;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +22,6 @@ class AboutSection extends StatelessWidget {
     final Widget narrative = _Narrative(
       paragraphs: paragraphs,
       tags: about.tags,
-      signature: signature,
       size: size,
     );
     final Widget steps = _Steps(steps: about.steps, size: size);
@@ -184,13 +178,11 @@ class _Narrative extends StatelessWidget {
   const _Narrative({
     required this.paragraphs,
     required this.tags,
-    required this.signature,
     required this.size,
   });
 
   final List<String> paragraphs;
   final List<String> tags;
-  final String signature;
   final ScreenSize size;
 
   @override
@@ -207,16 +199,19 @@ class _Narrative extends StatelessWidget {
             child: Reveal(
               offsetY: 16,
               delay: Duration(milliseconds: 70 * i),
-              child: HeroSentence(
-                text: paragraphs[i],
-                textAlign: TextAlign.start,
-                style: AppText.sectionDesc.copyWith(
-                  fontSize: bodySize,
-                  height: 1.72,
-                ),
-                accentStyle: const TextStyle(
-                  color: AppColors.ink,
-                  fontWeight: FontWeight.w700,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 540),
+                  child: HeroSentence(
+                  text: paragraphs[i],
+                  textAlign: TextAlign.start,
+                  style: AppText.sectionDesc.copyWith(
+                    fontSize: bodySize,
+                    height: 1.72,
+                  ),
+                  accentStyle: const TextStyle(
+                    color: AppColors.ink,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
@@ -234,20 +229,6 @@ class _Narrative extends StatelessWidget {
                 for (int i = 0; i < tags.length; i++)
                   _Tag(label: tags[i], filled: i == 0),
               ],
-            ),
-          ),
-        ],
-        if (signature.trim().isNotEmpty) ...<Widget>[
-          SizedBox(
-            height: responsive<double>(size, mobile: 18, tablet: 20, desktop: 24),
-          ),
-          Reveal(
-            offsetY: 12,
-            child: Text(
-              signature,
-              style: AppText.signature(
-                responsive<double>(size, mobile: 27, tablet: 29, desktop: 31),
-              ),
             ),
           ),
         ],

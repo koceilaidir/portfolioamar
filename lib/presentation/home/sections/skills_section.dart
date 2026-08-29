@@ -7,7 +7,6 @@ import '../../../core/theme/app_typography.dart';
 import '../../../data/models/portfolio_content.dart';
 import '../../widgets/section_heading.dart';
 import '../../widgets/skill_bar.dart';
-import '../../widgets/software_cloud.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({
@@ -42,23 +41,20 @@ class SkillsSection extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     flex: 5,
-                    child: Reveal(child: SoftwareCloud(skills: skills)),
+                    child: quote.trim().isEmpty
+                        ? const SizedBox.shrink()
+                        : _QuoteBlock(quote: quote, size: size),
                   ),
-                  const SizedBox(width: 48),
+                  const SizedBox(width: 56),
                   Expanded(flex: 6, child: _SkillList(skills: skills)),
                 ],
               )
             else ...<Widget>[
-              Reveal(child: SoftwareCloud(skills: skills)),
-              const SizedBox(height: 20),
               _SkillList(skills: skills),
-            ],
-            if (quote.trim().isNotEmpty) ...<Widget>[
-              SizedBox(
-                height:
-                    responsive<double>(size, mobile: 22, tablet: 34, desktop: 44),
-              ),
-              _QuoteBlock(quote: quote, size: size),
+              if (quote.trim().isNotEmpty) ...<Widget>[
+                const SizedBox(height: 22),
+                _QuoteBlock(quote: quote, size: size),
+              ],
             ],
           ],
         ),
@@ -97,35 +93,22 @@ class _QuoteBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double fontSize =
-        responsive<double>(size, mobile: 20, tablet: 23, desktop: 26);
+        responsive<double>(size, mobile: 19, tablet: 21, desktop: 23);
 
     return Reveal(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth:
-                responsive<double>(size, mobile: 520, tablet: 640, desktop: 760),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            '"',
+            style: AppText.quote(fontSize * 2).copyWith(
+              color: AppColors.primary,
+              height: 0.7,
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                '"',
-                textAlign: TextAlign.center,
-                style: AppText.quote(fontSize * 2).copyWith(
-                  color: AppColors.primary,
-                  height: 0.7,
-                ),
-              ),
-              SizedBox(height: fontSize * 0.24),
-              Text(
-                quote,
-                textAlign: TextAlign.center,
-                style: AppText.quote(fontSize),
-              ),
-            ],
-          ),
-        ),
+          SizedBox(height: fontSize * 0.24),
+          Text(quote, style: AppText.quote(fontSize)),
+        ],
       ),
     );
   }

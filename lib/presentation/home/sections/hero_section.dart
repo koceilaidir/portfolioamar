@@ -6,7 +6,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../data/models/portfolio_content.dart';
 import '../../widgets/grid_fade.dart';
-import '../../widgets/handwritten_signature.dart';
 import '../../widgets/hero_sentence.dart';
 import '../../widgets/pill_button.dart';
 
@@ -63,9 +62,9 @@ class HeroSection extends StatelessWidget {
                 children: <Widget>[
                   _Wordmark(
                     width: wordmarkWidth,
-                    aspectRatio: 1600 / 1018,
-                    topTrim: 0.078,
-                    bottomTrim: 0.057,
+                    aspectRatio: 1600 / 961,
+                    topTrim: 0.008,
+                    bottomTrim: 0.005,
                   ),
                   if (hasSentence) ...<Widget>[
                     SizedBox(
@@ -91,12 +90,13 @@ class HeroSection extends StatelessWidget {
                     height: responsive<double>(size,
                         mobile: 10, tablet: 12, desktop: 14),
                   ),
-                  HandwrittenSignature(
-                    text: profile.signature,
-                    style: AppText.signature(
-                      responsive<double>(size,
-                          mobile: 29, tablet: 32, desktop: 36),
-                    ),
+                  Image.asset(
+                    'assets/images/amar-logo.webp',
+                    width: responsive<double>(size,
+                        mobile: 118, tablet: 132, desktop: 146),
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                    semanticLabel: profile.signature,
                   ),
                   if (profile.subrole.trim().isNotEmpty) ...<Widget>[
                     SizedBox(

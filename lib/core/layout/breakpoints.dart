@@ -6,7 +6,7 @@ abstract final class Breakpoints {
   static const double tablet = 760;
   static const double desktop = 1100;
 
-  static const double maxContentWidth = 1160;
+  static const double maxContentWidth = 1040;
 
   static ScreenSize of(BuildContext context) {
     return fromWidth(MediaQuery.sizeOf(context).width);

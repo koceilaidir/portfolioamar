@@ -167,7 +167,6 @@ class _HomePageState extends State<HomePage> {
                       AboutSection(
                         key: _aboutKey,
                         about: content.about,
-                        signature: content.profile.signature,
                       ),
                     SkillsSection(
                       key: _skillsKey,
