@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ import 'core/theme/app_typography.dart';
 import 'data/models/portfolio_content.dart';
 import 'data/repositories/admin_repository.dart';
 import 'data/repositories/portfolio_repository.dart';
+import 'data/repositories/static_portfolio_repository.dart';
 import 'presentation/home/home_page.dart';
 
 class AppScrollBehavior extends MaterialScrollBehavior {
@@ -54,7 +56,13 @@ class _PortfolioAppState extends State<PortfolioApp> {
   }
 
   Future<PortfolioContent> _load() async {
-    final PortfolioContent content = await widget.repository.loadContent();
+    PortfolioContent content;
+    try {
+      content = await widget.repository.loadContent();
+    } catch (error) {
+      debugPrint('Contenu distant indisponible, repli statique : $error');
+      content = StaticPortfolioRepository.content;
+    }
     AppColors.applyBackground(content.backgroundColor);
     AppColors.applyHeader(content.headerColor);
     if (mounted) setState(() {});

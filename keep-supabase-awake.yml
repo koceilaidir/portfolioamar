@@ -1,0 +1,21 @@
+name: Garder Supabase actif
+
+on:
+  schedule:
+    - cron: '0 9 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger la base
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/site_settings?select=id&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "Reponse Supabase : $code"
+          if [ "$code" != "200" ]; then
+            echo "La base n'a pas repondu correctement."
+            exit 1
+          fi
